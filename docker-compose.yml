@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # MongoDB Database Service
+  mongo:
+    image: mongo:6.0
+    container_name: placement_portal_db
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: smart_placement
+    volumes:
+      - mongo_data:/data/db
+
+  # Node.js Express Backend Service
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: placement_portal_api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/smart_placement
+      - JWT_SECRET=production_jwt_secret_key_change_me
+      - REFRESH_TOKEN_SECRET=production_refresh_token_secret_key_change_me
+      - CLIENT_ORIGIN=*
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
