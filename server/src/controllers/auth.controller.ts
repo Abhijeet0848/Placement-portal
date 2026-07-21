@@ -14,10 +14,10 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'supersecretrefresh
 
 // 1. Sign Up
 export async function register(req: AuthenticatedRequest, res: Response) {
-  const { name, email, password, confirmPassword, role } = req.body;
+  const { name, email, password, role } = req.body;
 
-  if (!name || !email || !password || !confirmPassword || !role) {
-    return res.status(400).json({ message: 'All fields (name, email, password, confirmPassword, role) are required.' });
+  if (!name || !email || !password || !role) {
+    return res.status(400).json({ message: 'All fields (name, email, password, role) are required.' });
   }
 
   // Name validation
@@ -26,9 +26,6 @@ export async function register(req: AuthenticatedRequest, res: Response) {
     return res.status(400).json({ message: 'Invalid name. Must be 2-50 characters and contain only letters and spaces.' });
   }
 
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: 'Passwords do not match.' });
-  }
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
   if (!passwordRegex.test(password)) {
