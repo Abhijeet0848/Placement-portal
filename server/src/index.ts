@@ -19,30 +19,6 @@ const server = http.createServer(app);
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
-// Configure Socket.io
-const io = new Server(server, {
-  cors: {
-    origin: clientOrigin,
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-  }
-});
-
-// Real-time notification broadcast helper
-app.set('socketio', io);
-
-io.on('connection', (socket) => {
-  logger.info(`Socket client connected: ${socket.id}`);
-  
-  socket.on('join_room', (userId) => {
-    socket.join(userId);
-    logger.info(`User ${userId} joined their notification room.`);
-  });
-
-  socket.on('disconnect', () => {
-    logger.info(`Socket client disconnected: ${socket.id}`);
-  });
-});
-
 // Middleware
 app.use(helmet({
   crossOriginResourcePolicy: false // Allows loading local uploads if needed
@@ -100,18 +76,21 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.status(status).json({ message });
 });
 
-// Start Server
+// Start Server (Only for local development, Vercel ignores this)
 const PORT = process.env.PORT || 5000;
 
-async function bootstrap() {
-  // Connect to Database (real or fallback)
-  await connectDB();
+// Connect to DB immediately for serverless environment
+connectDB().then(() => {
+  logger.info('Database connected for Serverless environment.');
+}).catch(err => {
+  logger.error(`Database connection failed: ${err}`);
+});
 
-  // If using real MongoDB, we will no longer seed initial exam questions.
-
+if (process.env.NODE_ENV !== 'production') {
   server.listen(PORT, () => {
-    logger.info(`Server is running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    logger.info(`Server is running in development mode on port ${PORT}`);
   });
 }
 
-bootstrap();
+// Export for Vercel Serverless
+export default app;

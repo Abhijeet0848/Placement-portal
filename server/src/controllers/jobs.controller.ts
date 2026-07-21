@@ -70,6 +70,7 @@ export async function createJob(req: AuthenticatedRequest, res: Response) {
 
       const io = req.app.get('socketio');
       if (io) {
+        io.to('admin_room').emit('new_job_posted', { jobId: job._id, title });
         io.emit('notification', {
           id: `notif_${Date.now()}`,
           title: 'New Job Opportunity!',

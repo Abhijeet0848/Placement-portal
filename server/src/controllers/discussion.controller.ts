@@ -349,9 +349,13 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
     // Emit real-time notification
     const io = req.app.get('socketio');
     if (io) {
-      io.to(studentId.toString()).emit('notification', {
+      io.to(`user_${studentId}`).emit('interview_scheduled', {
+        id: `notif_${Date.now()}`,
         title: 'New Interview Scheduled',
-        message: `Your interview for ${jobTitle} at ${companyName} has been scheduled on ${date} at ${time}.`
+        message: `You have an interview scheduled for ${companyName} on ${new Date(date).toLocaleString()}`,
+        read: false,
+        createdAt: new Date(),
+        link: '/student/dashboard'
       });
     }
 
