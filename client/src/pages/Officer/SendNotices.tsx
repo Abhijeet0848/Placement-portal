@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BellRing, Send } from 'lucide-react';
+import { api } from '../../services/api';
 
 export const SendNotices: React.FC = () => {
+  const [title, setTitle] = useState('Placement drive update');
+  const [message, setMessage] = useState('Please review the updated eligibility criteria and prepare your documents for the next drive.');
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const handleBroadcast = async () => {
+    if (!title || !message) {
+      setStatus({ type: 'error', text: 'Title and message are required.' });
+      return;
+    }
+
+    setLoading(true);
+    setStatus(null);
+
+    try {
+      const response = await api.post('/notifications/broadcast', { title, message });
+      setStatus({ type: 'success', text: response.message || 'Notice broadcasted successfully!' });
+      setTitle('');
+      setMessage('');
+    } catch (error: any) {
+      setStatus({ type: 'error', text: error.response?.data?.message || 'Failed to broadcast notice.' });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
@@ -16,16 +42,41 @@ export const SendNotices: React.FC = () => {
         </div>
       </div>
 
+      {status && (
+        <div className={`p-4 rounded-xl text-sm font-semibold text-center ${status.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+          {status.text}
+        </div>
+      )}
+
       <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
         <label className="text-sm font-semibold text-slate-700">Notice title</label>
-        <input className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none" defaultValue="Placement drive update" />
+        <input 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 transition-all" 
+          placeholder="Enter notice title" 
+        />
 
         <label className="mt-4 block text-sm font-semibold text-slate-700">Message</label>
-        <textarea rows={5} className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none" defaultValue="Please review the updated eligibility criteria and prepare your documents for the next drive." />
+        <textarea 
+          rows={5} 
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 transition-all" 
+          placeholder="Enter your message here..." 
+        />
 
-        <button className="mt-5 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500">
-          <Send className="h-4 w-4" />
-          Broadcast notice
+        <button 
+          onClick={handleBroadcast}
+          disabled={loading}
+          className="mt-5 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? (
+            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <Send className="h-4 w-4" />
+          )}
+          {loading ? 'Broadcasting...' : 'Broadcast notice'}
         </button>
       </div>
     </div>

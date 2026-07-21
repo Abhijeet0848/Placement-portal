@@ -1,29 +1,70 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { register, login, refreshToken, getProfile, updateProfile, getAllStudents, forgotPassword, resetPassword } from '../controllers/auth.controller';
+import { register, login, refreshToken, getProfile, updateProfile, getAllStudents, getAllUsers, forgotPassword, resetPassword, deleteStudent, updateStudentProfile, logout, verifyEmail, uploadProfilePicture } from '../controllers/auth.controller';
 import { createJob, getAllJobs, applyJob, getRecruiterApplications, updateApplicationStatus, getStudentApplications } from '../controllers/jobs.controller';
 import { analyzeResumeUpload, evaluateInterview, getCareerRoadmap, createCoverLetter, matchJob, parseExamUpload } from '../controllers/ai.controller';
 import { getExams, getExamById, submitExam, createExam } from '../controllers/exam.controller';
-import { createThread, getAllThreads, addReply, createReview, getAllReviews, scheduleInterview, getInterviews } from '../controllers/discussion.controller';
+import { createThread, getAllThreads, editThread, deleteThread, addReply, createReview, getAllReviews, scheduleInterview, getInterviews } from '../controllers/discussion.controller';
 import { getRecommendedJobs } from '../controllers/recommendation.controller';
-import { getStudentDashboardStats, getRecruiterDashboardStats, sendEmail } from '../controllers/dashboard.controller';
+import { getStudentDashboardStats, getRecruiterDashboardStats, getAdminDashboardStats, sendEmail } from '../controllers/dashboard.controller';
+import { getPermissions, updatePermissions, createBackup, restoreBackup, getActivityLogs, updateUserStatus } from '../controllers/admin.controller';
+import { broadcastNotice } from '../controllers/notification.controller';
 import { authenticateJWT, requireRole } from '../middleware/auth';
 
 const router = Router();
+import rateLimit from 'express-rate-limit';
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per window for auth routes
+  message: { message: 'Too many authentication attempts from this IP, please try again after 15 minutes.' }
+});
+
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedMimeTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only PDF and DOCX are allowed.'));
+    }
+  }
+});
+
+const imageUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only JPEG, PNG, and PDF are allowed.'));
+    }
+  }
 });
 
 // Auth Routes
-router.post('/auth/register', register);
-router.post('/auth/login', login);
+router.post('/auth/register', authLimiter, register);
+router.post('/auth/login', authLimiter, login);
+router.post('/auth/logout', authenticateJWT, logout);
 router.post('/auth/refresh', refreshToken);
-router.post('/auth/forgot-password', forgotPassword);
-router.post('/auth/reset-password', resetPassword);
+router.post('/auth/verify-email', authenticateJWT, verifyEmail);
+router.post('/auth/profile/picture', authenticateJWT, imageUpload.single('avatar'), uploadProfilePicture);
+router.post('/auth/forgot-password', authLimiter, forgotPassword);
+router.post('/auth/reset-password', authLimiter, resetPassword);
 router.get('/auth/profile', authenticateJWT, getProfile);
 router.put('/auth/profile', authenticateJWT, updateProfile);
 router.get('/auth/students', authenticateJWT, getAllStudents);
+router.get('/admin/users', authenticateJWT, requireRole(['Admin']), getAllUsers);
+router.delete('/auth/students/:id', authenticateJWT, requireRole(['PlacementOfficer', 'Admin']), deleteStudent);
+router.put('/auth/students/:id/profile', authenticateJWT, requireRole(['PlacementOfficer', 'Admin']), updateStudentProfile);
 
 // Job Routes
 router.post('/jobs', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), createJob);
@@ -37,6 +78,13 @@ router.put('/recruiter/applications/:appId/status', authenticateJWT, requireRole
 router.post('/recruiter/send-email', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), sendEmail);
 router.get('/student/dashboard', authenticateJWT, requireRole(['Student']), getStudentDashboardStats);
 router.get('/student/applications', authenticateJWT, requireRole(['Student']), getStudentApplications);
+router.get('/admin/dashboard', authenticateJWT, requireRole(['Admin']), getAdminDashboardStats);
+router.get('/admin/permissions', authenticateJWT, requireRole(['Admin']), getPermissions);
+router.put('/admin/permissions/:role', authenticateJWT, requireRole(['Admin']), updatePermissions);
+router.post('/admin/backup', authenticateJWT, requireRole(['Admin']), createBackup);
+router.post('/admin/restore', authenticateJWT, requireRole(['Admin']), restoreBackup);
+router.get('/admin/activity-logs', authenticateJWT, requireRole(['Admin']), getActivityLogs);
+router.put('/admin/users/:id/status', authenticateJWT, requireRole(['Admin']), updateUserStatus);
 
 // AI & Resume Parser Routes
 router.post('/ai/analyze-resume', authenticateJWT, upload.single('resume'), analyzeResumeUpload);
@@ -52,9 +100,14 @@ router.get('/exams/:id', authenticateJWT, getExamById);
 router.post('/exams/:id/submit', authenticateJWT, submitExam);
 router.post('/exams', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), createExam);
 
+// Notification Routes
+router.post('/notifications/broadcast', authenticateJWT, requireRole(['PlacementOfficer', 'Admin']), broadcastNotice);
+
 // Discussion Forum Routes
 router.get('/forum', authenticateJWT, getAllThreads);
 router.post('/forum', authenticateJWT, createThread);
+router.put('/forum/:id', authenticateJWT, editThread);
+router.delete('/forum/:id', authenticateJWT, deleteThread);
 router.post('/forum/:id/reply', authenticateJWT, addReply);
 
 // Company Reviews Routes

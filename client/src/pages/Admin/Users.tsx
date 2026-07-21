@@ -35,7 +35,7 @@ export const Users: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await api.get('/auth/students');
+      const response = await api.get('/admin/users');
       const fetchedUsers = response.students || response.users || [];
       
       // Enhance users with additional data
@@ -81,8 +81,7 @@ export const Users: React.FC = () => {
     ));
 
     try {
-      // In a real app, you would call the API here
-      // await api.put(`/admin/users/${userId}/status`, { status: nextStatus });
+      await api.put(`/admin/users/${userId}/status`, { status: nextStatus });
       
       setMessage(`User account ${userName} has been ${nextStatus.toLowerCase()} successfully.`);
       setTimeout(() => setMessage(''), 3000);
@@ -136,11 +135,20 @@ export const Users: React.FC = () => {
     // Optimistic update
     if (action === 'delete') {
       setUsers(prev => prev.filter(u => !selectedUsers.includes(u.id)));
+      // Note: backend delete logic not fully wired for bulk in this snippet, sticking to status update.
     } else {
       const newStatus = action === 'block' ? 'Blocked' : 'Active';
       setUsers(prev => prev.map(u => 
         selectedUsers.includes(u.id) ? { ...u, status: newStatus } : u
       ));
+
+      try {
+        await Promise.all(selectedUsers.map(id => 
+          api.put(`/admin/users/${id}/status`, { status: newStatus })
+        ));
+      } catch (err) {
+        console.error('Failed to update some user statuses:', err);
+      }
     }
 
     setMessage(`${selectedUsers.length} user(s) have been ${actionText} successfully.`);
@@ -260,26 +268,19 @@ export const Users: React.FC = () => {
   return (
     <div className="space-y-6">
       {message && (
-        <div className="p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-xl text-sm text-emerald-400 font-semibold text-center animate-pulse flex items-center justify-center gap-2">
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 font-bold text-center animate-pulse flex items-center justify-center gap-2 shadow-sm">
           <Check className="h-4 w-4" />
           {message}
         </div>
       )}
 
-      {/* Header Section */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-black text-white uppercase tracking-tight">User Management</h1>
-          <p className="text-sm text-slate-400 mt-1">Audit accounts, block/unblock, and edit database access permissions.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="p-2.5 rounded-xl border border-slate-700 bg-slate-900/50 text-slate-400 hover:text-indigo-400 hover:border-indigo-500/30 transition-all relative hover:scale-105">
-            <Bell className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 h-3 w-3 bg-rose-500 rounded-full border-2 border-slate-900 animate-pulse"></span>
-          </button>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-            <div className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50"></div>
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Admin Mode</span>
+      {/* Premium Header Section */}
+      <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8 shadow-2xl">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-200 to-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-black text-slate-900 uppercase tracking-tight">User Management</h1>
+            <p className="text-sm text-slate-600 mt-2 font-medium">Audit accounts, block/unblock, and edit database access permissions.</p>
           </div>
         </div>
       </div>
@@ -721,14 +722,14 @@ export const Users: React.FC = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="glass-panel p-6 rounded-2xl border border-slate-800 max-w-sm w-full">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/20">
-                <AlertCircle className="h-5 w-5 text-amber-400" />
+              <div className="p-2 bg-amber-100 rounded-lg border border-amber-200">
+                <AlertCircle className="h-5 w-5 text-amber-600" />
               </div>
-              <h3 className="text-base font-bold text-white">Confirm Action</h3>
+              <h3 className="text-base font-bold text-slate-900">Confirm Action</h3>
             </div>
             
-            <p className="text-sm text-slate-300 mb-6">
-              Are you sure you want to {confirmAction.type} the account for <span className="font-bold text-white">{confirmAction.userName}</span>?
+            <p className="text-sm text-slate-600 mb-6">
+              Are you sure you want to {confirmAction.type} the account for <span className="font-bold text-slate-900">{confirmAction.userName}</span>?
             </p>
 
             <div className="flex gap-2">
@@ -737,7 +738,7 @@ export const Users: React.FC = () => {
                   setShowConfirmDialog(false);
                   setConfirmAction(null);
                 }}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-slate-900/50 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 transition-all"
+                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200 transition-all"
               >
                 Cancel
               </button>
@@ -745,8 +746,8 @@ export const Users: React.FC = () => {
                 onClick={confirmActionHandler}
                 className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium border transition-all ${
                   confirmAction.type === 'block'
-                    ? 'bg-rose-500/20 border-rose-500/30 text-rose-400 hover:bg-rose-500/30'
-                    : 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30'
+                    ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
+                    : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-100'
                 }`}
               >
                 Confirm

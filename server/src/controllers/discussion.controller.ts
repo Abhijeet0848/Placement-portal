@@ -59,6 +59,85 @@ export async function createThread(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+export async function editThread(req: AuthenticatedRequest, res: Response) {
+  const { id } = req.params;
+  const { title, content, category } = req.body;
+  const userId = req.user?.id || 'usr_stud_1';
+  const role = req.user?.role || 'Student';
+
+  if (!title || !content || !category) {
+    return res.status(400).json({ message: 'Title, content, and category are required.' });
+  }
+
+  try {
+    if (isMockDb) {
+      const thread = mockDb.discussions.find(t => t._id === id);
+      if (!thread) return res.status(404).json({ message: 'Thread not found' });
+      
+      if (thread.authorId !== userId && role !== 'Admin' && role !== 'PlacementOfficer') {
+        return res.status(403).json({ message: 'Not authorized to edit this thread' });
+      }
+
+      thread.title = title;
+      thread.content = content;
+      thread.category = category as any;
+      
+      return res.json({ message: 'Thread updated successfully', thread });
+    } else {
+      const thread = await Discussion.findById(id);
+      if (!thread) return res.status(404).json({ message: 'Thread not found' });
+
+      if (thread.authorId.toString() !== userId && role !== 'Admin' && role !== 'PlacementOfficer') {
+        return res.status(403).json({ message: 'Not authorized to edit this thread' });
+      }
+
+      thread.title = title;
+      thread.content = content;
+      thread.category = category;
+      await thread.save();
+
+      return res.json({ message: 'Thread updated successfully', thread });
+    }
+  } catch (error: any) {
+    logger.error(`Edit thread failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server discussion thread edit error' });
+  }
+}
+
+export async function deleteThread(req: AuthenticatedRequest, res: Response) {
+  const { id } = req.params;
+  const userId = req.user?.id || 'usr_stud_1';
+  const role = req.user?.role || 'Student';
+
+  try {
+    if (isMockDb) {
+      const threadIndex = mockDb.discussions.findIndex(t => t._id === id);
+      if (threadIndex === -1) return res.status(404).json({ message: 'Thread not found' });
+      
+      const thread = mockDb.discussions[threadIndex];
+      if (thread.authorId !== userId && role !== 'Admin' && role !== 'PlacementOfficer') {
+        return res.status(403).json({ message: 'Not authorized to delete this thread' });
+      }
+
+      mockDb.discussions.splice(threadIndex, 1);
+      return res.json({ message: 'Thread deleted successfully' });
+    } else {
+      const thread = await Discussion.findById(id);
+      if (!thread) return res.status(404).json({ message: 'Thread not found' });
+
+      if (thread.authorId.toString() !== userId && role !== 'Admin' && role !== 'PlacementOfficer') {
+        return res.status(403).json({ message: 'Not authorized to delete this thread' });
+      }
+
+      await Discussion.findByIdAndDelete(id);
+      return res.json({ message: 'Thread deleted successfully' });
+    }
+  } catch (error: any) {
+    logger.error(`Delete thread failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server discussion thread deletion error' });
+  }
+}
+
 export async function getAllThreads(req: AuthenticatedRequest, res: Response) {
   try {
     if (isMockDb) {

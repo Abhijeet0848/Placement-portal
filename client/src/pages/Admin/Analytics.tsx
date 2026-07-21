@@ -1,7 +1,24 @@
-import React from 'react';
-import { BarChart3, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BarChart3, TrendingUp, Loader2 } from 'lucide-react';
+import { api } from '../../services/api';
 
 export const AnalyticsPanel: React.FC = () => {
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await api.get('/admin/dashboard');
+        setStats(res);
+      } catch (error) {
+        console.error('Failed to fetch admin stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
@@ -16,23 +33,28 @@ export const AnalyticsPanel: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Active users</p>
-          <p className="mt-2 text-2xl font-bold text-slate-900">1,240</p>
+      {loading ? (
+        <div className="flex justify-center py-10 text-indigo-600">
+          <Loader2 className="h-8 w-8 animate-spin" />
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Placement success</p>
-          <p className="mt-2 text-2xl font-bold text-slate-900">84%</p>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm">
+            <p className="text-sm text-slate-500">Active users</p>
+            <p className="mt-2 text-2xl font-bold text-slate-900">
+              {stats?.totalUsers ?? '--'}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm">
+            <p className="text-sm text-slate-500">Placement success</p>
+            <p className="mt-2 text-2xl font-bold text-slate-900">--</p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm">
+            <p className="text-sm text-slate-500">Weekly growth</p>
+            <p className="mt-2 text-2xl font-bold text-slate-900">--</p>
+          </div>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          <p className="text-sm text-slate-500">Weekly growth</p>
-          <p className="mt-2 flex items-center gap-2 text-2xl font-bold text-emerald-700">
-            <TrendingUp className="h-5 w-5" />
-            +12%
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -393,7 +393,7 @@ export async function submitExam(req: AuthenticatedRequest, res: Response) {
         // Mock Application link
         if (exam.jobId) {
           const app = mockDb.applications.find(a => a.jobId === exam.jobId && a.studentId === studentId);
-          if (app) app.assessmentScore = totalScore;
+          if (app) (app as any).assessmentScore = totalScore;
         }
       } else {
         const AssessmentResult = (await import('../models/AssessmentResult')).default;

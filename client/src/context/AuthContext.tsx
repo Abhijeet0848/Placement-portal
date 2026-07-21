@@ -7,6 +7,7 @@ interface User {
   email: string;
   role: 'Student' | 'Recruiter' | 'PlacementOfficer' | 'Admin';
   profile: any;
+  permissions?: Record<string, boolean>;
 }
 
 interface AuthContextType {

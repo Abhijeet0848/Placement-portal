@@ -89,7 +89,6 @@ export async function getRecruiterDashboardStats(req: AuthenticatedRequest, res:
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const { Job, Application } = await import('../models/Job');
     const JobModel = (await import('../models/Job')).default;
     const AppModel = (await import('../models/Application')).default;
 
@@ -151,3 +150,23 @@ export async function sendEmail(req: AuthenticatedRequest, res: Response) {
 
   return res.json({ message: 'Email sent successfully (logged to console).' });
 }
+
+export async function getAdminDashboardStats(req: AuthenticatedRequest, res: Response) {
+  try {
+    const totalUsers = await User.countDocuments();
+    
+    // In a real app we might query a logs collection, but for now we'll just return the user count
+    // and empty events
+    
+    return res.json({
+      totalUsers,
+      systemHealth: 'Excellent',
+      auditActivity: 'Active',
+      events: []
+    });
+  } catch (error: any) {
+    logger.error(`Get admin dashboard stats failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+

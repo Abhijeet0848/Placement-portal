@@ -2,8 +2,9 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { 
   Users, Search, Filter, Mail, UserCheck, UserX, 
   Download, Eye, GraduationCap, Building2, Award,
-  ChevronUp, ChevronDown
+  ChevronUp, ChevronDown, Trash2
 } from 'lucide-react';
+import { api } from '../../services/api';
 
 interface Student {
   id: string;
@@ -35,9 +36,18 @@ export const ManageStudents: React.FC = () => {
 
   const fetchStudents = async () => {
     try {
-      // In a real app, you would fetch from API
-      // const response = await api.get('/auth/students');
-      // setStudents(response.students || []);
+      const response = await api.get('/auth/students');
+      const mappedStudents = (response.students || []).map((s: any) => ({
+        id: s.id,
+        name: s.name,
+        email: s.email,
+        branch: s.profile?.branch || '',
+        cgpa: s.profile?.cgpa || 0,
+        year: s.profile?.education?.[0]?.year || '',
+        placementStatus: 'Pending', // We will derive this later when we join with applications
+        skills: s.profile?.skills || []
+      }));
+      setStudents(mappedStudents);
     } catch (error) {
       console.error('Failed to fetch students:', error);
     } finally {
@@ -100,6 +110,20 @@ export const ManageStudents: React.FC = () => {
     window.URL.revokeObjectURL(url);
   };
 
+  const handleDeleteStudent = async (studentId: string, studentName: string) => {
+    if (window.confirm(`Are you sure you want to delete ${studentName}? This action cannot be undone.`)) {
+      try {
+        await api.delete(`/auth/students/${studentId}`);
+        setStudents(prev => prev.filter(s => s.id !== studentId));
+        setMessage(`Student ${studentName} has been deleted successfully.`);
+        setTimeout(() => setMessage(''), 3000);
+      } catch (error) {
+        console.error('Failed to delete student:', error);
+        alert('Failed to delete student. Please try again.');
+      }
+    }
+  };
+
   // Filter and search logic
   const filteredStudents = useMemo(() => {
     return students.filter(student => {
@@ -148,7 +172,7 @@ export const ManageStudents: React.FC = () => {
       case 'In Process':
         return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
       default:
-        return 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+        return 'bg-slate-500/10 text-slate-500 border-slate-500/20';
     }
   };
 
@@ -163,7 +187,7 @@ export const ManageStudents: React.FC = () => {
       notPlaced: students.filter(s => s.placementStatus === 'Not Placed').length,
       inProcess: students.filter(s => s.placementStatus === 'In Process').length,
       avgCgpa: students.length > 0 
-        ? (students.reduce((sum, s) => sum + s.cgpa, 0) / students.length).toFixed(2)
+        ? (students.reduce((sum, s) => sum + (s.cgpa || 0), 0) / students.length).toFixed(2)
         : '0.00'
     };
   }, [students]);
@@ -180,7 +204,7 @@ export const ManageStudents: React.FC = () => {
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-white uppercase tracking-tight">Manage Students</h1>
+          <h1 className="text-3xl font-black text-slate-900 uppercase tracking-tight">Manage Students</h1>
           <p className="text-sm text-slate-400 mt-1">Track student records, placement status, and academic performance.</p>
         </div>
         <div className="flex items-center gap-3">
@@ -390,15 +414,15 @@ export const ManageStudents: React.FC = () => {
                         <td className="p-4">
                           <div className="flex items-center gap-2">
                             <Building2 className="h-4 w-4 text-slate-400" />
-                            <span className="text-slate-600 text-sm">{student.branch}</span>
+                            <span className="text-slate-600 text-sm font-medium">{student.branch || 'Not specified'}</span>
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="text-sm font-bold text-slate-900">{student.cgpa}</span>
+                          <span className="text-sm font-bold text-slate-900">{student.cgpa || 'N/A'}</span>
                         </td>
                         <td className="p-4">
                           <span className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border ${getStatusBadgeColor(student.placementStatus)}`}>
-                            {student.placementStatus}
+                            {student.placementStatus || 'Pending'}
                           </span>
                         </td>
                         <td className="p-4">
@@ -426,6 +450,13 @@ export const ManageStudents: React.FC = () => {
                               title="Send Email"
                             >
                               <Mail className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteStudent(student.id, student.name)}
+                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-400 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 transition-all"
+                              title="Delete Student"
+                            >
+                              <Trash2 className="h-4 w-4" />
                             </button>
                           </div>
                         </td>
@@ -505,20 +536,20 @@ export const ManageStudents: React.FC = () => {
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Branch</p>
-                  <p className="text-sm font-bold text-slate-900">{selectedStudent.branch}</p>
+                  <p className="text-sm font-bold text-slate-900">{selectedStudent.branch || 'Not specified'}</p>
                 </div>
                 <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">CGPA</p>
-                  <p className="text-sm font-bold text-slate-900">{selectedStudent.cgpa}</p>
+                  <p className="text-sm font-bold text-slate-900">{selectedStudent.cgpa || 'N/A'}</p>
                 </div>
                 <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Year</p>
-                  <p className="text-sm font-bold text-slate-900">{selectedStudent.year}</p>
+                  <p className="text-sm font-bold text-slate-900">{selectedStudent.year || 'Not specified'}</p>
                 </div>
                 <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Status</p>
                   <span className={`px-2 py-1 rounded-lg text-xs font-bold border ${getStatusBadgeColor(selectedStudent.placementStatus)}`}>
-                    {selectedStudent.placementStatus}
+                    {selectedStudent.placementStatus || 'Pending'}
                   </span>
                 </div>
               </div>
@@ -531,7 +562,7 @@ export const ManageStudents: React.FC = () => {
                 </div>
               )}
 
-              {selectedStudent.skills.length > 0 && (
+              {selectedStudent.skills?.length > 0 && (
                 <div>
                   <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-2">Skills</p>
                   <div className="flex flex-wrap gap-2">

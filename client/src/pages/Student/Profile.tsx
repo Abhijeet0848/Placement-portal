@@ -3,14 +3,16 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import {
   FileText, Upload, Plus, Trash2, ExternalLink, Award,
-  Phone, GraduationCap, Code2, Sparkles
+  Phone, GraduationCap, Code2, Sparkles, User
 } from 'lucide-react';
 
 export const Profile: React.FC = () => {
   const { user, updateUser } = useAuth();
 
-  // Local state
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState(user?.profile.phone || '');
+  const [address, setAddress] = useState(user?.profile.address || '');
   const [cgpa, setCgpa] = useState(user?.profile.cgpa?.toString() || '');
   const [cgpaScale, setCgpaScale] = useState(user?.profile.cgpaScale || '10.0');
   const [branch, setBranch] = useState(user?.profile.branch || 'B.Tech CSE');
@@ -27,6 +29,29 @@ export const Profile: React.FC = () => {
   const [saveMessage, setSaveMessage] = useState({ text: '', type: '' });
   const [certificates, setCertificates] = useState<any[]>(user?.profile.certificates || []);
   const [uploadingCertificates, setUploadingCertificates] = useState(false);
+
+  const handleViewDocument = (dataUrl: string) => {
+    if (dataUrl.startsWith('data:')) {
+      try {
+        const arr = dataUrl.split(',');
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        const mime = mimeMatch ? mimeMatch[1] : 'application/pdf';
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        const blob = new Blob([u8arr], {type: mime});
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      } catch(e) {
+        window.open(dataUrl, '_blank');
+      }
+    } else {
+      window.open(dataUrl, '_blank');
+    }
+  };
 
   if (!user) return null;
 
@@ -60,7 +85,10 @@ export const Profile: React.FC = () => {
     setIsSaving(true);
     try {
       const updateData: any = {
+        name,
+        email,
         phone,
+        address,
         cgpaScale,
         branch,
         skills,
@@ -105,11 +133,19 @@ export const Profile: React.FC = () => {
         setSkills(nextSkills);
       }
 
+      const dataUrl = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string || '');
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+
       // Sync state back
       await updateUser({
         phone: data.parsed.phone || phone,
         skills: nextSkills,
-        resumeScore: data.analysis?.score || 0
+        resumeScore: data.analysis?.score || 0,
+        resumeUrl: dataUrl || `file://${file.name}`
       });
 
       setMessage('Resume parsed and analyzed successfully! Profile autofilled.');
@@ -235,6 +271,42 @@ export const Profile: React.FC = () => {
         </div>
       )}
 
+      {/* Render Uploaded Resume if exists */}
+      {user.profile.resumeUrl && (
+        <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-gradient-to-r from-slate-50 to-white p-6 shadow-xl flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
+              <FileText className="h-6 w-6" />
+            </div>
+            <div>
+              <h4 className="text-sm font-black text-slate-900">Your Uploaded Resume</h4>
+              <p className="text-xs text-slate-500 mt-1">PDF Document</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleViewDocument(user.profile.resumeUrl!)}
+              className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-md hover:bg-indigo-700 transition-all"
+            >
+              <ExternalLink className="h-4 w-4" />
+              <span>View Resume</span>
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                await updateUser({ resumeUrl: '' });
+                setMessage('Resume deleted successfully.');
+              }}
+              className="flex items-center space-x-2 px-4 py-2 bg-rose-100 text-rose-700 text-sm font-bold rounded-xl shadow-md hover:bg-rose-200 transition-all border border-rose-200"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span>Delete</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
         <div className="relative z-10">
@@ -270,15 +342,14 @@ export const Profile: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     {certificate.url && (
-                      <a
-                        href={certificate.url}
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        type="button"
+                        onClick={() => handleViewDocument(certificate.url)}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all flex items-center gap-1"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
                         View
-                      </a>
+                      </button>
                     )}
                     <span className={`rounded-full px-3 py-1.5 text-xs font-bold ${certificate.verified ? 'bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 border-2 border-emerald-300' : 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 border-2 border-amber-300'}`}>
                       {certificate.verified ? 'Verified' : 'Pending'}
@@ -305,11 +376,70 @@ export const Profile: React.FC = () => {
       </div>
 
       {/* Main Profile Info Form */}
-      <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Core details */}
+      <form onSubmit={handleSave} className="space-y-6">
+        
+        {/* Basic & Contact Details */}
         <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 shadow-2xl">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
           <div className="relative z-10">
+            <h4 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2 mb-6">
+              <span className="p-2 bg-indigo-100 rounded-xl"><User className="h-5 w-5 text-indigo-600" /></span>
+              <span>Basic & Contact Details</span>
+            </h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Email Address</label>
+                <input
+                  type="email"
+                  placeholder="john@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Phone Number</label>
+                <input
+                  type="text"
+                  placeholder="+91 99999 99999"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Residential Address</label>
+                <input
+                  type="text"
+                  placeholder="123 Tech Park, Bangalore, India"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Core details */}
+          <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 shadow-2xl">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
+            <div className="relative z-10">
             <h4 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2 mb-6">
               <GraduationCap className="h-5 w-5 text-indigo-600" />
               <span>Academic Profile Details</span>
@@ -361,18 +491,6 @@ export const Profile: React.FC = () => {
               </div>
             </div>
 
-            <div className="space-y-2 mt-4">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
-                <Phone className="h-4 w-4 text-slate-600" />
-                <span>Contact Number</span>
-              </label>
-              <input
-                type="text"
-                placeholder="+91 99999 99999"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
-              />
             </div>
 
             <button
@@ -467,6 +585,21 @@ export const Profile: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+        
+        <div className="flex flex-col items-center">
+          <button
+            type="submit"
+            disabled={isSaving}
+            className={`w-full lg:w-1/2 px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-lg font-black shadow-xl transition-all hover:scale-105 hover:shadow-2xl flex items-center justify-center space-x-2 ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
+          >
+            <span>{isSaving ? 'Saving...' : 'Save Entire Profile'}</span>
+          </button>
+          {saveMessage.text && (
+            <div className={`mt-4 w-full lg:w-1/2 p-4 rounded-xl text-sm font-bold text-center shadow-lg ${saveMessage.type === 'success' ? 'bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 text-emerald-700' : 'bg-gradient-to-r from-rose-50 to-red-50 border-2 border-rose-300 text-rose-700'}`}>
+              {saveMessage.text}
+            </div>
+          )}
         </div>
       </form>
     </div>

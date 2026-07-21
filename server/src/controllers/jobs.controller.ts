@@ -17,6 +17,15 @@ export async function createJob(req: AuthenticatedRequest, res: Response) {
     return res.status(400).json({ message: 'Title, company, location, description, and salary are required.' });
   }
 
+  if (typeof title !== 'string' || title.length < 2 || title.length > 100) {
+    return res.status(400).json({ message: 'Job title must be between 2 and 100 characters.' });
+  }
+
+  const numericSalary = Number(salary);
+  if (isNaN(numericSalary) || numericSalary <= 0) {
+    return res.status(400).json({ message: 'Salary must be a positive number.' });
+  }
+
   try {
     const minCGPAVal = minCGPA !== undefined ? Number(minCGPA) : 0;
     const branchesArr = Array.isArray(branches) ? branches : [];
@@ -286,7 +295,7 @@ export async function updateApplicationStatus(req: AuthenticatedRequest, res: Re
 
       const io = req.app.get('socketio');
       if (io) {
-        const studentIdStr = typeof app.studentId === 'object' && 'id' in app.studentId ? app.studentId.id.toString() : app.studentId.toString();
+        const studentIdStr = typeof app.studentId === 'object' && 'id' in (app.studentId as any) ? (app.studentId as any).id.toString() : (app.studentId as any).toString();
         const jobTitle = typeof app.jobId === 'object' && 'title' in app.jobId ? app.jobId.title : 'a job';
         io.to(studentIdStr).emit('notification', {
           id: `notif_${Date.now()}`,

@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { connectDB, isMockDb } from './config/dbConnect';
 import router from './routes/api';
 import logger from './utils/logger';
+import mongoSanitize from 'express-mongo-sanitize';
 import Exam from './models/Exam';
 
 // Load environment variables
@@ -16,7 +17,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-const clientOrigin = process.env.CLIENT_ORIGIN || '*';
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
 // Configure Socket.io
 const io = new Server(server, {
@@ -50,8 +51,17 @@ app.use(cors({
   origin: clientOrigin,
   credentials: true
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Sanitize data against NoSQL Query Injection (and explicitly reject malformed input)
+app.use(mongoSanitize({
+  onSanitize: ({ req, key }) => {
+    const err: any = new Error('Invalid input');
+    err.status = 400;
+    throw err;
+  }
+}));
 
 // Rate limiting (Prevent DDoS / Brute Force)
 const limiter = rateLimit({
@@ -77,10 +87,17 @@ app.get('/health', (req, res) => {
 
 // Global error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // Always log the detailed error safely on the server
   logger.error(`Express error handler: ${err?.message || err}`);
-  res.status(err?.status || 500).json({
-    message: err?.message || 'Internal server error occurred.'
-  });
+  
+  const status = err?.status || 500;
+  
+  // Only send specific error messages for 4xx client errors (like 400 Bad Request).
+  // For 500 Internal Server errors (like MongoDB crashes), mask the message.
+  const isClientError = status >= 400 && status < 500;
+  const message = isClientError ? (err?.message || 'Bad Request') : 'Something went wrong.';
+
+  res.status(status).json({ message });
 });
 
 // Start Server

@@ -39,6 +39,8 @@ import { ActivityLogs } from './pages/Admin/ActivityLogs';
 import { BackupDatabase } from './pages/Admin/BackupDatabase';
 import { Analytics as AdminAnalytics } from './pages/Admin/Analytics';
 import { HomePage } from './pages/HomePage';
+import { AnimatePresence } from 'framer-motion';
+import { AnimatedRoute } from './components/AnimatedRoute';
 
 const ProtectedLayout = () => {
   const { user, loading } = useAuth();
@@ -57,7 +59,9 @@ const ProtectedLayout = () => {
 
   return (
     <DashboardLayout>
-      <Outlet />
+      <AnimatePresence mode="wait">
+        <Outlet />
+      </AnimatePresence>
     </DashboardLayout>
   );
 };
@@ -79,42 +83,42 @@ function App() {
       <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
 
       <Route element={<ProtectedLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
-        <Route path="/job-matcher" element={<JobMatcher />} />
-        <Route path="/resume-builder" element={<ResumeBuilder />} />
-        <Route path="/search-system" element={<SearchSystem />} />
-        <Route path="/eligibility-checker" element={<EligibilityChecker />} />
-        <Route path="/skill-assessment" element={<SkillAssessment />} />
-        <Route path="/jobs" element={<JobBoard />} />
-        <Route path="/applications" element={<ApplicationsTracker />} />
-        <Route path="/career-roadmap" element={<CareerAdvisor />} />
-        <Route path="/coding-lab" element={<CodingLab />} />
-        <Route path="/mock-interview" element={<MockInterview />} />
-        <Route path="/forum" element={<Forum />} />
-        <Route path="/reviews" element={<Reviews />} />
-        <Route path="/candidates" element={<Candidates />} />
-        <Route path="/company-profile" element={<CompanyProfile />} />
-        <Route path="/resume-ranking" element={<ResumeRanking />} />
-        <Route path="/send-emails" element={<SendEmails />} />
-        <Route path="/analytics" element={<RecruiterAnalytics />} />
-        <Route path="/hire-reject" element={<HireReject />} />
-        <Route path="/jobs/manage" element={<JobCreator />} />
-        <Route path="/scheduler" element={<Scheduler />} />
-        <Route path="/officer/verify" element={<Verify />} />
-        <Route path="/officer/rules" element={<Rules />} />
-        <Route path="/officer/reports" element={<Reports />} />
-        <Route path="/officer/companies" element={<ManageCompanies />} />
-        <Route path="/officer/students" element={<ManageStudents />} />
-        <Route path="/officer/notices" element={<SendNotices />} />
-        <Route path="/officer/analytics" element={<PlacementAnalytics />} />
-        <Route path="/officer/exams" element={<ExamCreator />} />
-        <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/permissions" element={<Permissions />} />
-        <Route path="/admin/logs" element={<ActivityLogs />} />
-        <Route path="/admin/backup" element={<BackupDatabase />} />
-        <Route path="/admin/analytics" element={<AdminAnalytics />} />
+        <Route path="/dashboard" element={<AnimatedRoute><Dashboard /></AnimatedRoute>} />
+        <Route path="/profile" element={<AnimatedRoute><Profile /></AnimatedRoute>} />
+        <Route path="/resume-analyzer" element={<AnimatedRoute><ResumeAnalyzer /></AnimatedRoute>} />
+        <Route path="/job-matcher" element={<AnimatedRoute><JobMatcher /></AnimatedRoute>} />
+        <Route path="/resume-builder" element={<AnimatedRoute><ResumeBuilder /></AnimatedRoute>} />
+        <Route path="/search-system" element={<AnimatedRoute><SearchSystem /></AnimatedRoute>} />
+        <Route path="/eligibility-checker" element={<AnimatedRoute><EligibilityChecker /></AnimatedRoute>} />
+        <Route path="/skill-assessment" element={<AnimatedRoute><SkillAssessment /></AnimatedRoute>} />
+        <Route path="/jobs" element={<AnimatedRoute><JobBoard /></AnimatedRoute>} />
+        <Route path="/applications" element={<AnimatedRoute><ApplicationsTracker /></AnimatedRoute>} />
+        <Route path="/career-roadmap" element={<AnimatedRoute><CareerAdvisor /></AnimatedRoute>} />
+        <Route path="/coding-lab" element={<AnimatedRoute><CodingLab /></AnimatedRoute>} />
+        <Route path="/mock-interview" element={<AnimatedRoute><MockInterview /></AnimatedRoute>} />
+        <Route path="/forum" element={<AnimatedRoute><Forum /></AnimatedRoute>} />
+        <Route path="/reviews" element={<AnimatedRoute><Reviews /></AnimatedRoute>} />
+        <Route path="/candidates" element={<AnimatedRoute><Candidates /></AnimatedRoute>} />
+        <Route path="/company-profile" element={<AnimatedRoute><CompanyProfile /></AnimatedRoute>} />
+        <Route path="/resume-ranking" element={<AnimatedRoute><ResumeRanking /></AnimatedRoute>} />
+        <Route path="/send-emails" element={<AnimatedRoute><SendEmails /></AnimatedRoute>} />
+        <Route path="/analytics" element={<AnimatedRoute><RecruiterAnalytics /></AnimatedRoute>} />
+        <Route path="/hire-reject" element={<AnimatedRoute><HireReject /></AnimatedRoute>} />
+        <Route path="/jobs/manage" element={<AnimatedRoute><JobCreator /></AnimatedRoute>} />
+        <Route path="/scheduler" element={<AnimatedRoute><Scheduler /></AnimatedRoute>} />
+        <Route path="/officer/verify" element={<AnimatedRoute><Verify /></AnimatedRoute>} />
+        <Route path="/officer/rules" element={<AnimatedRoute><Rules /></AnimatedRoute>} />
+        <Route path="/officer/reports" element={<AnimatedRoute><Reports /></AnimatedRoute>} />
+        <Route path="/officer/companies" element={<AnimatedRoute><ManageCompanies /></AnimatedRoute>} />
+        <Route path="/officer/students" element={<AnimatedRoute><ManageStudents /></AnimatedRoute>} />
+        <Route path="/officer/notices" element={<AnimatedRoute><SendNotices /></AnimatedRoute>} />
+        <Route path="/officer/analytics" element={<AnimatedRoute><PlacementAnalytics /></AnimatedRoute>} />
+        <Route path="/officer/exams" element={<AnimatedRoute><ExamCreator /></AnimatedRoute>} />
+        <Route path="/admin/users" element={<AnimatedRoute><Users /></AnimatedRoute>} />
+        <Route path="/admin/permissions" element={<AnimatedRoute><Permissions /></AnimatedRoute>} />
+        <Route path="/admin/logs" element={<AnimatedRoute><ActivityLogs /></AnimatedRoute>} />
+        <Route path="/admin/backup" element={<AnimatedRoute><BackupDatabase /></AnimatedRoute>} />
+        <Route path="/admin/analytics" element={<AnimatedRoute><AdminAnalytics /></AnimatedRoute>} />
       </Route>
 
       <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />

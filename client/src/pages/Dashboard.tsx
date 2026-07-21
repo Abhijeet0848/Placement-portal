@@ -30,6 +30,8 @@ export const Dashboard: React.FC = () => {
           ? await api.get('/student/dashboard').catch(() => ({}))
           : user?.role === 'Recruiter'
           ? await api.get('/recruiter/dashboard').catch(() => ({}))
+          : user?.role === 'Admin'
+          ? await api.get('/admin/dashboard').catch(() => ({}))
           : {};
 
         setStats({
@@ -51,10 +53,10 @@ export const Dashboard: React.FC = () => {
   if (!user) return null;
 
   const officerDepartmentData = [
-    { name: 'MCA', Package: 8.5, Placed: 88 },
-    { name: 'CSE', Package: 12.0, Placed: 94 },
-    { name: 'ECE', Package: 7.2, Placed: 78 },
-    { name: 'ME', Package: 5.0, Placed: 62 }
+    { name: 'MCA', Package: 0, Placed: 0 },
+    { name: 'CSE', Package: 0, Placed: 0 },
+    { name: 'ECE', Package: 0, Placed: 0 },
+    { name: 'ME', Package: 0, Placed: 0 }
   ];
 
   const PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444'];
@@ -454,7 +456,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Highest Package</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">24 LPA</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">0 LPA</h4>
               </div>
               <Award className="h-8 w-8 text-amber-500" />
             </div>
@@ -465,7 +467,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Average Package</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">11.4 LPA</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">0 LPA</h4>
               </div>
               <TrendingUp className="h-8 w-8 text-indigo-500" />
             </div>
@@ -476,7 +478,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Eligible Students</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">182</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">0</h4>
               </div>
               <Users className="h-8 w-8 text-indigo-500" />
             </div>
@@ -487,7 +489,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Overall Placement</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">82.4%</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">0%</h4>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500" />
             </div>
@@ -541,6 +543,11 @@ export const Dashboard: React.FC = () => {
   // ADMIN VIEW
   // ==========================================
   const renderAdminDashboard = () => {
+    const adminStats = stats?.dashboard || {};
+    const totalUsers = adminStats.totalUsers || 0;
+    const systemHealth = adminStats.systemHealth || 'Excellent';
+    const auditActivity = adminStats.auditActivity || 'Active';
+
     return (
       <div className="space-y-6">
         <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-300 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-8 shadow-2xl">
@@ -552,23 +559,23 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl transition-all">
+          <Link to="/admin/users" className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl transition-all cursor-pointer hover:border-indigo-500">
             <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Registered Users</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">4 Seeded</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">{totalUsers}</h4>
               </div>
               <Users className="h-8 w-8 text-indigo-500" />
             </div>
-          </div>
+          </Link>
 
           <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl transition-all">
             <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">System Health</p>
-                <h4 className="text-2xl font-black text-emerald-400 mt-1.5">Excellent</h4>
+                <h4 className="text-2xl font-black text-emerald-400 mt-1.5">{systemHealth}</h4>
               </div>
               <ShieldCheck className="h-8 w-8 text-emerald-500" />
             </div>
@@ -579,7 +586,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Audit Activity</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">Active</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">{auditActivity}</h4>
               </div>
               <Database className="h-8 w-8 text-indigo-500" />
             </div>
@@ -602,23 +609,8 @@ export const Dashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="text-slate-300">
-                  <tr className="border-b border-slate-800">
-                    <td className="py-2.5">July 18, 2026 - 19:28</td>
-                    <td className="py-2.5 text-indigo-400 font-bold">SECURITY</td>
-                    <td className="py-2.5">Sarah Connor (Recruiter)</td>
-                    <td className="py-2.5">Auth session token created successfully</td>
-                  </tr>
-                  <tr className="border-b border-slate-800">
-                    <td className="py-2.5">July 18, 2026 - 19:15</td>
-                    <td className="py-2.5 text-emerald-400 font-bold">DATABASE</td>
-                    <td className="py-2.5">System Bootstrap</td>
-                    <td className="py-2.5">Seeded MCQ exam successfully</td>
-                  </tr>
                   <tr>
-                    <td className="py-2.5">July 18, 2026 - 19:00</td>
-                    <td className="py-2.5 text-amber-400 font-bold">API</td>
-                    <td className="py-2.5">Amit Sharma (Student)</td>
-                    <td className="py-2.5">Parsed PDF resume successfully</td>
+                    <td colSpan={4} className="py-4 text-center text-slate-500">No events found.</td>
                   </tr>
                 </tbody>
               </table>

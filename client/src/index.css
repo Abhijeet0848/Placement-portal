@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     margin: 0;
     background-color: #f8fafc;
@@ -53,6 +57,11 @@
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Universal Smooth Interactions */
+  a, button, input, select, textarea, .glass-card, .glass-panel {
+    @apply transition-all duration-300 ease-in-out;
   }
 }
 

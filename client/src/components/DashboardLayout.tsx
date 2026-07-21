@@ -65,6 +65,12 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
   if (!user) return null;
 
+  const isAllowed = (flagId: string) => {
+    // If the database has never been configured for this role, default to allowing everything
+    if (!user.permissions || Object.keys(user.permissions).length === 0) return true;
+    return user.permissions[flagId] !== false;
+  };
+
   // Sidebar link builder with categories
   const sidebarItems: Record<string, SidebarCategory[]> = {
     Student: [
@@ -79,7 +85,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         title: 'PROFILE',
         emoji: '👤',
         items: [
-          { name: 'Profile & Resume', path: '/profile', icon: User },
+          ...(isAllowed('canViewProfile') ? [{ name: 'Profile & Resume', path: '/profile', icon: User }] : []),
           { name: 'Resume Builder', path: '/resume-builder', icon: FileText },
           { name: 'Resume Analyzer', path: '/resume-analyzer', icon: FileText },
         ]

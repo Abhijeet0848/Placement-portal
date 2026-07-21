@@ -5,8 +5,10 @@ export interface IUser extends Document {
   email: string;
   passwordHash: string;
   role: 'Student' | 'Recruiter' | 'PlacementOfficer' | 'Admin';
+  status: 'Active' | 'Blocked';
   profile: {
     phone?: string;
+    address?: string;
     cgpa?: number;
     cgpaScale?: string;
     branch?: string;
@@ -19,6 +21,8 @@ export interface IUser extends Document {
     resumeAnalysis?: any;
     verified: boolean;
     certificates: { name: string; url: string; verified: boolean; issueDate: string }[];
+    verificationToken?: string;
+    avatarUrl?: string;
   };
   createdAt: Date;
 }
@@ -28,8 +32,10 @@ const UserSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true, index: true },
   passwordHash: { type: String, required: true },
   role: { type: String, enum: ['Student', 'Recruiter', 'PlacementOfficer', 'Admin'], required: true },
+  status: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
   profile: {
     phone: { type: String },
+    address: { type: String },
     cgpa: { type: Number },
     cgpaScale: { type: String, default: '10.0' },
     branch: { type: String },
@@ -61,7 +67,9 @@ const UserSchema: Schema = new Schema({
         issueDate: { type: String },
         uploadedAt: { type: String }
       }
-    ]
+    ],
+    verificationToken: { type: String },
+    avatarUrl: { type: String }
   },
   createdAt: { type: Date, default: Date.now }
 });

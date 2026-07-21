@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { MessageSquare, Calendar, User, MessageCircle, Send, Sparkles } from 'lucide-react';
+import { MessageSquare, Calendar, User, MessageCircle, Send, Sparkles, Edit2, Trash2, X } from 'lucide-react';
 
 export const Forum: React.FC = () => {
   const { user } = useAuth();
@@ -9,6 +9,7 @@ export const Forum: React.FC = () => {
   const [threads, setThreads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedThread, setSelectedThread] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   // New Thread inputs
   const [title, setTitle] = useState('');
@@ -75,6 +76,59 @@ export const Forum: React.FC = () => {
     }
   };
 
+  const handleEditThread = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim() || !content.trim() || !selectedThread) return;
+
+    setErrorMsg('');
+    try {
+      const data = await api.put(`/forum/${selectedThread._id}`, { title, content, category });
+      setSelectedThread(data.thread);
+      setIsEditing(false);
+      fetchThreads();
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Failed to edit thread.');
+    }
+  };
+
+  const handleDeleteThread = async (threadId: string) => {
+    if (!window.confirm('Are you sure you want to delete this thread?')) return;
+    try {
+      await api.delete(`/forum/${threadId}`);
+      if (selectedThread && selectedThread._id === threadId) {
+        setSelectedThread(null);
+      }
+      fetchThreads();
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Failed to delete thread.');
+    }
+  };
+
+  const handleStartEdit = (thread: any) => {
+    setSelectedThread(thread);
+    setTitle(thread.title);
+    setContent(thread.content);
+    setCategory(thread.category);
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setTitle('');
+    setContent('');
+    setCategory('General');
+  };
+
+  const handleSelectThread = (t: any) => {
+    setSelectedThread(t);
+    setIsEditing(false);
+    setTitle('');
+    setContent('');
+    setCategory('General');
+  };
+
+
+
   const getCategoryColor = (cat: string) => {
     switch (cat) {
       case 'Official': return 'from-rose-100 to-red-100 border-rose-300 text-rose-700';
@@ -132,7 +186,7 @@ export const Forum: React.FC = () => {
               {threads.map((t) => (
                 <div 
                   key={t._id}
-                  onClick={() => setSelectedThread(t)}
+                  onClick={() => handleSelectThread(t)}
                   className={`relative overflow-hidden rounded-2xl border-2 p-5 shadow-md hover:shadow-xl transition-all cursor-pointer ${
                     selectedThread?._id === t._id 
                       ? 'border-indigo-400 bg-gradient-to-r from-indigo-50 to-purple-50' 
@@ -151,9 +205,21 @@ export const Forum: React.FC = () => {
                       </span>
                     </div>
 
-                    <h4 className="font-bold text-slate-900 mt-2 text-sm hover:text-indigo-600 transition-all leading-snug">
-                      {t.title}
-                    </h4>
+                    <div className="flex justify-between items-start mt-2">
+                      <h4 className="font-bold text-slate-900 text-sm hover:text-indigo-600 transition-all leading-snug pr-4">
+                        {t.title}
+                      </h4>
+                      {(t.authorId === user?.id || user?.role === 'Admin' || user?.role === 'PlacementOfficer' || t.authorName === user?.name) && (
+                        <div className="flex gap-2">
+                          <button onClick={(e) => { e.stopPropagation(); handleStartEdit(t); }} className="text-slate-400 hover:text-indigo-600 transition-colors p-1">
+                            <Edit2 className="h-4 w-4" />
+                          </button>
+                          <button onClick={(e) => { e.stopPropagation(); handleDeleteThread(t._id); }} className="text-slate-400 hover:text-rose-600 transition-colors p-1">
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     
                     <div className="flex items-center justify-between border-t border-slate-200 mt-3 pt-2.5 text-[10px] text-slate-600">
                       <span className="flex items-center space-x-1">
@@ -175,44 +241,50 @@ export const Forum: React.FC = () => {
         {/* Right Column: Dynamic Pane */}
         <div className="lg:col-span-4 space-y-4">
           
-          {/* Thread Detail View */}
-          {selectedThread ? (
+          {/* Thread Detail View or Form */}
+          {selectedThread && !isEditing ? (
             <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
-              <div className="relative z-10 space-y-4">
-                <div className="border-b border-slate-200 pb-3">
-                  <h4 className="font-bold text-slate-900 text-sm leading-normal">{selectedThread.title}</h4>
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed font-medium bg-gradient-to-br from-slate-50 to-slate-100 p-3 rounded-xl border-2 border-slate-200">
-                    {selectedThread.content}
-                  </p>
+              <div className="relative z-10 space-y-4 flex flex-col h-full">
+                <div className="border-b border-slate-200 pb-3 flex justify-between items-start">
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm leading-normal pr-4">{selectedThread.title}</h4>
+                    <p className="text-[10px] text-slate-500 mt-1">{selectedThread.authorName} &bull; {new Date(selectedThread.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <button onClick={() => setSelectedThread(null)} className="text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1">
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
+                <p className="text-xs text-slate-700 leading-relaxed font-medium bg-gradient-to-br from-slate-50 to-slate-100 p-4 rounded-xl border-2 border-slate-100 whitespace-pre-wrap">
+                  {selectedThread.content}
+                </p>
 
                 {/* Reply list */}
-                <div className="space-y-2 max-h-60 overflow-y-auto">
+                <div className="space-y-3 max-h-64 overflow-y-auto pr-2 mt-2">
                   {selectedThread.replies?.length === 0 ? (
                     <p className="text-xs text-slate-500 italic py-2">No replies yet.</p>
                   ) : (
                     selectedThread.replies?.map((rep: any, idx: number) => (
-                      <div key={idx} className="p-3 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl text-xs leading-relaxed border-2 border-slate-200">
-                        <div className="flex justify-between items-center text-[10px] text-slate-600 font-bold mb-1.5">
+                      <div key={idx} className="p-3 bg-white rounded-xl text-xs leading-relaxed border-2 border-slate-100 shadow-sm">
+                        <div className="flex justify-between items-center text-[10px] text-indigo-700 font-bold mb-1.5">
                           <span>{rep.authorName} ({rep.authorRole})</span>
-                          <span>{new Date(rep.createdAt).toLocaleDateString()}</span>
+                          <span className="text-slate-400 font-normal">{new Date(rep.createdAt).toLocaleDateString()}</span>
                         </div>
-                        <p className="text-slate-700">{rep.content}</p>
+                        <p className="text-slate-700 whitespace-pre-wrap">{rep.content}</p>
                       </div>
                     ))
                   )}
                 </div>
 
                 {/* Add reply Form */}
-                <form onSubmit={handleAddReply} className="flex space-x-2 border-t border-slate-200 pt-3">
+                <form onSubmit={handleAddReply} className="flex space-x-2 border-t border-slate-200 pt-4 mt-auto">
                   <input
                     type="text"
-                    placeholder="Post reply text..."
+                    placeholder="Type your reply..."
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
                     disabled={submittingReply}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-50 border-2 border-slate-200 text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                   />
                   <button
                     type="submit"
@@ -225,16 +297,23 @@ export const Forum: React.FC = () => {
               </div>
             </div>
           ) : (
-            // Create Thread Form
+            // Create/Edit Thread Form
             <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
               <div className="relative z-10 space-y-4">
-                <div className="flex items-center gap-2 text-indigo-600">
-                  <Sparkles className="h-5 w-5" />
-                  <h4 className="text-sm font-bold uppercase tracking-wider">Create New Thread</h4>
+                <div className="flex justify-between items-center text-indigo-600 border-b border-slate-100 pb-3">
+                  <div className="flex items-center gap-2">
+                    {isEditing ? <Edit2 className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
+                    <h4 className="text-sm font-bold uppercase tracking-wider">{isEditing ? 'Edit Thread' : 'Create New Thread'}</h4>
+                  </div>
+                  {isEditing && (
+                    <button onClick={handleCancelEdit} className="text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1">
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
                 </div>
 
-                <form onSubmit={handleCreateThread} className="space-y-3">
+                <form onSubmit={isEditing ? handleEditThread : handleCreateThread} className="space-y-4 pt-2">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Title</label>
                     <input
@@ -277,7 +356,7 @@ export const Forum: React.FC = () => {
                     type="submit"
                     className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
                   >
-                    Post Discussion Thread
+                    {isEditing ? 'Save Changes' : 'Post Discussion Thread'}
                   </button>
                 </form>
               </div>

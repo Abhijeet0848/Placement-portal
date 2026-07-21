@@ -4,22 +4,55 @@ import jwt from 'jsonwebtoken';
 import { isMockDb } from '../config/dbConnect';
 import { mockDb } from '../db/mockDb';
 import User from '../models/User';
+import Permission from '../models/Permission';
 import { generateTokens, AuthenticatedRequest } from '../middleware/auth';
 import logger from '../utils/logger';
+import { mockPermissions } from './admin.controller';
+import BlacklistedToken from '../models/BlacklistedToken';
 
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'supersecretrefreshkey';
 
 // 1. Sign Up
 export async function register(req: AuthenticatedRequest, res: Response) {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, confirmPassword, role } = req.body;
 
-  if (!name || !email || !password || !role) {
-    return res.status(400).json({ message: 'All fields (name, email, password, role) are required.' });
+  if (!name || !email || !password || !confirmPassword || !role) {
+    return res.status(400).json({ message: 'All fields (name, email, password, confirmPassword, role) are required.' });
+  }
+
+  // Name validation
+  const nameRegex = /^[A-Za-z\s]{2,50}$/;
+  if (!nameRegex.test(name)) {
+    return res.status(400).json({ message: 'Invalid name. Must be 2-50 characters and contain only letters and spaces.' });
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match.' });
+  }
+
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({ message: 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.' });
+  }
+
+  // Strict email regex validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format.' });
   }
 
   try {
     const salt = bcryptjs.genSaltSync(10);
     const passwordHash = bcryptjs.hashSync(password, salt);
+    
+    // Generate 6 digit verification code
+    const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    logger.info(`--- MOCK EMAIL ---`);
+    logger.info(`To: ${email}`);
+    logger.info(`Subject: Verify Your Email`);
+    logger.info(`Your verification code is: ${verificationToken}`);
+    logger.info(`------------------`);
 
     if (isMockDb) {
       // Mock DB path
@@ -40,7 +73,8 @@ export async function register(req: AuthenticatedRequest, res: Response) {
           projects: [],
           education: [],
           verified: false,
-          certificates: []
+          certificates: [],
+          verificationToken
         },
         createdAt: new Date()
       };
@@ -77,7 +111,8 @@ export async function register(req: AuthenticatedRequest, res: Response) {
           projects: [],
           education: [],
           verified: false,
-          certificates: []
+          certificates: [],
+          verificationToken
         }
       });
 
@@ -117,10 +152,18 @@ export async function login(req: AuthenticatedRequest, res: Response) {
         return res.status(400).json({ message: 'Invalid credentials.' });
       }
 
+      if (user.status === 'Blocked') {
+        return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
+      }
+
       const isMatch = bcryptjs.compareSync(password, user.passwordHash);
       if (!isMatch) {
         return res.status(400).json({ message: 'Invalid credentials.' });
       }
+
+      // Fetch role permissions (Mock)
+      const mockRolePerms = mockPermissions.find(p => p.role === user.role);
+      const permissions = mockRolePerms ? mockRolePerms.permissions : {};
 
       const tokens = generateTokens({ id: user._id, email: user.email, role: user.role, name: user.name });
       return res.json({
@@ -131,7 +174,8 @@ export async function login(req: AuthenticatedRequest, res: Response) {
           name: user.name,
           email: user.email,
           role: user.role,
-          profile: user.profile
+          profile: user.profile,
+          permissions
         }
       });
     } else {
@@ -140,10 +184,18 @@ export async function login(req: AuthenticatedRequest, res: Response) {
         return res.status(400).json({ message: 'Invalid credentials.' });
       }
 
+      if (user.status === 'Blocked') {
+        return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
+      }
+
       const isMatch = bcryptjs.compareSync(password, user.passwordHash);
       if (!isMatch) {
         return res.status(400).json({ message: 'Invalid credentials.' });
       }
+
+      // Fetch role permissions
+      const permDoc = await Permission.findOne({ role: user.role });
+      const permissions = permDoc && permDoc.permissions ? Object.fromEntries(permDoc.permissions) : {};
 
       const tokens = generateTokens({ id: user._id.toString(), email: user.email, role: user.role, name: user.name });
       return res.json({
@@ -154,7 +206,8 @@ export async function login(req: AuthenticatedRequest, res: Response) {
           name: user.name,
           email: user.email,
           role: user.role,
-          profile: user.profile
+          profile: user.profile,
+          permissions
         }
       });
     }
@@ -173,6 +226,17 @@ export async function refreshToken(req: AuthenticatedRequest, res: Response) {
   }
 
   try {
+    if (isMockDb) {
+      if (mockDb.blacklistedTokens.includes(token)) {
+        return res.status(403).json({ message: 'Refresh token is blacklisted.' });
+      }
+    } else {
+      const isBlacklisted = await BlacklistedToken.findOne({ token });
+      if (isBlacklisted) {
+        return res.status(403).json({ message: 'Refresh token is blacklisted.' });
+      }
+    }
+
     jwt.verify(token, JWT_REFRESH_SECRET, (err: any, decoded: any) => {
       if (err) {
         return res.status(403).json({ message: 'Refresh token is invalid or expired.' });
@@ -195,7 +259,32 @@ export async function refreshToken(req: AuthenticatedRequest, res: Response) {
   }
 }
 
-// 4. Get Current Profile
+// 4. Logout
+export async function logout(req: AuthenticatedRequest, res: Response) {
+  const { refreshToken } = req.body;
+  const authHeader = req.headers.authorization;
+  const accessToken = authHeader ? authHeader.split(' ')[1] : null;
+
+  try {
+    if (isMockDb) {
+      if (accessToken) mockDb.blacklistedTokens.push(accessToken);
+      if (refreshToken) mockDb.blacklistedTokens.push(refreshToken);
+    } else {
+      if (accessToken) {
+        await BlacklistedToken.create({ token: accessToken });
+      }
+      if (refreshToken) {
+        await BlacklistedToken.create({ token: refreshToken });
+      }
+    }
+    return res.json({ message: 'Logged out successfully' });
+  } catch (error: any) {
+    logger.error(`Logout failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server logout error' });
+  }
+}
+
+// 5. Get Current Profile
 export async function getProfile(req: AuthenticatedRequest, res: Response) {
   if (!req.user) {
     return res.status(401).json({ message: 'Unauthorized.' });
@@ -205,25 +294,32 @@ export async function getProfile(req: AuthenticatedRequest, res: Response) {
     if (isMockDb) {
       const user = mockDb.users.find(u => u._id === req.user?.id);
       if (!user) return res.status(404).json({ message: 'User not found' });
+      const mockRolePerms = mockPermissions.find(p => p.role === user.role);
+      const permissions = mockRolePerms ? mockRolePerms.permissions : {};
       return res.json({
         user: {
           id: user._id,
           name: user.name,
           email: user.email,
           role: user.role,
-          profile: user.profile
+          profile: user.profile,
+          permissions
         }
       });
     } else {
       const user = await User.findById(req.user.id);
       if (!user) return res.status(404).json({ message: 'User not found' });
+      const permDoc = await Permission.findOne({ role: user.role });
+      const permissions = permDoc && permDoc.permissions ? Object.fromEntries(permDoc.permissions) : {};
+
       return res.json({
         user: {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
           role: user.role,
-          profile: user.profile
+          profile: user.profile,
+          permissions
         }
       });
     }
@@ -239,17 +335,41 @@ export async function updateProfile(req: AuthenticatedRequest, res: Response) {
     return res.status(401).json({ message: 'Unauthorized.' });
   }
 
-  const { phone, cgpa, cgpaScale, branch, skills, experience, projects, education, resumeUrl, certificates } = req.body;
+  const { name, email, phone, address, cgpa, cgpaScale, branch, skills, experience, projects, education, resumeUrl, certificates } = req.body;
+
+  if (name !== undefined) {
+    const nameRegex = /^[A-Za-z\s]{2,50}$/;
+    if (!nameRegex.test(name)) {
+      return res.status(400).json({ message: 'Invalid name. Must be 2-50 characters and contain only letters and spaces.' });
+    }
+  }
+
+  if (phone !== undefined) {
+    const phoneRegex = /^\+?[\d\s-]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({ message: 'Invalid phone number format.' });
+    }
+  }
+
+  if (experience !== undefined) {
+    if (!Array.isArray(experience) || experience.some(exp => typeof exp !== 'string' || exp.length > 500)) {
+      return res.status(400).json({ message: 'Experience must be an array of valid strings.' });
+    }
+  }
 
   try {
     if (isMockDb) {
       const userIndex = mockDb.users.findIndex(u => u._id === req.user?.id);
       if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
 
+      if (name !== undefined) mockDb.users[userIndex].name = name;
+      if (email !== undefined) mockDb.users[userIndex].email = email;
+
       const profile = mockDb.users[userIndex].profile;
       mockDb.users[userIndex].profile = {
         ...profile,
         phone: phone !== undefined ? phone : profile.phone,
+        address: address !== undefined ? address : profile.address,
         cgpa: cgpa !== undefined ? Number(cgpa) : profile.cgpa,
         cgpaScale: cgpaScale !== undefined ? cgpaScale : (profile.cgpaScale || '10.0'),
         branch: branch !== undefined ? branch : profile.branch,
@@ -275,7 +395,10 @@ export async function updateProfile(req: AuthenticatedRequest, res: Response) {
       const user = await User.findById(req.user.id);
       if (!user) return res.status(404).json({ message: 'User not found' });
 
+      if (name !== undefined) user.name = name;
+      if (email !== undefined) user.email = email;
       if (phone !== undefined) user.profile.phone = phone;
+      if (address !== undefined) user.profile.address = address;
       if (cgpa !== undefined) user.profile.cgpa = Number(cgpa);
       if (cgpaScale !== undefined) user.profile.cgpaScale = cgpaScale;
       if (branch !== undefined) user.profile.branch = branch;
@@ -332,6 +455,34 @@ export async function getAllStudents(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+// 6.1 Get All Users (For Admin)
+export async function getAllUsers(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (isMockDb) {
+      const users = mockDb.users.map(u => ({
+        id: u._id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        profile: u.profile
+      }));
+      return res.json({ users });
+    } else {
+      const dbUsers = await User.find({});
+      const users = dbUsers.map(u => ({
+        id: u._id.toString(),
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        profile: u.profile
+      }));
+      return res.json({ users });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ message: 'Server fetch users error' });
+  }
+}
+
 // In-memory reset tokens map for mock DB or fallback
 const resetTokens: Record<string, { code: string; expires: number }> = {};
 
@@ -374,13 +525,18 @@ export async function forgotPassword(req: AuthenticatedRequest, res: Response) {
 
 // 8. Reset Password (Verify OTP & Set New Password)
 export async function resetPassword(req: AuthenticatedRequest, res: Response) {
-  const { email, code, newPassword } = req.body;
-  if (!email || !code || !newPassword) {
-    return res.status(400).json({ message: 'Email, reset code, and new password are required.' });
+  const { email, code, newPassword, confirmPassword } = req.body;
+  if (!email || !code || !newPassword || !confirmPassword) {
+    return res.status(400).json({ message: 'Email, reset code, new password, and confirm password are required.' });
   }
 
-  if (newPassword.length < 6) {
-    return res.status(400).json({ message: 'New password must be at least 6 characters long.' });
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match.' });
+  }
+
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+  if (!passwordRegex.test(newPassword)) {
+    return res.status(400).json({ message: 'New password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.' });
   }
 
   try {
@@ -412,5 +568,137 @@ export async function resetPassword(req: AuthenticatedRequest, res: Response) {
   } catch (error: any) {
     logger.error(`Reset password error: ${error?.message || error}`);
     return res.status(500).json({ message: 'Failed to reset password.' });
+  }
+}
+
+// 9. Delete Student (For Placement Officer / Admin)
+export async function deleteStudent(req: AuthenticatedRequest, res: Response) {
+  try {
+    const studentId = req.params.id;
+    if (isMockDb) {
+      const index = mockDb.users.findIndex(u => u._id === studentId && u.role === 'Student');
+      if (index === -1) {
+        return res.status(404).json({ message: 'Student not found' });
+      }
+      mockDb.users.splice(index, 1);
+      return res.json({ message: 'Student deleted successfully (Mock DB)' });
+    } else {
+      const deletedUser = await User.findOneAndDelete({ _id: studentId, role: 'Student' });
+      if (!deletedUser) {
+        return res.status(404).json({ message: 'Student not found' });
+      }
+      return res.json({ message: 'Student deleted successfully' });
+    }
+  } catch (error: any) {
+    logger.error(`Delete student failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server delete student error' });
+  }
+}
+
+// 10. Update Student Profile (For Placement Officer / Admin)
+export async function updateStudentProfile(req: AuthenticatedRequest, res: Response) {
+  const studentId = req.params.id;
+  const { certificates } = req.body;
+
+  try {
+    if (isMockDb) {
+      const userIndex = mockDb.users.findIndex(u => u._id === studentId && u.role === 'Student');
+      if (userIndex === -1) return res.status(404).json({ message: 'Student not found' });
+
+      const profile = mockDb.users[userIndex].profile;
+      mockDb.users[userIndex].profile = {
+        ...profile,
+        certificates: certificates !== undefined ? certificates : profile.certificates
+      };
+
+      return res.json({
+        message: 'Student profile updated successfully (Mock DB)',
+        profile: mockDb.users[userIndex].profile
+      });
+    } else {
+      const user = await User.findOne({ _id: studentId, role: 'Student' });
+      if (!user) return res.status(404).json({ message: 'Student not found' });
+
+      if (certificates !== undefined) user.profile.certificates = certificates;
+
+      await user.save();
+      return res.json({
+        message: 'Student profile updated successfully',
+        profile: user.profile
+      });
+    }
+  } catch (error: any) {
+    logger.error(`Update student profile failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server student profile update error' });
+  }
+}
+
+// 12. Verify Email
+export async function verifyEmail(req: AuthenticatedRequest, res: Response) {
+  const { code } = req.body;
+  if (!code) {
+    return res.status(400).json({ message: 'Verification code is required.' });
+  }
+  if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
+
+  try {
+    if (isMockDb) {
+      const user = mockDb.users.find(u => u._id === req.user?.id);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+      
+      if (user.profile.verificationToken === code) {
+        user.profile.verified = true;
+        user.profile.verificationToken = undefined;
+        return res.json({ message: 'Email verified successfully' });
+      } else {
+        return res.status(400).json({ message: 'Invalid verification code' });
+      }
+    } else {
+      const user = await User.findById(req.user.id);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+
+      if (user.profile.verificationToken === code) {
+        user.profile.verified = true;
+        user.profile.verificationToken = undefined;
+        await user.save();
+        return res.json({ message: 'Email verified successfully' });
+      } else {
+        return res.status(400).json({ message: 'Invalid verification code' });
+      }
+    }
+  } catch (error: any) {
+    logger.error(`Verify email failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server verification error' });
+  }
+}
+
+// 13. Upload Profile Picture
+export async function uploadProfilePicture(req: AuthenticatedRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
+  
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image file uploaded.' });
+  }
+
+  try {
+    // In a real app we'd upload to S3/Cloudinary and get a URL.
+    // For now, we simulate success and return a mock URL.
+    const avatarUrl = `https://mock-storage.com/avatars/${req.user.id}-${Date.now()}.png`;
+
+    if (isMockDb) {
+      const user = mockDb.users.find(u => u._id === req.user?.id);
+      if (user) {
+        user.profile.avatarUrl = avatarUrl;
+      }
+    } else {
+      await User.findByIdAndUpdate(req.user.id, {
+        $set: { 'profile.avatarUrl': avatarUrl }
+      });
+    }
+
+    return res.json({ message: 'Profile picture uploaded successfully', avatarUrl });
+  } catch (error: any) {
+    logger.error(`Upload profile picture failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server upload error' });
   }
 }

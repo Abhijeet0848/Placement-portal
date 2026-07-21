@@ -113,6 +113,10 @@ class ApiService {
       body: JSON.stringify(body),
     });
   }
+
+  delete(endpoint: string, options?: RequestInit) {
+    return this.request(endpoint, { ...options, method: 'DELETE' });
+  }
 }
 
 export const api = new ApiService();

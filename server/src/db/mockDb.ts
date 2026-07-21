@@ -9,6 +9,7 @@ export interface User {
   role: 'Student' | 'Recruiter' | 'PlacementOfficer' | 'Admin';
   profile: {
     phone?: string;
+    address?: string;
     cgpa?: number;
     cgpaScale?: string;
     branch?: string;
@@ -21,6 +22,8 @@ export interface User {
     resumeAnalysis?: any;
     verified: boolean;
     certificates: { name: string; url: string; verified: boolean; issueDate: string }[];
+    verificationToken?: string;
+    avatarUrl?: string;
   };
   createdAt: Date;
 }
@@ -156,6 +159,8 @@ class MockDatabase {
   notifications: Notification[] = [];
   exams: SkillExam[] = [];
   assessmentResults: any[] = [];
+  activityLogs: any[] = [];
+  blacklistedTokens: string[] = [];
 
   constructor() {
     this.seed();
@@ -523,9 +528,10 @@ class MockDatabase {
             negativeMarks: 0.5,
             options: ['60 km/hr', '72 km/hr', '80 km/hr', '90 km/hr'],
             correctAnswerIndex: 1,
-            explanation: 'Speed = Distance/Time = 120/6 = 20 m/s. Convert to km/hr: 20 * (18/5) = 72 km/hr.'
+            explanation: 'Speed = Distance / Time = 120 / 6 = 20 m/s. In km/hr, it is 20 * (18/5) = 72 km/hr.'
           }
         ],
+        codingChallenges: []
       },
       {
         _id: 'exam_private_1',
