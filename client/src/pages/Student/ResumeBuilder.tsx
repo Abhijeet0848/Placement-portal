@@ -214,8 +214,8 @@ export const ResumeBuilder: React.FC = () => {
         <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
           <div className="relative z-10">
-            <div class="grid gap-4 md:grid-cols-2">
-              <div class="space-y-2">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
                 <input
                   value={form.name}
@@ -223,7 +223,7 @@ export const ResumeBuilder: React.FC = () => {
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
-              <div class="space-y-2">
+              <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Email</label>
                 <input
                   value={form.email}
@@ -231,7 +231,7 @@ export const ResumeBuilder: React.FC = () => {
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
-              <div class="space-y-2">
+              <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Phone</label>
                 <input
                   value={form.phone}
@@ -239,7 +239,7 @@ export const ResumeBuilder: React.FC = () => {
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
-              <div class="space-y-2">
+              <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Links (GitHub/LinkedIn)</label>
                 <input
                   value={form.links}
@@ -248,7 +248,7 @@ export const ResumeBuilder: React.FC = () => {
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
-              <div class="space-y-2 md:col-span-2">
+              <div className="space-y-2 md:col-span-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Skills</label>
                 <input
                   value={form.skills}

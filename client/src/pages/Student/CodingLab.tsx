@@ -24,7 +24,7 @@ export const CodingLab: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   
   // Timer Ref
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const examContainerRef = useRef<HTMLDivElement>(null);
 
   // Submission Results

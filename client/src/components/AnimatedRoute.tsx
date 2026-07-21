@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface AnimatedRouteProps {
@@ -37,7 +37,7 @@ export const AnimatedRoute = ({ children }: AnimatedRouteProps) => {
       animate="in"
       exit="out"
       variants={pageVariants}
-      transition={pageTransition}
+      transition={pageTransition as any}
       className="w-full h-full"
     >
       {children}

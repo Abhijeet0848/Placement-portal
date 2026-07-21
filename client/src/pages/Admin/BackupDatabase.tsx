@@ -11,7 +11,7 @@ export const BackupDatabasePanel: React.FC = () => {
     setIsBackingUp(true);
     setMessage('');
     try {
-      const res = await api.post('/admin/backup');
+      const res = await api.post('/admin/backup', {});
       
       // Trigger browser download
       const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
