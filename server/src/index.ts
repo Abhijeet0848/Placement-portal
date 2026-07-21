@@ -24,7 +24,7 @@ app.use(helmet({
   crossOriginResourcePolicy: false // Allows loading local uploads if needed
 }));
 app.use(cors({
-  origin: clientOrigin,
+  origin: true,
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
