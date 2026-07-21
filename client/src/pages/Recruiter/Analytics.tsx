@@ -1,13 +1,44 @@
- import React from 'react';
+ import React, { useState, useEffect } from 'react';
 import { BarChart3, TrendingUp, Users, CheckCircle2, Award, Target } from 'lucide-react';
-
-const stats = [
-  { label: 'Applications reviewed', value: '142', icon: Users, color: 'from-indigo-500 to-blue-500' },
-  { label: 'Interviews scheduled', value: '28', icon: BarChart3, color: 'from-purple-500 to-pink-500' },
-  { label: 'Offers accepted', value: '11', icon: CheckCircle2, color: 'from-emerald-500 to-green-500' },
-];
+import { api } from '../../services/api';
 
 export const Analytics: React.FC = () => {
+  const [statsData, setStatsData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await api.get('/recruiter/dashboard');
+        setStatsData(res);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const totalApplicants = statsData?.totalApplicants || 0;
+  
+  // Find funnel data
+  const getFunnelCount = (name: string) => {
+    if (!statsData?.funnelData) return 0;
+    const item = statsData.funnelData.find((f: any) => f.name === name);
+    return item ? item.Count : 0;
+  };
+
+  const applications = totalApplicants;
+  const shortlisted = getFunnelCount('Shortlisted');
+  const selected = getFunnelCount('Selected');
+
+  const stats = [
+    { label: 'Applications received', value: applications.toString(), icon: Users, color: 'from-indigo-500 to-blue-500' },
+    { label: 'Candidates shortlisted', value: shortlisted.toString(), icon: BarChart3, color: 'from-purple-500 to-pink-500' },
+    { label: 'Offers accepted', value: selected.toString(), icon: CheckCircle2, color: 'from-emerald-500 to-green-500' },
+  ];
+
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -43,7 +74,7 @@ export const Analytics: React.FC = () => {
                   <TrendingUp className="h-5 w-5 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="text-3xl font-black text-slate-900">{item.value}</p>
+                  <p className="text-3xl font-black text-slate-900">{loading ? '...' : item.value}</p>
                   <p className="text-sm text-slate-600 mt-1 font-medium">{item.label}</p>
                 </div>
                 <div className="mt-3 pt-3 border-t border-slate-200">
@@ -73,30 +104,30 @@ export const Analytics: React.FC = () => {
               <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl border-2 border-indigo-200">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold text-slate-700">Applications Received</span>
-                  <span className="text-sm font-black text-indigo-600">142</span>
+                  <span className="text-sm font-black text-indigo-600">{applications}</span>
                 </div>
                 <div className="h-2 w-full bg-indigo-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-indigo-500 to-blue-500" style={{ width: '100%' }}></div>
+                  <div className="h-full bg-gradient-to-r from-indigo-500 to-blue-500" style={{ width: applications ? '100%' : '0%' }}></div>
                 </div>
               </div>
 
               <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-slate-700">Interviews Conducted</span>
-                  <span className="text-sm font-black text-purple-600">28</span>
+                  <span className="text-xs font-bold text-slate-700">Candidates Shortlisted</span>
+                  <span className="text-sm font-black text-purple-600">{shortlisted}</span>
                 </div>
                 <div className="h-2 w-full bg-purple-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500" style={{ width: '72%' }}></div>
+                  <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500" style={{ width: applications ? `${(shortlisted / applications) * 100}%` : '0%' }}></div>
                 </div>
               </div>
 
               <div className="p-4 bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl border-2 border-emerald-200">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold text-slate-700">Offers Accepted</span>
-                  <span className="text-sm font-black text-emerald-600">11</span>
+                  <span className="text-sm font-black text-emerald-600">{selected}</span>
                 </div>
                 <div className="h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-emerald-500 to-green-500" style={{ width: '39%' }}></div>
+                  <div className="h-full bg-gradient-to-r from-emerald-500 to-green-500" style={{ width: applications ? `${(selected / applications) * 100}%` : '0%' }}></div>
                 </div>
               </div>
             </div>
@@ -117,10 +148,14 @@ export const Analytics: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Response Rate</p>
-                    <p className="text-2xl font-black text-slate-900 mt-1">87%</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1">
+                      {applications > 0 ? Math.round(((shortlisted + selected) / applications) * 100) : 0}%
+                    </p>
                   </div>
                   <div className="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">A+</span>
+                    <span className="text-white font-bold text-sm">
+                      {applications > 0 && ((shortlisted + selected) / applications) > 0.5 ? 'A+' : 'B'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -129,7 +164,7 @@ export const Analytics: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Avg. Time to Hire</p>
-                    <p className="text-2xl font-black text-slate-900 mt-1">12 days</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1">5 days</p>
                   </div>
                   <div className="h-12 w-12 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
                     <span className="text-white font-bold text-xs">FAST</span>
@@ -140,8 +175,8 @@ export const Analytics: React.FC = () => {
               <div className="p-4 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border-2 border-slate-200">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Candidate Satisfaction</p>
-                    <p className="text-2xl font-black text-slate-900 mt-1">4.8/5</p>
+                    <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Selection Ratio</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1">{statsData?.selectionRatio || '0.0'}%</p>
                   </div>
                   <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center">
                     <span className="text-white font-bold text-xs">TOP</span>

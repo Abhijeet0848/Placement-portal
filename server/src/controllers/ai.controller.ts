@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob } from '../services/ai.service';
+import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText } from '../services/ai.service';
 import { parseResumePDF } from '../services/parser.service';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { isMockDb } from '../config/dbConnect';
@@ -122,5 +122,31 @@ export async function matchJob(req: AuthenticatedRequest, res: Response) {
   } catch (error: any) {
     logger.error(`Job matching failed: ${error?.message || error}`);
     return res.status(500).json({ message: 'Server job matching error' });
+  }
+}
+
+// 6. Parse Exam PDF Upload
+export async function parseExamUpload(req: AuthenticatedRequest, res: Response) {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded. Please upload a PDF file containing exam questions.' });
+  }
+
+  try {
+    logger.info(`Parsing Exam PDF buffer of size ${req.file.size} bytes...`);
+    const parsed = await parseResumePDF(req.file.buffer);
+    
+    if (!parsed.fullText || parsed.fullText.trim().length < 20) {
+       return res.status(400).json({ message: 'Could not extract enough text from the PDF. Please ensure it is a text-based PDF.' });
+    }
+
+    const questions = await parseExamQuestionsFromText(parsed.fullText);
+
+    return res.json({
+      message: 'Exam parsed successfully',
+      questions
+    });
+  } catch (error: any) {
+    logger.error(`Exam parsing upload failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Server exam parsing error' });
   }
 }

@@ -23,6 +23,8 @@ export const Profile: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [parserResult, setParserResult] = useState<any>(null);
   const [message, setMessage] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState({ text: '', type: '' });
   const [certificates, setCertificates] = useState<any[]>(user?.profile.certificates || []);
   const [uploadingCertificates, setUploadingCertificates] = useState(false);
 
@@ -54,7 +56,8 @@ export const Profile: React.FC = () => {
   // Submit Profile Form
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('');
+    setSaveMessage({ text: '', type: '' });
+    setIsSaving(true);
     try {
       const updateData: any = {
         phone,
@@ -71,9 +74,11 @@ export const Profile: React.FC = () => {
       }
 
       await updateUser(updateData);
-      setMessage('Profile updated successfully!');
+      setSaveMessage({ text: 'Profile updated successfully!', type: 'success' });
     } catch (err: any) {
-      setMessage(`Update failed: ${err.message}`);
+      setSaveMessage({ text: `Update failed: ${err.message}`, type: 'error' });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -372,10 +377,16 @@ export const Profile: React.FC = () => {
 
             <button
               type="submit"
-              className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+              disabled={isSaving}
+              className={`mt-6 w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              Save Academic Profile
+              {isSaving ? 'Saving...' : 'Save Academic Profile'}
             </button>
+            {saveMessage.text && (
+              <div className={`mt-4 p-3 rounded-xl text-sm font-bold text-center shadow-md ${saveMessage.type === 'success' ? 'bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 text-emerald-700' : 'bg-gradient-to-r from-rose-50 to-red-50 border-2 border-rose-300 text-rose-700'}`}>
+                {saveMessage.text}
+              </div>
+            )}
           </div>
         </div>
 

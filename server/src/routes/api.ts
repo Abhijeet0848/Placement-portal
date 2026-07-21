@@ -2,10 +2,11 @@ import { Router } from 'express';
 import multer from 'multer';
 import { register, login, refreshToken, getProfile, updateProfile, getAllStudents, forgotPassword, resetPassword } from '../controllers/auth.controller';
 import { createJob, getAllJobs, applyJob, getRecruiterApplications, updateApplicationStatus, getStudentApplications } from '../controllers/jobs.controller';
-import { analyzeResumeUpload, evaluateInterview, getCareerRoadmap, createCoverLetter, matchJob } from '../controllers/ai.controller';
-import { getExams, getExamById, submitExam } from '../controllers/exam.controller';
+import { analyzeResumeUpload, evaluateInterview, getCareerRoadmap, createCoverLetter, matchJob, parseExamUpload } from '../controllers/ai.controller';
+import { getExams, getExamById, submitExam, createExam } from '../controllers/exam.controller';
 import { createThread, getAllThreads, addReply, createReview, getAllReviews, scheduleInterview, getInterviews } from '../controllers/discussion.controller';
 import { getRecommendedJobs } from '../controllers/recommendation.controller';
+import { getStudentDashboardStats, getRecruiterDashboardStats, sendEmail } from '../controllers/dashboard.controller';
 import { authenticateJWT, requireRole } from '../middleware/auth';
 
 const router = Router();
@@ -30,8 +31,11 @@ router.get('/jobs', authenticateJWT, getAllJobs);
 router.post('/jobs/:jobId/apply', authenticateJWT, requireRole(['Student']), applyJob);
 
 // Application Tracking Routes
+router.get('/recruiter/dashboard', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), getRecruiterDashboardStats);
 router.get('/recruiter/applications', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), getRecruiterApplications);
 router.put('/recruiter/applications/:appId/status', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), updateApplicationStatus);
+router.post('/recruiter/send-email', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), sendEmail);
+router.get('/student/dashboard', authenticateJWT, requireRole(['Student']), getStudentDashboardStats);
 router.get('/student/applications', authenticateJWT, requireRole(['Student']), getStudentApplications);
 
 // AI & Resume Parser Routes
@@ -40,11 +44,13 @@ router.post('/ai/evaluate-interview', authenticateJWT, evaluateInterview);
 router.post('/ai/career-roadmap', authenticateJWT, getCareerRoadmap);
 router.post('/ai/cover-letter', authenticateJWT, createCoverLetter);
 router.post('/ai/match-job', authenticateJWT, matchJob);
+router.post('/ai/parse-exam', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), upload.single('exam'), parseExamUpload);
 
-// Assessment & Coding Exam Routes
+// Exam & Assessment System
 router.get('/exams', authenticateJWT, getExams);
 router.get('/exams/:id', authenticateJWT, getExamById);
 router.post('/exams/:id/submit', authenticateJWT, submitExam);
+router.post('/exams', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), createExam);
 
 // Discussion Forum Routes
 router.get('/forum', authenticateJWT, getAllThreads);

@@ -12,7 +12,10 @@ export const ResumeBuilder: React.FC = () => {
     skills: 'React, Node.js, MongoDB, TypeScript',
     experience: 'Built full-stack campus placement portal using React, Node.js, and MongoDB.\nDeveloped feature-rich dashboards for students, recruiters, and placement officers.',
     education: 'MCA • XYZ University • 2024-2026\nBCA • ABC College • 2021-2024',
-    projects: 'Smart Placement Portal • Full-stack placement management system\nE-commerce Dashboard • React + Node + MongoDB'
+    projects: 'Smart Placement Portal • Full-stack placement management system\nE-commerce Dashboard • React + Node + MongoDB',
+    certifications: '',
+    achievements: '',
+    links: 'github.com/johndoe • linkedin.com/in/johndoe'
   });
   const [preview, setPreview] = useState<string>('');
 
@@ -20,26 +23,147 @@ export const ResumeBuilder: React.FC = () => {
 
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
+    const resumeContent = `
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        @page {
+          margin: 0; /* This removes the browser's default headers and footers (date, URL, title) */
+        }
+        
+        @media print {
+          body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            background-color: white !important;
+          }
+          .resume-container {
+            padding: 20mm !important; /* Restore margins for the printed page */
+            max-width: 100% !important;
+          }
+        }
+
+        .resume-container {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+          color: #111827;
+          line-height: 1.6;
+          padding: 2rem;
+          max-width: 800px;
+          margin: 0 auto;
+          background-color: #ffffff;
+          text-align: left;
+        }
+        .resume-container .header {
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+        .resume-container .header h1 {
+          font-size: 2.25rem;
+          font-weight: 800;
+          margin: 0 0 0.5rem;
+          color: #111827;
+          letter-spacing: -0.025em;
+          text-transform: uppercase;
+          line-height: 1.1;
+        }
+        .resume-container .meta {
+          color: #4b5563;
+          font-size: 0.95rem;
+          font-weight: 500;
+        }
+        .resume-container .section {
+          margin-top: 1.5rem;
+        }
+        .resume-container .section-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #111827;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          border-bottom: 2px solid #e5e7eb;
+          padding-bottom: 0.25rem;
+          margin-bottom: 0.75rem;
+        }
+        .resume-container .content-text {
+          font-size: 0.95rem;
+          color: #374151;
+          white-space: pre-wrap;
+        }
+        .resume-container .skills-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          padding: 0;
+          margin: 0;
+          list-style: none;
+        }
+        .resume-container .skills-list li {
+          font-size: 0.85rem;
+          font-weight: 600;
+          background: #f3f4f6;
+          color: #374151;
+          padding: 0.25rem 0.75rem;
+          border-radius: 9999px;
+          border: 1px solid #e5e7eb;
+        }
+      </style>
+      <div class="resume-container">
+        <div class="header">
+          <h1>${form.name}</h1>
+          <div class="meta">
+            ${form.email ? `<span>${form.email}</span>` : ''}
+            ${form.phone ? `&nbsp;•&nbsp; <span>${form.phone}</span>` : ''}
+            ${form.links ? `&nbsp;•&nbsp; <span>${form.links}</span>` : ''}
+          </div>
+        </div>
+        ${form.summary ? `
+        <div class="section">
+          <div class="section-title">Professional Summary</div>
+          <div class="content-text">${form.summary}</div>
+        </div>` : ''}
+        ${form.skills ? `
+        <div class="section">
+          <div class="section-title">Skills</div>
+          <ul class="skills-list">
+            ${skillList.map(skill => `<li>${skill}</li>`).join('')}
+          </ul>
+        </div>` : ''}
+        ${form.experience ? `
+        <div class="section">
+          <div class="section-title">Experience</div>
+          <div class="content-text">${form.experience}</div>
+        </div>` : ''}
+        ${form.education ? `
+        <div class="section">
+          <div class="section-title">Education</div>
+          <div class="content-text">${form.education}</div>
+        </div>` : ''}
+        ${form.projects ? `
+        <div class="section">
+          <div class="section-title">Projects</div>
+          <div class="content-text">${form.projects}</div>
+        </div>` : ''}
+        ${form.certifications ? `
+        <div class="section">
+          <div class="section-title">Certifications</div>
+          <div class="content-text">${form.certifications}</div>
+        </div>` : ''}
+        ${form.achievements ? `
+        <div class="section">
+          <div class="section-title">Achievements</div>
+          <div class="content-text">${form.achievements}</div>
+        </div>` : ''}
+      </div>
+    `;
+
     const html = `<!doctype html>
       <html>
-        <head><meta charset="utf-8" /><title>${form.name} Resume</title>
-        <style>
-          body{font-family:Arial,sans-serif;color:#111827;line-height:1.4;padding:24px;max-width:900px;margin:auto}
-          h1{font-size:24px;margin:0 0 4px}
-          .meta{color:#4b5563;font-size:13px;margin-bottom:12px}
-          .section{margin-top:16px}
-          .section h2{font-size:15px;border-bottom:1px solid #d1d5db;padding-bottom:4px;margin-bottom:8px}
-          ul{margin:0;padding-left:20px}
-          li{margin-bottom:4px}
-        </style></head>
+        <head>
+          <meta charset="utf-8" />
+          <title>${form.name} Resume</title>
+        </head>
         <body>
-          <h1>${form.name}</h1>
-          <div class="meta">${form.email} • ${form.phone}</div>
-          <div class="section"><h2>Professional Summary</h2><p>${form.summary}</p></div>
-          <div class="section"><h2>Skills</h2><ul>${skillList.map(skill => `<li>${skill}</li>`).join('')}</ul></div>
-          <div class="section"><h2>Experience</h2><p>${form.experience.replace(/\n/g, '<br/>')}</p></div>
-          <div class="section"><h2>Education</h2><p>${form.education.replace(/\n/g, '<br/>')}</p></div>
-          <div class="section"><h2>Projects</h2><p>${form.projects.replace(/\n/g, '<br/>')}</p></div>
+          ${resumeContent}
         </body>
       </html>`;
     setPreview(html);
@@ -90,8 +214,8 @@ export const ResumeBuilder: React.FC = () => {
         <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
           <div className="relative z-10">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
                 <input
                   value={form.name}
@@ -99,7 +223,7 @@ export const ResumeBuilder: React.FC = () => {
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
-              <div className="space-y-2">
+              <div class="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Email</label>
                 <input
                   value={form.email}
@@ -107,7 +231,7 @@ export const ResumeBuilder: React.FC = () => {
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
-              <div className="space-y-2">
+              <div class="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Phone</label>
                 <input
                   value={form.phone}
@@ -115,11 +239,21 @@ export const ResumeBuilder: React.FC = () => {
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
-              <div className="space-y-2">
+              <div class="space-y-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Links (GitHub/LinkedIn)</label>
+                <input
+                  value={form.links}
+                  onChange={(e) => setForm({ ...form, links: e.target.value })}
+                  placeholder="github.com/username • linkedin.com/in/username"
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                />
+              </div>
+              <div class="space-y-2 md:col-span-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Skills</label>
                 <input
                   value={form.skills}
                   onChange={(e) => setForm({ ...form, skills: e.target.value })}
+                  placeholder="React, Node.js, MongoDB (comma separated)"
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
@@ -161,6 +295,28 @@ export const ResumeBuilder: React.FC = () => {
                 rows={3}
                 value={form.projects}
                 onChange={(e) => setForm({ ...form, projects: e.target.value })}
+                className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+              />
+            </div>
+
+            <div className="space-y-2 mt-4">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Certifications (Optional)</label>
+              <textarea
+                rows={2}
+                value={form.certifications}
+                onChange={(e) => setForm({ ...form, certifications: e.target.value })}
+                placeholder="AWS Certified Solutions Architect&#10;Google Data Analytics Professional"
+                className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+              />
+            </div>
+
+            <div className="space-y-2 mt-4">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Achievements (Optional)</label>
+              <textarea
+                rows={2}
+                value={form.achievements}
+                onChange={(e) => setForm({ ...form, achievements: e.target.value })}
+                placeholder="1st Place in Global Hackathon 2025&#10;Dean's List 2023-2024"
                 className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
               />
             </div>
@@ -209,7 +365,7 @@ export const ResumeBuilder: React.FC = () => {
               <div
                 className="rounded-xl border-2 border-slate-200 bg-white p-6 text-slate-800 shadow-sm"
                 dangerouslySetInnerHTML={{
-                  __html: preview.replace(/<!doctype html>|<html>|<head>.*?<title>.*?<\/title>.*?<\/head>|<body>|<\/body>|<\/html>/gs, '').replace(/<style>.*?<\/style>/gs, '')
+                  __html: preview.replace(/<!doctype html>|<html>|<head>.*?<\/head>|<body>|<\/body>|<\/html>/gs, '')
                 }}
               >
               </div>

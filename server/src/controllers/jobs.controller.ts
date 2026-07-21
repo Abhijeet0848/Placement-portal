@@ -58,6 +58,19 @@ export async function createJob(req: AuthenticatedRequest, res: Response) {
       });
 
       await job.save();
+
+      const io = req.app.get('socketio');
+      if (io) {
+        io.emit('notification', {
+          id: `notif_${Date.now()}`,
+          title: 'New Job Opportunity!',
+          message: `${company} just posted a new role: ${title}`,
+          type: 'job',
+          read: false,
+          createdAt: new Date()
+        });
+      }
+
       return res.status(201).json({ message: 'Job created successfully', job });
     }
   } catch (error: any) {
@@ -190,6 +203,19 @@ export async function applyJob(req: AuthenticatedRequest, res: Response) {
       jobDetails.applicantsCount += 1;
       await jobDetails.save();
 
+      const io = req.app.get('socketio');
+      if (io) {
+        const postedByStr = typeof jobDetails.postedBy === 'string' ? jobDetails.postedBy : jobDetails.postedBy.toString();
+        io.to(postedByStr).emit('notification', {
+          id: `notif_${Date.now()}`,
+          title: 'New Job Application',
+          message: `${studentProfile.name || 'A student'} applied for your job: ${jobDetails.title}`,
+          type: 'application',
+          read: false,
+          createdAt: new Date()
+        });
+      }
+
       return res.status(201).json({
         message: 'Successfully applied to job',
         application: newApp,
@@ -252,11 +278,26 @@ export async function updateApplicationStatus(req: AuthenticatedRequest, res: Re
       mockDb.applications[appIndex].status = status;
       return res.json({ message: `Application status updated to ${status} (Mock DB)`, application: mockDb.applications[appIndex] });
     } else {
-      const app = await Application.findById(appId);
+      const app = await Application.findById(appId).populate('studentId', 'name').populate('jobId', 'title');
       if (!app) return res.status(404).json({ message: 'Application not found.' });
 
       app.status = status;
       await app.save();
+
+      const io = req.app.get('socketio');
+      if (io) {
+        const studentIdStr = typeof app.studentId === 'object' && 'id' in app.studentId ? app.studentId.id.toString() : app.studentId.toString();
+        const jobTitle = typeof app.jobId === 'object' && 'title' in app.jobId ? app.jobId.title : 'a job';
+        io.to(studentIdStr).emit('notification', {
+          id: `notif_${Date.now()}`,
+          title: 'Application Update',
+          message: `Your application for ${jobTitle} has been updated to: ${status}`,
+          type: 'status_update',
+          read: false,
+          createdAt: new Date()
+        });
+      }
+
       return res.json({ message: `Application status updated to ${status}`, application: app });
     }
   } catch (error: any) {

@@ -6,22 +6,31 @@ import { Briefcase, CalendarDays, Sparkles, Clock3, TrendingUp, Award } from 'lu
 export const ApplicationsTracker: React.FC = () => {
   const { user } = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
+  const [interviews, setInterviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    const fetchApplications = async () => {
+    const fetchData = async () => {
       try {
-        const data = await api.get('/student/applications');
-        setApplications(data.applications || []);
+        const [appsRes, intsRes] = await Promise.all([
+          api.get('/student/applications').catch(() => ({ applications: [] })),
+          api.get('/interviews').catch(() => ({ interviews: [] }))
+        ]);
+        
+        setApplications(appsRes.applications || []);
+        
+        // Only show upcoming scheduled interviews
+        const upcomingInts = (intsRes.interviews || []).filter((i: any) => i.status === 'Scheduled');
+        setInterviews(upcomingInts);
       } catch (err: any) {
-        setErrorMsg(err.message || 'Unable to load your applications.');
+        setErrorMsg(err.message || 'Unable to load your data.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchApplications();
+    fetchData();
   }, []);
 
   if (!user) return null;
@@ -73,17 +82,61 @@ export const ApplicationsTracker: React.FC = () => {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-sm font-semibold text-slate-700">Loading your application history...</p>
-        </div>
-      ) : applications.length === 0 ? (
-        <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-12 shadow-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-slate-400 to-slate-500 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
-          <div className="relative z-10 text-center">
-            <Briefcase className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-            <p className="text-sm font-semibold text-slate-700">No applications yet. Visit the job board to start applying.</p>
-          </div>
+          <p className="text-sm font-semibold text-slate-700">Loading your data...</p>
         </div>
       ) : (
+        <div className="space-y-8">
+          {/* Interviews Section */}
+          {interviews.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <CalendarDays className="h-5 w-5 text-indigo-600" />
+                Upcoming Interviews
+              </h3>
+              <div className="grid gap-4 md:grid-cols-2">
+                {interviews.map((interview) => (
+                  <div key={interview._id} className="relative overflow-hidden rounded-2xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-50 p-5 shadow-md">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-bold text-slate-900">{interview.jobTitle}</h4>
+                        <p className="text-sm text-slate-600">{interview.company}</p>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 border border-indigo-200">
+                        {interview.status}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-2 text-sm text-slate-700">
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="h-4 w-4 text-indigo-600" />
+                        <span className="font-semibold">{interview.date} at {interview.time}</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <a href={interview.meetLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500 transition-colors text-xs">
+                          Join Meeting
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Applications Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Briefcase className="h-5 w-5 text-indigo-600" />
+              Application History
+            </h3>
+            {applications.length === 0 ? (
+              <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-12 shadow-2xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-slate-400 to-slate-500 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+                <div className="relative z-10 text-center">
+                  <Briefcase className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <p className="text-sm font-semibold text-slate-700">No applications yet. Visit the job board to start applying.</p>
+                </div>
+              </div>
+            ) : (
         <div className="space-y-4">
           {applications.map((application) => {
             const status = application.status;
@@ -152,6 +205,9 @@ export const ApplicationsTracker: React.FC = () => {
               </div>
             );
           })}
+        </div>
+      )}
+          </div>
         </div>
       )}
     </div>

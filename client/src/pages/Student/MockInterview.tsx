@@ -24,6 +24,33 @@ export const MockInterview: React.FC = () => {
 
   // Voice toggle
   const [voiceMode, setVoiceMode] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  // Speech Recognition setup
+  const startListening = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Your browser does not support Speech Recognition. Please use Google Chrome.');
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    
+    recognition.onstart = () => setIsListening(true);
+    
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((result: any) => result[0].transcript)
+        .join('');
+      setCurrentInput(transcript);
+    };
+
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
+
+    recognition.start();
+  };
 
   // Summary Report
   const [report, setReport] = useState<any>(null);
@@ -39,6 +66,22 @@ export const MockInterview: React.FC = () => {
       startQuestion = 'Can you explain the differences between the virtual DOM and the real DOM, and how React utilizes it to optimize rendering?';
     } else if (domain === 'Backend') {
       startQuestion = 'What are Node.js streams, and why would you use them over standard file system methods when reading large files?';
+    } else if (domain === 'Databases') {
+      startQuestion = 'What are indexes in databases, how do B-Trees optimize query runs, and when should you avoid creating them?';
+    } else if (domain === 'System Design') {
+      startQuestion = 'How would you design a scalable URL shortener service like TinyURL? Discuss the core components, load balancing, and database choices.';
+    } else if (domain === 'DevOps') {
+      startQuestion = 'Can you explain the concept of containerization using Docker, and how it differs from traditional virtual machines?';
+    } else if (domain === 'Machine Learning') {
+      startQuestion = 'What is the difference between supervised and unsupervised learning? Can you give a real-world use case for each?';
+    } else if (domain === 'Java') {
+      startQuestion = 'Can you explain the concept of Garbage Collection in Java and describe how the JVM decides when an object is eligible for garbage collection?';
+    } else if (domain === 'Python') {
+      startQuestion = 'What is the Global Interpreter Lock (GIL) in Python, and how does it affect multi-threading vs multi-processing?';
+    } else if (domain === 'C++') {
+      startQuestion = 'What are smart pointers in modern C++ (like std::unique_ptr and std::shared_ptr), and how do they solve memory leak issues?';
+    } else if (domain === 'JavaScript') {
+      startQuestion = 'Explain the concept of closures in JavaScript. How do they work, and what is a common practical use case for them?';
     } else {
       startQuestion = 'What are indexes in databases, how do B-Trees optimize query runs, and when should you avoid creating them?';
     }
@@ -171,6 +214,13 @@ export const MockInterview: React.FC = () => {
                     <option value="Frontend">Frontend Engineer (React/DOM)</option>
                     <option value="Backend">Backend Engineer (Node/Streams)</option>
                     <option value="Databases">Database Administrator (SQL/Indexing)</option>
+                    <option value="System Design">System Architecture (Scalability/Microservices)</option>
+                    <option value="DevOps">DevOps Engineer (Docker/CI-CD)</option>
+                    <option value="Machine Learning">Data Scientist / ML (Supervised/Unsupervised)</option>
+                    <option value="Java">Java Developer (JVM/Spring)</option>
+                    <option value="Python">Python Developer (GIL/Data)</option>
+                    <option value="C++">C++ Developer (Memory/Pointers)</option>
+                    <option value="JavaScript">JavaScript Developer (Closures/Async)</option>
                   </select>
                 </div>
 
@@ -306,9 +356,23 @@ export const MockInterview: React.FC = () => {
 
             {/* Form message input */}
             <form onSubmit={handleSendAnswer} className="flex space-x-3 p-6 border-t border-slate-200">
+              {voiceMode && (
+                <button
+                  type="button"
+                  onClick={startListening}
+                  className={`p-3 rounded-xl border-2 transition-all flex-shrink-0 ${
+                    isListening 
+                      ? 'bg-rose-500 text-white border-rose-600 animate-pulse'
+                      : 'bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100'
+                  }`}
+                  title="Click to dictate answer"
+                >
+                  <Mic className="h-5 w-5" />
+                </button>
+              )}
               <input
                 type="text"
-                placeholder="Type your explanation answer here..."
+                placeholder={isListening ? "Listening... Speak now" : "Type your explanation answer here..."}
                 value={currentInput}
                 onChange={(e) => setCurrentInput(e.target.value)}
                 disabled={loadingReply}

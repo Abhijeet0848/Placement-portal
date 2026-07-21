@@ -58,14 +58,6 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
     };
   }, [user]);
 
-  // Seed default notifications for visual fidelity
-  useEffect(() => {
-    setNotifications([
-      { id: '1', title: 'Placement Drive', message: 'Google Full Stack drive commences tomorrow at 9 AM.', read: false },
-      { id: '2', title: 'Resume Review', message: 'Your ATS Resume score updated to 82/100.', read: true }
-    ]);
-  }, []);
-
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -108,14 +100,13 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         items: [
           { name: 'AI Career Coach', path: '/career-roadmap', icon: Brain },
           { name: 'AI Mock Interview', path: '/mock-interview', icon: Award },
-          { name: 'Skill Assessment', path: '/skill-assessment', icon: CheckSquare },
         ]
       },
       {
         title: 'PRACTICE',
         emoji: '💻',
         items: [
-          { name: 'Coding Practice', path: '/coding-lab', icon: CheckSquare },
+          { name: 'Skill Assessments', path: '/coding-lab', icon: CheckSquare },
           { name: 'Community', path: '/forum', icon: MessageSquare },
         ]
       },
@@ -142,6 +133,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         { name: 'AI Resume Ranking', path: '/resume-ranking', icon: Award },
         { name: 'Schedule Interviews', path: '/scheduler', icon: Calendar },
         { name: 'Hire/Reject', path: '/hire-reject', icon: CheckSquare },
+        { name: 'Exam Creator', path: '/officer/exams', icon: CheckSquare },
       ]},
       { title: 'COMMUNICATION', emoji: '📧', items: [
         { name: 'Send Emails', path: '/send-emails', icon: FileText },
@@ -160,6 +152,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         { name: 'Manage Students', path: '/officer/students', icon: Users },
         { name: 'Verify Documents', path: '/officer/verify', icon: Shield },
         { name: 'Send Notices', path: '/officer/notices', icon: Bell },
+        { name: 'Exam Creator', path: '/officer/exams', icon: CheckSquare },
       ]},
       { title: 'ANALYTICS', emoji: '📊', items: [
         { name: 'Generate Reports', path: '/officer/reports', icon: FileText },
@@ -234,9 +227,9 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
       {/* Sidebar - Mobile: slide-in, Desktop: fixed */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50
-        w-64 bg-white/80 border-r border-slate-200 
-        flex flex-col p-4 shadow-sm
+        fixed lg:static inset-y-0 left-0 z-50 print:hidden
+        w-64 bg-white border-r border-slate-200 
+        flex flex-col p-4 shadow-lg
         transform transition-transform duration-300 ease-in-out
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
@@ -324,7 +317,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Main Container */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="h-16 border-b border-slate-200 px-4 lg:px-6 flex items-center justify-between z-10 bg-white/80 backdrop-blur">
+        <header className="h-16 border-b border-slate-200 px-4 lg:px-6 flex items-center justify-between z-10 bg-white/80 backdrop-blur print:hidden">
           <div className="flex items-center space-x-3">
             {/* Mobile menu button */}
             <button 

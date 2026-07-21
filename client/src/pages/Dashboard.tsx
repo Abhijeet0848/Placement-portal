@@ -23,16 +23,23 @@ export const Dashboard: React.FC = () => {
         // Try fetching actual data from backend
         const jobsData = await api.get('/jobs');
         const appsData = user?.role === 'Student' 
-          ? await api.get('/student/applications')
+          ? await api.get('/student/applications').catch(() => ({ applications: [] }))
           : await api.get('/recruiter/applications').catch(() => ({ applications: [] }));
+        
+        const dashboardData = user?.role === 'Student' 
+          ? await api.get('/student/dashboard').catch(() => ({}))
+          : user?.role === 'Recruiter'
+          ? await api.get('/recruiter/dashboard').catch(() => ({}))
+          : {};
 
         setStats({
           jobs: jobsData.jobs || [],
-          applications: appsData.applications || []
+          applications: appsData.applications || [],
+          dashboard: dashboardData || null
         });
       } catch (err) {
         // Mock fallback stats if backend endpoints fail
-        setStats({ jobs: [], applications: [] });
+        setStats({ jobs: [], applications: [], dashboard: null });
       } finally {
         setLoading(false);
       }
@@ -42,21 +49,6 @@ export const Dashboard: React.FC = () => {
   }, [user]);
 
   if (!user) return null;
-
-  // Chart data configs
-  const studentReadinessData = [
-    { name: 'Semester 1', Score: 40 },
-    { name: 'Semester 2', Score: 55 },
-    { name: 'Semester 3', Score: 70 },
-    { name: 'Semester 4 (Current)', Score: 85 }
-  ];
-
-  const recruiterFunnelData = [
-    { name: 'Applied', Count: 14 },
-    { name: 'Shortlisted', Count: 8 },
-    { name: 'Interviewed', Count: 5 },
-    { name: 'Selected', Count: 2 }
-  ];
 
   const officerDepartmentData = [
     { name: 'MCA', Package: 8.5, Placed: 88 },
@@ -74,6 +66,13 @@ export const Dashboard: React.FC = () => {
     const apps = stats?.applications || [];
     const resumeScore = user.profile.resumeScore || 0;
     const skills = user.profile.skills || [];
+    const dStats = stats?.dashboard || {};
+
+    const hiringReadiness = dStats.readinessScore || 0;
+    const avgCodingScore = dStats.avgCodingScore || 0;
+    const skillsEvaluatedCount = dStats.skillsEvaluatedCount || 0;
+    const readinessJourney = dStats.readinessJourney || [{ name: 'Baseline', Score: 0 }];
+    const aiPlacementTip = dStats.aiTip || "Take an assessment to generate your personalized tip!";
 
     return (
       <div className="space-y-6">
@@ -122,7 +121,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Skills Evaluated</p>
-                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{skills.length}</h4>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{skillsEvaluatedCount}</h4>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-600" />
             </div>
@@ -133,7 +132,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Hiring Readiness</p>
-                <h4 className="text-2xl font-black text-slate-900 mt-1.5">85%</h4>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{hiringReadiness}%</h4>
               </div>
               <TrendingUp className="h-8 w-8 text-indigo-600" />
             </div>
@@ -149,10 +148,10 @@ export const Dashboard: React.FC = () => {
               <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Placement Readiness Journey</h4>
               <div className="h-60">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={studentReadinessData}>
+                  <LineChart data={readinessJourney}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                     <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={11} />
+                    <YAxis stroke="#64748b" fontSize={11} domain={[0, 100]} />
                     <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#1e293b' }} />
                     <Line type="monotone" dataKey="Score" stroke="#6366f1" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
                   </LineChart>
@@ -183,17 +182,17 @@ export const Dashboard: React.FC = () => {
                 <div className="p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-700 font-medium">Coding assessments</span>
-                    <span className="font-bold text-indigo-600">80% Avg Score</span>
+                    <span className="font-bold text-indigo-600">{avgCodingScore}% Avg Score</span>
                   </div>
                   <div className="h-1.5 w-full bg-purple-100 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-indigo-500" style={{ width: '80%' }}></div>
+                    <div className="h-full bg-indigo-500" style={{ width: `${avgCodingScore}%` }}></div>
                   </div>
                 </div>
 
                 <div className="p-3 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl border-2 border-amber-200">
                   <p className="text-xs font-bold text-amber-700">AI Placement Tip</p>
                   <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                    Your React and Node skills are strong. Try to add Docker containerization and AWS deployments to hit 95% match rates.
+                    {aiPlacementTip}
                   </p>
                 </div>
               </div>
@@ -314,6 +313,18 @@ export const Dashboard: React.FC = () => {
   // RECRUITER VIEW
   // ==========================================
   const renderRecruiterDashboard = () => {
+    const dStats = stats?.dashboard || {};
+    const totalJobs = dStats.totalJobs || 0;
+    const totalApplicants = dStats.totalApplicants || 0;
+    const selectionRatio = dStats.selectionRatio || "0.0";
+    const ats = dStats.ats || { High: 0, Medium: 0, Low: 0 };
+    const recruiterFunnelData = dStats.funnelData || [
+      { name: 'Applied', Count: 0 },
+      { name: 'Shortlisted', Count: 0 },
+      { name: 'Selected', Count: 0 },
+      { name: 'Rejected', Count: 0 }
+    ];
+
     return (
       <div className="space-y-6">
         {/* Welcome Section */}
@@ -338,7 +349,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total job posts</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">2</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">{totalJobs}</h4>
               </div>
               <Briefcase className="h-8 w-8 text-indigo-500" />
             </div>
@@ -349,7 +360,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total applicants</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">14</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">{totalApplicants}</h4>
               </div>
               <Users className="h-8 w-8 text-indigo-500" />
             </div>
@@ -360,7 +371,7 @@ export const Dashboard: React.FC = () => {
             <div className="relative z-10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Selection Ratio</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">14.2%</h4>
+                <h4 className="text-2xl font-black text-white mt-1.5">{selectionRatio}%</h4>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500" />
             </div>
@@ -403,15 +414,15 @@ export const Dashboard: React.FC = () => {
               <div className="space-y-2.5">
                 <div className="flex justify-between items-center text-xs p-3 bg-slate-800/60 rounded-xl border border-slate-700">
                   <span className="text-slate-400">High Match (&gt;80%)</span>
-                  <span className="font-bold text-emerald-400">5 Candidate</span>
+                  <span className="font-bold text-emerald-400">{ats.High} Candidates</span>
                 </div>
                 <div className="flex justify-between items-center text-xs p-3 bg-slate-800/60 rounded-xl border border-slate-700">
                   <span className="text-slate-400">Medium Match (50-80%)</span>
-                  <span className="font-bold text-indigo-400">7 Candidates</span>
+                  <span className="font-bold text-indigo-400">{ats.Medium} Candidates</span>
                 </div>
                 <div className="flex justify-between items-center text-xs p-3 bg-slate-800/60 rounded-xl border border-slate-700">
                   <span className="text-slate-400">Unmatched (&lt;50%)</span>
-                  <span className="font-bold text-rose-400">2 Candidates</span>
+                  <span className="font-bold text-rose-400">{ats.Low} Candidates</span>
                 </div>
               </div>
             </div>

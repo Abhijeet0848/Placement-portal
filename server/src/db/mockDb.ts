@@ -121,11 +121,21 @@ export interface SkillExam {
   title: string;
   domain: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
+  durationInMinutes: number;
+  startTime?: Date;
+  endTime?: Date;
+  isPrivateScreening?: boolean;
+  jobId?: string;
   questions: {
     _id: string;
     questionText: string;
+    category: string;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    marks: number;
+    negativeMarks: number;
     options: string[];
     correctAnswerIndex: number;
+    explanation: string;
   }[];
   codingChallenges: {
     _id: string;
@@ -145,6 +155,7 @@ class MockDatabase {
   reviews: Review[] = [];
   notifications: Notification[] = [];
   exams: SkillExam[] = [];
+  assessmentResults: any[] = [];
 
   constructor() {
     this.seed();
@@ -286,7 +297,7 @@ class MockDatabase {
         _id: 'app_1',
         jobId: 'job_1',
         studentId: 'usr_stud_1',
-        status: 'Applied',
+        status: 'Shortlisted',
         resumeUrl: 'https://res.cloudinary.com/demo/image/upload/sample_resume.pdf',
         matchScore: 94,
         matchDetails: {
@@ -357,29 +368,45 @@ class MockDatabase {
         title: 'Full Stack Fundamentals MCQ',
         domain: 'Frontend',
         difficulty: 'Medium',
+        durationInMinutes: 30,
         questions: [
           {
             _id: 'q1',
             questionText: 'Which React hook is used to handle side effects?',
+            category: 'React',
+            difficulty: 'Medium',
+            marks: 2,
+            negativeMarks: 0.5,
             options: ['useState', 'useEffect', 'useContext', 'useReducer'],
-            correctAnswerIndex: 1
+            correctAnswerIndex: 1,
+            explanation: 'useEffect is the hook meant for mutations, subscriptions, timers, logging, and other side effects.'
           },
           {
             _id: 'q2',
             questionText: 'What is the purpose of CORS in Express?',
+            category: 'Node.js',
+            difficulty: 'Easy',
+            marks: 1,
+            negativeMarks: 0.25,
             options: [
               'To enable compression',
               'To allow requests from other origins',
               'To encrypt traffic',
               'To hash user passwords'
             ],
-            correctAnswerIndex: 1
+            correctAnswerIndex: 1,
+            explanation: 'Cross-Origin Resource Sharing (CORS) is an HTTP-header based mechanism that allows a server to indicate any origins other than its own from which a browser should permit loading resources.'
           },
           {
             _id: 'q3',
             questionText: 'Which database type is MongoDB?',
+            category: 'Database',
+            difficulty: 'Easy',
+            marks: 1,
+            negativeMarks: 0.25,
             options: ['Relational', 'Document-based NoSQL', 'Key-Value store', 'Graph Database'],
-            correctAnswerIndex: 1
+            correctAnswerIndex: 1,
+            explanation: 'MongoDB is a source-available cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas.'
           }
         ],
         codingChallenges: [
@@ -393,6 +420,141 @@ class MockDatabase {
               { input: '456', output: '15' },
               { input: '9', output: '9' }
             ]
+          }
+        ]
+      },
+      {
+        _id: 'exam_sched_1',
+        title: 'Weekly Programming Challenge',
+        domain: 'System Design',
+        difficulty: 'Hard',
+        durationInMinutes: 45,
+        startTime: new Date(Date.now() + 2 * 60000), // starts in 2 minutes
+        endTime: new Date(Date.now() + 60 * 60000), // ends in 1 hour
+        questions: [
+          {
+            _id: 'q_sch_1',
+            questionText: 'What is the primary benefit of consistent hashing?',
+            category: 'System Design',
+            difficulty: 'Medium',
+            marks: 2,
+            negativeMarks: 0.5,
+            options: ['Minimizes data reorganization when nodes are added/removed', 'Faster query times', 'Less memory usage', 'Eliminates the need for databases'],
+            correctAnswerIndex: 0,
+            explanation: 'Consistent hashing minimizes data reorganization when nodes are added or removed from a cluster.'
+          }
+        ],
+        codingChallenges: []
+      },
+      {
+        _id: 'exam_react_1',
+        title: 'React Advanced Concepts',
+        domain: 'Frontend',
+        difficulty: 'Hard',
+        durationInMinutes: 45,
+        questions: [
+          {
+            _id: 'q_r_1',
+            questionText: 'What is the purpose of useMemo hook?',
+            category: 'React',
+            difficulty: 'Medium',
+            marks: 2,
+            negativeMarks: 0.5,
+            options: ['To memoize a callback function', 'To cache a calculated value between renders', 'To manage side effects', 'To access DOM elements directly'],
+            correctAnswerIndex: 1,
+            explanation: 'useMemo caches the result of a calculation between renders.'
+          },
+          {
+            _id: 'q_r_2',
+            questionText: 'Which of the following is true about React Server Components?',
+            category: 'React',
+            difficulty: 'Hard',
+            marks: 4,
+            negativeMarks: 1,
+            options: ['They can use state and effects', 'They execute only on the client', 'They reduce the client-side JavaScript bundle size', 'They replace the need for an API'],
+            correctAnswerIndex: 2,
+            explanation: 'React Server Components render on the server, which reduces the amount of JavaScript sent to the client.'
+          }
+        ],
+        codingChallenges: [
+          {
+            _id: 'c_r_1',
+            title: 'Build a Counter Component',
+            description: 'Write a React component that renders a button and a count. Clicking the button should increment the count.',
+            starterCode: `import React, { useState } from 'react';\n\nexport default function Counter() {\n  // Your code here\n  return <div></div>;\n}`,
+            testCases: []
+          }
+        ]
+      },
+      {
+        _id: 'exam_backend_1',
+        title: 'Node.js & Express Fundamentals',
+        domain: 'Backend',
+        difficulty: 'Medium',
+        durationInMinutes: 60,
+        questions: [
+          {
+            _id: 'q_b_1',
+            questionText: 'Which core module in Node.js is used for file system operations?',
+            category: 'Node.js',
+            difficulty: 'Easy',
+            marks: 1,
+            negativeMarks: 0.25,
+            options: ['http', 'fs', 'path', 'os'],
+            correctAnswerIndex: 1,
+            explanation: 'The "fs" (file system) module provides an API for interacting with the file system.'
+          }
+        ],
+        codingChallenges: []
+      },
+      {
+        _id: 'exam_apt_1',
+        title: 'General Aptitude & Logical Reasoning',
+        domain: 'Aptitude',
+        difficulty: 'Easy',
+        durationInMinutes: 30,
+        questions: [
+          {
+            _id: 'q_a_1',
+            questionText: 'If a train 120 meters long passes a telegraph post in 6 seconds, what is the speed of the train in km/hr?',
+            category: 'Aptitude',
+            difficulty: 'Medium',
+            marks: 2,
+            negativeMarks: 0.5,
+            options: ['60 km/hr', '72 km/hr', '80 km/hr', '90 km/hr'],
+            correctAnswerIndex: 1,
+            explanation: 'Speed = Distance/Time = 120/6 = 20 m/s. Convert to km/hr: 20 * (18/5) = 72 km/hr.'
+          }
+        ],
+      },
+      {
+        _id: 'exam_private_1',
+        title: 'Google Screening Test (Full Stack)',
+        domain: 'System Design',
+        difficulty: 'Hard',
+        durationInMinutes: 60,
+        isPrivateScreening: true,
+        jobId: 'job_1',
+        questions: [
+          {
+            _id: 'q_p_1',
+            questionText: 'Which data structure is typically used to implement an LRU cache?',
+            category: 'System Design',
+            difficulty: 'Hard',
+            marks: 3,
+            negativeMarks: 1,
+            options: ['Array', 'Doubly Linked List + Hash Map', 'Binary Search Tree', 'Min Heap'],
+            correctAnswerIndex: 1,
+            explanation: 'A Hash Map provides O(1) access to nodes, and a Doubly Linked List allows O(1) removal and addition at the head/tail.'
+          }
+        ],
+        codingChallenges: [
+          {
+            _id: 'c_p_1',
+            title: 'LRU Cache Implementation',
+            description: 'Implement an LRU Cache with get and put methods in O(1) time complexity.',
+            starterCode: `class LRUCache {\n  constructor(capacity) {\n  }\n\n  get(key) {\n  }\n\n  put(key, value) {\n  }\n}`,
+            testCases: []
           }
         ]
       }

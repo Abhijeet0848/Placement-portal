@@ -240,22 +240,98 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
     }
   }
 
-  // Fallback Simulation
-  const roles = skills.includes('React') || skills.includes('Angular') ? ['Frontend Engineer', 'Full Stack Developer'] : ['Backend Engineer', 'Systems Engineer'];
-  if (cgpa > 8.0) roles.push('Research Engineer');
+  // Fallback Simulation with dynamic contextual matching
+  const roles = new Set<string>();
+  const roadmapSteps = new Set<string>();
+  const resources = new Set<string>();
+
+  const lowerInterests = interests.map(i => i.toLowerCase());
+  const lowerSkills = skills.map(s => s.toLowerCase());
+
+  const hasInterest = (keywords: string[]) => lowerInterests.some(i => keywords.some(kw => i.includes(kw)));
+  const hasSkill = (keywords: string[]) => lowerSkills.some(s => keywords.some(kw => s.includes(kw)));
+
+  let matched = false;
+
+  // Check Data Science / ML
+  if (hasInterest(['data', 'machine learning', 'ai', 'artificial intelligence']) || (!lowerInterests.length && hasSkill(['python', 'pandas', 'tensorflow']))) {
+    roles.add('Data Scientist');
+    roles.add('Machine Learning Engineer');
+    roadmapSteps.add('Master Python, Pandas, and Scikit-Learn.');
+    roadmapSteps.add('Learn deep learning frameworks like TensorFlow or PyTorch.');
+    roadmapSteps.add('Build end-to-end ML pipelines and deploy them on AWS/GCP.');
+    resources.add('DeepLearning.AI Specialization');
+    resources.add('Fast.ai Practical Deep Learning');
+    matched = true;
+  }
+
+  // Check Full Stack (NEW)
+  if (hasInterest(['full stack', 'fullstack', 'full-stack'])) {
+    roles.add('Full Stack Developer');
+    roles.add('Software Engineer');
+    roadmapSteps.add('Master modern frontend frameworks (React/Next.js).');
+    roadmapSteps.add('Build robust backend APIs using Node.js, Java, or Python.');
+    roadmapSteps.add('Understand relational and NoSQL databases, and basic DevOps.');
+    resources.add('Full Stack Open (University of Helsinki)');
+    resources.add('The Odin Project');
+    matched = true;
+  }
+
+  // Check Frontend / UI
+  if (hasInterest(['frontend', 'ui', 'web', 'front-end']) || (!lowerInterests.length && hasSkill(['react', 'angular', 'vue', 'html', 'css']))) {
+    roles.add('Frontend Engineer');
+    roles.add('UI/UX Developer');
+    roadmapSteps.add('Master modern JavaScript/TypeScript and React/Next.js.');
+    roadmapSteps.add('Learn advanced CSS, Tailwind, and responsive design principles.');
+    roadmapSteps.add('Understand web performance optimization and accessibility.');
+    resources.add('Frontend Masters');
+    resources.add('Epic React by Kent C. Dodds');
+    matched = true;
+  }
+
+  // Check Backend / Systems
+  if (hasInterest(['backend', 'system', 'cloud', 'distributed', 'back-end']) || (!lowerInterests.length && hasSkill(['node', 'java', 'c++', 'go', 'sql']))) {
+    roles.add('Backend Engineer');
+    roles.add('Systems/Cloud Engineer');
+    roadmapSteps.add('Master Data Structures and Algorithms in a backend language.');
+    roadmapSteps.add('Learn microservices architecture and API design.');
+    roadmapSteps.add('Gain hands-on experience with Docker, Kubernetes, and Cloud providers.');
+    resources.add('Designing Data-Intensive Applications');
+    resources.add('AWS Certified Solutions Architect');
+    matched = true;
+  }
+
+  // Check CyberSecurity
+  if (hasInterest(['security', 'cyber', 'crypto']) || (!lowerInterests.length && hasSkill(['security', 'pentest']))) {
+    roles.add('Security Engineer');
+    roles.add('Penetration Tester');
+    roadmapSteps.add('Learn networking fundamentals and OSI model.');
+    roadmapSteps.add('Understand common vulnerabilities (OWASP Top 10) and cryptography.');
+    roadmapSteps.add('Practice on platforms like HackTheBox or TryHackMe.');
+    resources.add('CompTIA Security+');
+    resources.add('Offensive Security Certified Professional (OSCP)');
+    matched = true;
+  }
+
+  if (cgpa > 8.5 && roles.size > 0) {
+    roles.add('Research Scientist / R&D Engineer');
+  }
+
+  // Default fallbacks if nothing matched
+  if (!matched) {
+    roles.add('Software Engineer');
+    roles.add('Full Stack Developer');
+    roadmapSteps.add('Master core computer science fundamentals and data structures.');
+    roadmapSteps.add('Build full-stack side projects to gain practical experience.');
+    roadmapSteps.add('Learn version control (Git) and basic CI/CD concepts.');
+    resources.add('The Odin Project');
+    resources.add('System Design Primer');
+  }
 
   return {
-    roles,
-    roadmap: [
-      'Master Data Structures and Algorithms in C++/Java/Python.',
-      'Build 2 real-world projects showing full-stack integration and deploy them.',
-      'Learn cloud containerization with Docker and Kubernetes.'
-    ],
-    learningResources: [
-      'AWS Certified Cloud Practitioner',
-      'Advanced React and Node Patterns (Coursera / Udemy)',
-      'System Design Primer course'
-    ]
+    roles: Array.from(roles).slice(0, 4),
+    roadmap: Array.from(roadmapSteps).slice(0, 5),
+    learningResources: Array.from(resources).slice(0, 4)
   };
 }
 
@@ -278,13 +354,16 @@ export async function generateCoverLetter(studentName: string, skills: string[],
   }
 
   // Fallback
+  const relevantSkills = skills.slice(0, 5);
+  const skillsStr = relevantSkills.length > 0 ? relevantSkills.join(', ') : 'modern software engineering principles';
+  
   return `Dear Hiring Manager,
 
-I am writing to express my strong interest in the ${jobTitle} position at ${company}. As a student majoring in Computer Applications, I have developed a solid foundation in software engineering, specifically utilizing technologies like ${skills.slice(0, 4).join(', ')}.
+I am writing to express my strong interest in the ${jobTitle} position at ${company}. As a dedicated student and aspiring engineer, I have developed a solid technical foundation, specifically utilizing technologies like ${skillsStr}.
 
-I have completed projects demonstrating full-stack engineering practices, web development standards, and analytical databases. I am confident that my technical capabilities align well with the expectations of the team at ${company}.
+Throughout my academic journey and practical projects, I have focused on building robust, scalable solutions. I am highly motivated to bring my expertise in ${relevantSkills[0] || 'problem-solving'} and ${relevantSkills[1] || 'system design'} to the engineering team at ${company}, contributing to your ongoing success and innovative projects.
 
-Thank you for your time and consideration.
+I would welcome the opportunity to discuss how my background, skills, and enthusiasm align with the goals of ${company}. Thank you for your time and consideration.
 
 Sincerely,
 ${studentName}`;
@@ -319,15 +398,139 @@ export async function evaluateInterviewAnswer(questionText: string, studentAnswe
     }
   }
 
-  // Fallback Simulation
-  const score = studentAnswer.split(' ').length > 10 ? 8 : 5;
+  // Fallback Simulation with Contextual Keyword Matching
+  const lowerQuestion = questionText.toLowerCase();
+  const lowerAnswer = studentAnswer.toLowerCase();
+
+  // Determine expected keywords based on the question context
+  let expectedKeywords: string[] = [];
+  if (lowerQuestion.includes('virtual dom') || lowerQuestion.includes('react')) {
+    expectedKeywords = ['reconciliation', 'diffing', 'memory', 'performance', 'state', 'ui', 'render'];
+  } else if (lowerQuestion.includes('node') || lowerQuestion.includes('stream')) {
+    expectedKeywords = ['buffer', 'memory', 'chunk', 'pipe', 'event', 'asynchronous', 'large files', 'data'];
+  } else if (lowerQuestion.includes('database') || lowerQuestion.includes('index')) {
+    expectedKeywords = ['b-tree', 'scan', 'speed', 'read', 'write', 'penalty', 'lookup', 'performance'];
+  } else if (lowerQuestion.includes('url shortener') || lowerQuestion.includes('design')) {
+    expectedKeywords = ['hash', 'base62', 'load balancer', 'cache', 'redis', 'nosql', 'sharding', 'throughput'];
+  } else if (lowerQuestion.includes('docker') || lowerQuestion.includes('container')) {
+    expectedKeywords = ['image', 'kernel', 'isolation', 'lightweight', 'namespace', 'cgroups', 'virtual machine', 'overhead'];
+  } else if (lowerQuestion.includes('supervised') || lowerQuestion.includes('learning')) {
+    expectedKeywords = ['labels', 'classification', 'regression', 'clustering', 'training', 'data', 'algorithm', 'target'];
+  } else if (lowerQuestion.includes('garbage collection') || lowerQuestion.includes('jvm')) {
+    expectedKeywords = ['heap', 'reference', 'unreachable', 'memory', 'mark', 'sweep', 'generation', 'eden'];
+  } else if (lowerQuestion.includes('gil') || lowerQuestion.includes('interpreter lock')) {
+    expectedKeywords = ['thread', 'mutex', 'cpython', 'concurrency', 'cpu-bound', 'i/o-bound', 'multiprocessing', 'parallelism'];
+  } else if (lowerQuestion.includes('smart pointers') || lowerQuestion.includes('c++')) {
+    expectedKeywords = ['memory leak', 'ownership', 'unique_ptr', 'shared_ptr', 'reference counting', 'delete', 'raii', 'scope'];
+  } else if (lowerQuestion.includes('closure') || lowerQuestion.includes('javascript')) {
+    expectedKeywords = ['lexical', 'scope', 'function', 'inner', 'outer', 'encapsulation', 'private', 'variables'];
+  } else {
+    expectedKeywords = ['design', 'architecture', 'scalable', 'efficient', 'optimize'];
+  }
+
+  // Calculate technical accuracy based on keyword hits
+  let matches = 0;
+  expectedKeywords.forEach(kw => {
+    if (lowerAnswer.includes(kw)) matches++;
+  });
+
+  const wordCount = studentAnswer.split(' ').length;
+  const isTooShort = wordCount < 15;
+
+  let techScore = 4;
+  if (matches >= 3) techScore = 9;
+  else if (matches >= 1) techScore = 7;
+  
+  if (isTooShort) techScore -= 2;
+
+  let feedbackMsg = '';
+  if (techScore >= 8) {
+    feedbackMsg = `Excellent answer! You correctly identified key concepts like ${expectedKeywords.filter(k => lowerAnswer.includes(k)).slice(0, 2).join(' and ')}. Your technical understanding is very solid.`;
+  } else if (techScore >= 5) {
+    feedbackMsg = `Good attempt. You mentioned some correct points, but try to use more precise terminology like "${expectedKeywords[0]}" or "${expectedKeywords[1]}" to strengthen your answer.`;
+  } else {
+    feedbackMsg = isTooShort 
+      ? 'Your answer was too brief. Try to elaborate on the concepts and provide specific examples.'
+      : 'You missed the core technical concepts. Review the fundamental mechanisms behind this technology.';
+  }
+
   return {
-    confidence: score + Math.floor(Math.random() * 2),
-    communication: score,
-    technicalAccuracy: score + Math.floor(Math.random() * 2),
-    feedback: studentAnswer.split(' ').length > 10 
-      ? 'Good structural explanation of the concepts. You clearly understand the core principles, but you could enrich your response with a real-world project example.'
-      : 'The answer is too brief. Try to explain what the concept is, how it works, and why it is useful in software architecture.',
-    followUpQuestion: 'Can you elaborate on how you would optimize this in a high-traffic production application?'
+    confidence: isTooShort ? 5 : 8,
+    communication: isTooShort ? 4 : 8,
+    technicalAccuracy: techScore,
+    feedback: feedbackMsg,
+    followUpQuestion: techScore >= 7 
+      ? 'Great. Can you elaborate on how you would optimize this in a high-traffic production environment?'
+      : 'Let us try another one. Can you describe a recent technical challenge you solved?'
   };
+}
+
+// 6. PDF Exam Question Parser
+export async function parseExamQuestionsFromText(pdfText: string) {
+  if (genAI) {
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const prompt = `
+        You are an expert technical assessment creator.
+        Extract Multiple Choice Questions (MCQs) from the following text (which is a parsed PDF exam).
+        
+        Text:
+        """
+        ${pdfText}
+        """
+
+        Extract as many distinct MCQs as you can find. 
+        For each question, ensure there are exactly 4 options. Identify the correct answer index (0 to 3).
+        If the difficulty is not stated, infer it (Easy, Medium, Hard).
+        Assign a generic category like 'General' or 'Technical' if none is obvious.
+        
+        Return a JSON array of objects with this exact structure:
+        [
+          {
+            "questionText": "What does CPU stand for?",
+            "category": "Computer Science",
+            "difficulty": "Easy",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "options": ["Central Process Unit", "Computer Personal Unit", "Central Processing Unit", "Central Processor Unit"],
+            "correctAnswerIndex": 2,
+            "explanation": "CPU stands for Central Processing Unit."
+          }
+        ]
+
+        Output strictly valid JSON array only:
+      `;
+
+      const result = await model.generateContent(prompt);
+      const text = result.response.text().trim();
+      const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      return JSON.parse(cleanJson);
+    } catch (error: any) {
+      logger.error(`Gemini parseExamQuestions failed: ${error?.message || error}`);
+    }
+  }
+
+  // Fallback Simulation if Gemini fails or is disabled
+  return [
+    {
+      questionText: 'Mock Extracted Question 1: What is the time complexity of binary search?',
+      category: 'Algorithms',
+      difficulty: 'Medium',
+      marks: 2,
+      negativeMarks: 0.5,
+      options: ['O(1)', 'O(log n)', 'O(n)', 'O(n^2)'],
+      correctAnswerIndex: 1,
+      explanation: 'Binary search halves the search space each step.'
+    },
+    {
+      questionText: 'Mock Extracted Question 2: Which keyword is used to define a constant in JS?',
+      category: 'JavaScript',
+      difficulty: 'Easy',
+      marks: 2,
+      negativeMarks: 0,
+      options: ['let', 'var', 'const', 'final'],
+      correctAnswerIndex: 2,
+      explanation: 'const is used for block-scoped variables that cannot be reassigned.'
+    }
+  ];
 }

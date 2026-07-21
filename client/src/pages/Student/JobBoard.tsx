@@ -48,7 +48,7 @@ export const JobBoard: React.FC = () => {
   // Helper: Client-side eligibility checker
   const checkEligibility = (job: any) => {
     const studentCGPA = user.profile.cgpa || 0;
-    const studentBranch = user.profile.branch;
+    const studentBranch = user.profile.branch || '';
 
     const minCGPA = job.requirements?.minCGPA || 0;
     const allowedBranches = job.requirements?.branches || [];
@@ -58,7 +58,7 @@ export const JobBoard: React.FC = () => {
       reasons.push(`GPA is ${studentCGPA}, but job requires minimum ${minCGPA}.`);
     }
     if (allowedBranches.length > 0 && !allowedBranches.map((b: string) => b.toLowerCase()).includes(studentBranch.toLowerCase())) {
-      reasons.push(`Branch is ${studentBranch}, but job only accepts: ${allowedBranches.join(', ')}.`);
+      reasons.push(`Branch is ${studentBranch || 'Not Set'}, but job only accepts: ${allowedBranches.join(', ')}.`);
     }
 
     return {

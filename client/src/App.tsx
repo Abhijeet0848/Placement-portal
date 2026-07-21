@@ -32,6 +32,7 @@ import { ManageCompanies } from './pages/Officer/ManageCompanies';
 import { ManageStudents } from './pages/Officer/ManageStudents';
 import { SendNotices } from './pages/Officer/SendNotices';
 import { PlacementAnalytics } from './pages/Officer/PlacementAnalytics';
+import { ExamCreator } from './pages/Officer/ExamCreator';
 import { Users } from './pages/Admin/Users';
 import { Permissions } from './pages/Admin/Permissions';
 import { ActivityLogs } from './pages/Admin/ActivityLogs';
@@ -108,6 +109,7 @@ function App() {
         <Route path="/officer/students" element={<ManageStudents />} />
         <Route path="/officer/notices" element={<SendNotices />} />
         <Route path="/officer/analytics" element={<PlacementAnalytics />} />
+        <Route path="/officer/exams" element={<ExamCreator />} />
         <Route path="/admin/users" element={<Users />} />
         <Route path="/admin/permissions" element={<Permissions />} />
         <Route path="/admin/logs" element={<ActivityLogs />} />

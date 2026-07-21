@@ -88,11 +88,7 @@ export const ResumeAnalyzer: React.FC = () => {
                   <Award className="h-5 w-5 text-indigo-600" />
                   <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Resume Score</p>
                 </div>
-                <p className="text-4xl font-black bg-clip-text text-transparent" style={{
-                  backgroundImage: `linear-gradient(to right, ${getScoreColor(result.analysis?.score ?? 0)})`,
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text'
-                }}>
+                <p className={`text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r ${getScoreColor(result.analysis?.score ?? 0)}`}>
                   {result.analysis?.score ?? 0}/100
                 </p>
               </div>

@@ -267,6 +267,15 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
       });
     }
 
+    // Emit real-time notification
+    const io = req.app.get('socketio');
+    if (io) {
+      io.to(studentId.toString()).emit('notification', {
+        title: 'New Interview Scheduled',
+        message: `Your interview for ${jobTitle} at ${companyName} has been scheduled on ${date} at ${time}.`
+      });
+    }
+
     return res.status(201).json({
       message: 'Interview scheduled successfully',
       meetLink

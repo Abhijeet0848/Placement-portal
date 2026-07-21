@@ -11,6 +11,7 @@ export interface IApplication extends Document {
     missingSkills: string[];
     recommendation: string;
   };
+  assessmentScore: number | null;
   appliedAt: Date;
 }
 
@@ -25,6 +26,7 @@ const ApplicationSchema: Schema = new Schema({
     missingSkills: { type: [String], default: [] },
     recommendation: { type: String }
   },
+  assessmentScore: { type: Number, default: null },
   appliedAt: { type: Date, default: Date.now }
 });
 

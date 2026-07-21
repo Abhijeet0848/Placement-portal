@@ -90,58 +90,7 @@ async function bootstrap() {
   // Connect to Database (real or fallback)
   await connectDB();
 
-  // If using real MongoDB, seed initial exam questions if empty
-  if (!isMockDb) {
-    try {
-      const examCount = await Exam.countDocuments();
-      if (examCount === 0) {
-        logger.info('Database empty. Seeding initial assessments and coding challenge...');
-        const defaultExam = new Exam({
-          title: 'Full Stack Fundamentals MCQ',
-          domain: 'Frontend',
-          difficulty: 'Medium',
-          questions: [
-            {
-              questionText: 'Which React hook is used to handle side effects?',
-              options: ['useState', 'useEffect', 'useContext', 'useReducer'],
-              correctAnswerIndex: 1
-            },
-            {
-              questionText: 'What is the purpose of CORS in Express?',
-              options: [
-                'To enable compression',
-                'To allow requests from other origins',
-                'To encrypt traffic',
-                'To hash user passwords'
-              ],
-              correctAnswerIndex: 1
-            },
-            {
-              questionText: 'Which database type is MongoDB?',
-              options: ['Relational', 'Document-based NoSQL', 'Key-Value store', 'Graph Database'],
-              correctAnswerIndex: 1
-            }
-          ],
-          codingChallenges: [
-            {
-              title: 'Sum of Digits',
-              description: 'Write a function sumDigits(n) that takes a positive integer n and returns the sum of all its digits. For example, sumDigits(123) should return 6.',
-              starterCode: 'function sumDigits(n) {\n  // Write your code here\n  return 0;\n}',
-              testCases: [
-                { input: '123', output: '6' },
-                { input: '456', output: '15' },
-                { input: '9', output: '9' }
-              ]
-            }
-          ]
-        });
-        await defaultExam.save();
-        logger.info('Assessments seeded successfully.');
-      }
-    } catch (e: any) {
-      logger.error(`Failed to seed real DB assessments: ${e?.message || e}`);
-    }
-  }
+  // If using real MongoDB, we will no longer seed initial exam questions.
 
   server.listen(PORT, () => {
     logger.info(`Server is running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
