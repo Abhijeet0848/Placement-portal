@@ -15,13 +15,10 @@ export async function connectDB() {
     return;
   }
 
-  // Using the user's provided Atlas connection string as fallback if env var is missing
-  // Removing /Smart-placement so it defaults to the 'test' database where their data is
-  const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://gautamabhijeet050_db_user:YrHVtolXoqDopbtt@cluster0.pt91ykf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+  // FORCE the Atlas connection string to ignore any potentially broken Vercel environment variables
+  const mongoUri = 'mongodb+srv://gautamabhijeet050_db_user:YrHVtolXoqDopbtt@cluster0.pt91ykf.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0';
 
-  if (!process.env.MONGODB_URI) {
-    logger.warn('No MONGODB_URI found in environment variables. Using the hardcoded Atlas fallback.');
-  }
+  logger.info(`Connecting to MongoDB using explicitly hardcoded Atlas string: ${mongoUri.substring(0, 25)}...`);
 
   try {
     logger.info('Attempting to connect to MongoDB...');
