@@ -15,10 +15,10 @@ export async function connectDB() {
     return;
   }
 
-  // FORCE the Atlas connection string to ignore any potentially broken Vercel environment variables
-  const mongoUri = 'mongodb+srv://gautamabhijeet050_db_user:YrHVtolXoqDopbtt@cluster0.pt91ykf.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0';
+  // FORCE the exact raw Atlas connection string to completely bypass Vercel DNS SRV lookup timeouts
+  const mongoUri = 'mongodb://gautamabhijeet050_db_user:YrHVtolXoqDopbtt@ac-fyfcr30-shard-00-00.pt91ykf.mongodb.net:27017,ac-fyfcr30-shard-00-01.pt91ykf.mongodb.net:27017,ac-fyfcr30-shard-00-02.pt91ykf.mongodb.net:27017/test?ssl=true&replicaSet=atlas-v09m31-shard-0&authSource=admin&retryWrites=true&w=majority';
 
-  logger.info(`Connecting to MongoDB using explicitly hardcoded Atlas string: ${mongoUri.substring(0, 25)}...`);
+  logger.info(`Connecting to MongoDB using explicitly hardcoded raw Atlas string...`);
 
   try {
     logger.info('Attempting to connect to MongoDB...');
