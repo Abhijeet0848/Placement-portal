@@ -25,6 +25,7 @@ export async function connectDB() {
     const db = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+      bufferCommands: false,  // Do not hang the Vercel function if connection drops
     });
     
     isConnected = db.connections[0].readyState === 1;
