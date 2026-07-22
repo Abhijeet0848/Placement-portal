@@ -718,8 +718,8 @@ export const Users: React.FC = () => {
       )}
 
       {/* Confirmation Modal */}
-      {showConfirmModal && confirmAction && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowConfirmModal(false)}>
+      {showConfirmDialog && confirmAction && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowConfirmDialog(false)}>
           <div className="glass-panel p-6 rounded-2xl border border-slate-200 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-3 mb-4">
               <div className={`p-3 rounded-full ${
@@ -739,7 +739,7 @@ export const Users: React.FC = () => {
 
             <div className="flex gap-3">
               <button
-                onClick={() => setShowConfirmModal(false)}
+                onClick={() => setShowConfirmDialog(false)}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all"
               >
                 Cancel
