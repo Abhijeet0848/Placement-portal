@@ -40,7 +40,10 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
     const apiOrigin = import.meta.env.VITE_API_URL 
       ? new URL(import.meta.env.VITE_API_URL as string).origin 
       : 'http://localhost:5000';
-    const newSocket = io(apiOrigin);
+    const newSocket = io(apiOrigin, {
+      reconnectionAttempts: 2, // Stop trying to reconnect if server doesn't support WebSockets (like Vercel)
+      reconnectionDelay: 5000
+    });
 
     newSocket.on('connect', () => {
       newSocket.emit('join_room', user.id);
