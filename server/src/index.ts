@@ -20,6 +20,8 @@ const server = http.createServer(app);
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
 // Middleware
+app.set('trust proxy', 1); // Trust the Vercel proxy for rate limiting
+
 app.use(helmet({
   crossOriginResourcePolicy: false // Allows loading local uploads if needed
 }));
