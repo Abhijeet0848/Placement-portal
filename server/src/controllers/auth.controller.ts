@@ -13,6 +13,11 @@ import BlacklistedToken from '../models/BlacklistedToken';
 
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'supersecretrefreshkey';
 
+const BANNED_EMAIL_DOMAINS = [
+  'gmail.com', 'yahoo.com', 'yahoo.in', 'hotmail.com', 'outlook.com', 
+  'aol.com', 'icloud.com', 'rediffmail.com', 'mail.com', 'protonmail.com'
+];
+
 // 1. Sign Up
 export async function register(req: AuthenticatedRequest, res: Response) {
   const { name, email, password, role } = req.body;
@@ -37,6 +42,11 @@ export async function register(req: AuthenticatedRequest, res: Response) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Invalid email format.' });
+  }
+
+  const domain = email.split('@')[1].toLowerCase();
+  if (BANNED_EMAIL_DOMAINS.includes(domain)) {
+    return res.status(400).json({ message: 'Personal email domains are not allowed. Please use your official university or company email.' });
   }
 
   try {
@@ -252,6 +262,11 @@ export async function googleLogin(req: AuthenticatedRequest, res: Response) {
     const email = payload.email;
     const name = payload.name || 'Google User';
     
+    const domain = email.split('@')[1].toLowerCase();
+    if (BANNED_EMAIL_DOMAINS.includes(domain)) {
+      return res.status(400).json({ message: 'Personal email domains are not allowed. Please use your official university or company email.' });
+    }
+    
     // Find or create user
     let user;
     if (isMockDb) {
@@ -341,6 +356,11 @@ export async function microsoftLogin(req: AuthenticatedRequest, res: Response) {
     
     if (!email) {
       return res.status(400).json({ message: 'Email not found in Microsoft profile.' });
+    }
+    
+    const domain = email.split('@')[1].toLowerCase();
+    if (BANNED_EMAIL_DOMAINS.includes(domain)) {
+      return res.status(400).json({ message: 'Personal email domains are not allowed. Please use your official university or company email.' });
     }
     
     // Find or create user
