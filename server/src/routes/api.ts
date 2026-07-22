@@ -10,8 +10,21 @@ import { getStudentDashboardStats, getRecruiterDashboardStats, getAdminDashboard
 import { getPermissions, updatePermissions, createBackup, restoreBackup, getActivityLogs, updateUserStatus } from '../controllers/admin.controller';
 import { broadcastNotice } from '../controllers/notification.controller';
 import { authenticateJWT, requireRole } from '../middleware/auth';
+import { connectDB } from '../config/dbConnect';
 
 const router = Router();
+
+export async function ensureDB(req: any, res: any, next: any) {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("Database connection failed in middleware:", error);
+    res.status(500).json({ message: 'Database connection failed' });
+  }
+}
+
+router.use(ensureDB);
 import rateLimit from 'express-rate-limit';
 
 const authLimiter = rateLimit({
