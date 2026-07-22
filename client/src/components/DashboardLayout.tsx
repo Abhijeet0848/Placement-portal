@@ -7,7 +7,7 @@ import {
   Star, Users, Bell, LogOut, CheckSquare, Shield, ShieldAlert,
   Calendar, FileText, BarChart3, Search, Menu, X
 } from 'lucide-react';
-import api from '../services/api';
+import { api } from '../services/api';
 
 interface SidebarItem {
   name: string;
