@@ -10,6 +10,7 @@ import logger from '../utils/logger';
 import { OAuth2Client } from 'google-auth-library';
 import { mockPermissions } from './admin.controller';
 import BlacklistedToken from '../models/BlacklistedToken';
+import { sendEmail } from '../utils/email';
 
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'supersecretrefreshkey';
 
@@ -56,11 +57,21 @@ export async function register(req: AuthenticatedRequest, res: Response) {
     // Generate 6 digit verification code
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
     
-    logger.info(`--- MOCK EMAIL ---`);
-    logger.info(`To: ${email}`);
-    logger.info(`Subject: Verify Your Email`);
-    logger.info(`Your verification code is: ${verificationToken}`);
-    logger.info(`------------------`);
+    await sendEmail({
+      to: email,
+      subject: 'Verify Your Email - Smart Placement Portal',
+      text: `Welcome to the Smart Placement Portal!\n\nYour verification code is: ${verificationToken}\n\nPlease enter this code to complete your registration.`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+          <h2 style="color: #4f46e5;">Welcome to Smart Placement Portal!</h2>
+          <p>Thank you for registering. Please use the verification code below to complete your sign-up process:</p>
+          <div style="background-color: #f8fafc; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 4px; margin: 20px 0;">
+            ${verificationToken}
+          </div>
+          <p style="color: #64748b; font-size: 14px;">If you did not request this code, please ignore this email.</p>
+        </div>
+      `
+    });
 
     console.log("isMockDb =", isMockDb);
     console.log("User Model =", User.modelName);
@@ -278,7 +289,7 @@ export async function googleLogin(req: AuthenticatedRequest, res: Response) {
           email,
           passwordHash: '',
           role: role || 'Student',
-          status: 'Active',
+          status: 'Active' as const,
           profile: {
             skills: [], experience: [], projects: [], education: [],
             verified: true, certificates: [], avatarUrl: payload.picture
@@ -350,7 +361,7 @@ export async function microsoftLogin(req: AuthenticatedRequest, res: Response) {
       return res.status(400).json({ message: 'Invalid Microsoft token.' });
     }
     
-    const profileData = await graphResponse.json();
+    const profileData = await graphResponse.json() as any;
     const email = profileData.mail || profileData.userPrincipalName;
     const name = profileData.displayName || 'Microsoft User';
     
@@ -374,10 +385,10 @@ export async function microsoftLogin(req: AuthenticatedRequest, res: Response) {
           email,
           passwordHash: '',
           role: role || 'Student',
-          status: 'Active',
+          status: 'Active' as const,
           profile: {
-            skills: [], experience: [], projects: [], education: [],
-            verified: true, certificates: []
+             skills: [], experience: [], projects: [], education: [],
+             verified: true, certificates: []
           },
           createdAt: new Date()
         };
@@ -723,11 +734,25 @@ export async function forgotPassword(req: AuthenticatedRequest, res: Response) {
       expires: Date.now() + 15 * 60 * 1000 // 15 mins expiry
     };
 
-    logger.info(`Password reset requested for ${email}. Reset code: ${resetCode}`);
+    await sendEmail({
+      to: email,
+      subject: 'Password Reset Request - Smart Placement Portal',
+      text: `You have requested a password reset.\n\nYour reset code is: ${resetCode}\n\nThis code will expire in 15 minutes.`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+          <h2 style="color: #4f46e5;">Password Reset Request</h2>
+          <p>We received a request to reset the password for your account. Please use the following code to reset your password:</p>
+          <div style="background-color: #f8fafc; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 4px; margin: 20px 0;">
+            ${resetCode}
+          </div>
+          <p><strong>Note:</strong> This code will expire in 15 minutes.</p>
+          <p style="color: #64748b; font-size: 14px;">If you did not request a password reset, please ignore this email or contact support.</p>
+        </div>
+      `
+    });
 
     return res.json({
-      message: `Reset code generated! Check your email or use code: ${resetCode}`,
-      resetCode // Included for easy demo testing
+      message: `Reset code generated! Please check your email.`,
     });
   } catch (error: any) {
     logger.error(`Forgot password error: ${error?.message || error}`);

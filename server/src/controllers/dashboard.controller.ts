@@ -135,20 +135,30 @@ export async function getRecruiterDashboardStats(req: AuthenticatedRequest, res:
   }
 }
 
+import { sendEmail as mailerSendEmail } from '../utils/email';
+
 export async function sendEmail(req: AuthenticatedRequest, res: Response) {
   const { to, subject, message } = req.body;
   if (!to || !subject || !message) {
     return res.status(400).json({ message: 'To, subject, and message are required.' });
   }
 
-  // Simulate sending email since SMTP is not configured
-  logger.info(`--- MOCK EMAIL SENT ---`);
-  logger.info(`To: ${to}`);
-  logger.info(`Subject: ${subject}`);
-  logger.info(`Message: ${message}`);
-  logger.info(`-----------------------`);
+  const success = await mailerSendEmail({
+    to,
+    subject,
+    text: message,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        ${message.replace(/\n/g, '<br>')}
+      </div>
+    `
+  });
 
-  return res.json({ message: 'Email sent successfully (logged to console).' });
+  if (success) {
+    return res.json({ message: 'Email sent successfully.' });
+  } else {
+    return res.status(500).json({ message: 'Failed to send email.' });
+  }
 }
 
 export async function getAdminDashboardStats(req: AuthenticatedRequest, res: Response) {
