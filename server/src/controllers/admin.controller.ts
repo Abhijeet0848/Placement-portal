@@ -98,15 +98,6 @@ export async function updatePermissions(req: AuthenticatedRequest, res: Response
 
 export async function createBackup(req: AuthenticatedRequest, res: Response) {
   try {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const backupDir = path.join(__dirname, '../../backups');
-    
-    // Ensure backups directory exists
-    if (!fs.existsSync(backupDir)) {
-      fs.mkdirSync(backupDir, { recursive: true });
-    }
-
-    const backupFilePath = path.join(backupDir, `backup-${timestamp}.json`);
     let backupData: any = {};
 
     if (isMockDb) {
@@ -121,8 +112,6 @@ export async function createBackup(req: AuthenticatedRequest, res: Response) {
       backupData = { users, permissions };
     }
 
-    fs.writeFileSync(backupFilePath, JSON.stringify(backupData, null, 2), 'utf-8');
-    
     if (req.user?.id) {
       await logActivity(req.user.id, 'Backed up placement database successfully');
     }
