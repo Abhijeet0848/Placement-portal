@@ -12,10 +12,11 @@ export async function connectDB() {
     return;
   }
 
-  const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/Smart-placement';
+  // Using the user's provided Atlas connection string as fallback if env var is missing
+  const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://gautamabhijeet050_db_user:YrHVtolXoqDopbtt@cluster0.pt91ykf.mongodb.net/Smart-placement?retryWrites=true&w=majority&appName=Cluster0';
 
   if (!process.env.MONGODB_URI) {
-    logger.warn('No MONGODB_URI found in environment variables. Using the local MongoDB URI fallback.');
+    logger.warn('No MONGODB_URI found in environment variables. Using the hardcoded Atlas fallback.');
   }
 
   try {
