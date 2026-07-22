@@ -218,9 +218,9 @@ export const Scheduler: React.FC = () => {
                           <span className="font-semibold">{i.date} at {i.time}</span>
                         </span>
                         <a 
-                          href={i.meetLink} 
+                          href={i.meetLink || 'https://meet.google.com/new'} 
                           target="_blank" 
-                          rel="noreferrer"
+                          rel="noopener noreferrer"
                           className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1.5 mt-1 hover:underline"
                         >
                           <Video className="h-3.5 w-3.5" />

@@ -85,14 +85,16 @@ export const HireReject: React.FC = () => {
                     <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-slate-600 border border-slate-200">{candidate.status}</span>
                     <button 
                       onClick={() => handleDecision(candidate._id, 'Selected')}
-                      className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-600 transition-colors shadow-sm hover:shadow-md"
+                      disabled={assessmentScore === undefined || assessmentScore === null}
+                      className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-600 transition-colors shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <CheckCircle2 className="h-4 w-4" />
                       Hire
                     </button>
                     <button 
                       onClick={() => handleDecision(candidate._id, 'Rejected')}
-                      className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 transition-colors"
+                      disabled={assessmentScore === undefined || assessmentScore === null}
+                      className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <XCircle className="h-4 w-4" />
                       Reject
