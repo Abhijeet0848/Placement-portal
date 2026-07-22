@@ -30,7 +30,7 @@ export const Profile: React.FC = () => {
   const [certificates, setCertificates] = useState<any[]>(user?.profile.certificates || []);
   const [uploadingCertificates, setUploadingCertificates] = useState(false);
 
-  const handleViewDocument = (dataUrl: string) => {
+  const handleViewDocument = (dataUrl: string, filename = 'Document.pdf') => {
     if (dataUrl.startsWith('data:')) {
       try {
         const arr = dataUrl.split(',');
@@ -44,9 +44,21 @@ export const Profile: React.FC = () => {
         }
         const blob = new Blob([u8arr], {type: mime});
         const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        
+        // Use download to bypass strict browser popup/blob blockers (like Brave)
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       } catch(e) {
-        window.open(dataUrl, '_blank');
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
     } else {
       window.open(dataUrl, '_blank');
@@ -286,7 +298,7 @@ export const Profile: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => handleViewDocument(user.profile.resumeUrl!)}
+              onClick={() => handleViewDocument(user.profile.resumeUrl!, 'Resume.pdf')}
               className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-md hover:bg-indigo-700 transition-all"
             >
               <ExternalLink className="h-4 w-4" />
@@ -344,7 +356,7 @@ export const Profile: React.FC = () => {
                     {certificate.url && (
                       <button
                         type="button"
-                        onClick={() => handleViewDocument(certificate.url)}
+                        onClick={() => handleViewDocument(certificate.url, certificate.name)}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all flex items-center gap-1"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
