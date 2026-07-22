@@ -15,7 +15,7 @@ import { sendEmail } from '../utils/email';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'supersecretrefreshkey';
 
 const BANNED_EMAIL_DOMAINS = [
-  'gmail.com', 'yahoo.com', 'yahoo.in', 'hotmail.com', 'outlook.com', 
+  'yahoo.com', 'yahoo.in', 'hotmail.com', 'outlook.com', 
   'aol.com', 'icloud.com', 'rediffmail.com', 'mail.com', 'protonmail.com'
 ];
 
