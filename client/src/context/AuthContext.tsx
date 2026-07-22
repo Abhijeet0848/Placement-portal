@@ -15,6 +15,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, role: string) => Promise<void>;
+  ssoLogin: (provider: 'google' | 'microsoft', token: string, role?: string) => Promise<void>;
   logout: () => void;
   updateUser: (profileData: any) => Promise<void>;
 }
@@ -66,6 +67,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(data.user);
   };
 
+  const ssoLogin = async (provider: 'google' | 'microsoft', token: string, role?: string) => {
+    const endpoint = provider === 'google' ? '/auth/google' : '/auth/microsoft';
+    const payload = provider === 'google' ? { credential: token, role } : { accessToken: token, role };
+    const data = await api.post(endpoint, payload);
+    localStorage.setItem('tokens', JSON.stringify(data.tokens));
+    setUser(data.user);
+  };
+
   const logout = () => {
     localStorage.removeItem('tokens');
     setUser(null);
@@ -77,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, register, ssoLogin, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

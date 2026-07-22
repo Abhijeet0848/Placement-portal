@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { ShieldCheck, Mail, Lock, UserCheck, KeyRound, X, CheckCircle, Eye, EyeOff } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
+import { useMsal } from '@azure/msal-react';
 
 export const Login: React.FC = () => {
-  const { login, register } = useAuth();
+  const { login, register, ssoLogin } = useAuth();
   const navigate = useNavigate();
+  const { instance: msalInstance } = useMsal();
 
   const [isRegister, setIsRegister] = useState(false);
   const [name, setName] = useState('');
@@ -105,6 +108,35 @@ export const Login: React.FC = () => {
     setEmail('');
     setPassword('');
     setRole(selectedRole);
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    try {
+      setError('');
+      setLoading(true);
+      await ssoLogin('google', credentialResponse.credential, role);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err?.message || 'Google login failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMicrosoftLogin = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      const loginResponse = await msalInstance.loginPopup({
+        scopes: ["user.read"]
+      });
+      await ssoLogin('microsoft', loginResponse.accessToken, role);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err?.message || 'Microsoft login failed.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -319,22 +351,26 @@ export const Login: React.FC = () => {
           )}
 
           {!isRegister && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-center w-full">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => setError('Google login failed.')}
+                  useOneTap
+                  theme="outline"
+                  size="large"
+                  text="signin_with"
+                  shape="rectangular"
+                />
+              </div>
               <button
                 type="button"
-                onClick={() => alert('Google login is not configured yet. Please use email/password login.')}
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-all active:scale-[0.98]"
+                onClick={handleMicrosoftLogin}
+                className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.98] w-full max-w-[400px] mx-auto"
+                style={{ height: '40px' }}
               >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[9px] font-black text-white">G</span>
-                Google
-              </button>
-              <button
-                type="button"
-                onClick={() => alert('Microsoft login is not configured yet. Please use email/password login.')}
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-all active:scale-[0.98]"
-              >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[9px] font-black text-white">M</span>
-                Microsoft
+                <img src="https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg" alt="Microsoft" className="h-5 w-5" />
+                Sign in with Microsoft
               </button>
             </div>
           )}

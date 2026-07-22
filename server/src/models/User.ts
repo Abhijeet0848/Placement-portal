@@ -30,7 +30,7 @@ export interface IUser extends Document {
 const UserSchema: Schema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true, index: true },
-  passwordHash: { type: String, required: true },
+  passwordHash: { type: String, required: false },
   role: { type: String, enum: ['Student', 'Recruiter', 'PlacementOfficer', 'Admin'], required: true },
   status: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
   profile: {

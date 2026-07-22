@@ -7,6 +7,7 @@ import User from '../models/User';
 import Permission from '../models/Permission';
 import { generateTokens, AuthenticatedRequest } from '../middleware/auth';
 import logger from '../utils/logger';
+import { OAuth2Client } from 'google-auth-library';
 import { mockPermissions } from './admin.controller';
 import BlacklistedToken from '../models/BlacklistedToken';
 
@@ -225,6 +226,186 @@ export async function login(req: AuthenticatedRequest, res: Response) {
   } catch (error: any) {
     logger.error(`Login failed: ${error?.message || error}`);
     return res.status(500).json({ message: 'Server login error' });
+  }
+}
+
+// 2.1 Google SSO Login
+export async function googleLogin(req: AuthenticatedRequest, res: Response) {
+  const { credential, role } = req.body;
+  
+  if (!credential) {
+    return res.status(400).json({ message: 'Google credential is required.' });
+  }
+  
+  try {
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res.status(400).json({ message: 'Invalid Google token.' });
+    }
+    
+    const email = payload.email;
+    const name = payload.name || 'Google User';
+    
+    // Find or create user
+    let user;
+    if (isMockDb) {
+      user = mockDb.users.find(u => u.email === email);
+      if (!user) {
+        user = {
+          _id: `usr_google_${Date.now()}`,
+          name,
+          email,
+          passwordHash: '',
+          role: role || 'Student',
+          status: 'Active',
+          profile: {
+            skills: [], experience: [], projects: [], education: [],
+            verified: true, certificates: [], avatarUrl: payload.picture
+          },
+          createdAt: new Date()
+        };
+        mockDb.users.push(user);
+      }
+    } else {
+      user = await User.findOne({ email });
+      if (!user) {
+        user = new User({
+          name,
+          email,
+          passwordHash: '',
+          role: role || 'Student',
+          profile: {
+            skills: [], experience: [], projects: [], education: [],
+            verified: true, certificates: [], avatarUrl: payload.picture
+          }
+        });
+        await user.save();
+      }
+    }
+    
+    if (user.status === 'Blocked') {
+      return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
+    }
+    
+    let permissions = {};
+    if (!isMockDb) {
+      const permDoc = await Permission.findOne({ role: user.role });
+      permissions = permDoc && permDoc.permissions ? Object.fromEntries(permDoc.permissions) : {};
+    }
+    
+    const tokens = generateTokens({ id: user._id.toString(), email: user.email, role: user.role, name: user.name });
+    return res.json({
+      message: 'Google login successful',
+      tokens,
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profile: user.profile,
+        permissions
+      }
+    });
+  } catch (error: any) {
+    logger.error(`Google login failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Google authentication failed' });
+  }
+}
+
+// 2.2 Microsoft SSO Login
+export async function microsoftLogin(req: AuthenticatedRequest, res: Response) {
+  const { accessToken, role } = req.body;
+  
+  if (!accessToken) {
+    return res.status(400).json({ message: 'Microsoft access token is required.' });
+  }
+  
+  try {
+    const graphResponse = await fetch('https://graph.microsoft.com/v1.0/me', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    
+    if (!graphResponse.ok) {
+      return res.status(400).json({ message: 'Invalid Microsoft token.' });
+    }
+    
+    const profileData = await graphResponse.json();
+    const email = profileData.mail || profileData.userPrincipalName;
+    const name = profileData.displayName || 'Microsoft User';
+    
+    if (!email) {
+      return res.status(400).json({ message: 'Email not found in Microsoft profile.' });
+    }
+    
+    // Find or create user
+    let user;
+    if (isMockDb) {
+      user = mockDb.users.find(u => u.email === email);
+      if (!user) {
+        user = {
+          _id: `usr_ms_${Date.now()}`,
+          name,
+          email,
+          passwordHash: '',
+          role: role || 'Student',
+          status: 'Active',
+          profile: {
+            skills: [], experience: [], projects: [], education: [],
+            verified: true, certificates: []
+          },
+          createdAt: new Date()
+        };
+        mockDb.users.push(user);
+      }
+    } else {
+      user = await User.findOne({ email });
+      if (!user) {
+        user = new User({
+          name,
+          email,
+          passwordHash: '',
+          role: role || 'Student',
+          profile: {
+            skills: [], experience: [], projects: [], education: [],
+            verified: true, certificates: []
+          }
+        });
+        await user.save();
+      }
+    }
+    
+    if (user.status === 'Blocked') {
+      return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
+    }
+    
+    let permissions = {};
+    if (!isMockDb) {
+      const permDoc = await Permission.findOne({ role: user.role });
+      permissions = permDoc && permDoc.permissions ? Object.fromEntries(permDoc.permissions) : {};
+    }
+    
+    const tokens = generateTokens({ id: user._id.toString(), email: user.email, role: user.role, name: user.name });
+    return res.json({
+      message: 'Microsoft login successful',
+      tokens,
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profile: user.profile,
+        permissions
+      }
+    });
+  } catch (error: any) {
+    logger.error(`Microsoft login failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Microsoft authentication failed' });
   }
 }
 
