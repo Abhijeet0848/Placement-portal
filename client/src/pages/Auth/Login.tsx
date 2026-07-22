@@ -351,7 +351,7 @@ export const Login: React.FC = () => {
           )}
 
           {!isRegister && (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 max-w-[400px] mx-auto w-full">
               <div className="flex justify-center w-full">
                 <GoogleLogin
                   onSuccess={handleGoogleSuccess}
@@ -361,12 +361,14 @@ export const Login: React.FC = () => {
                   size="large"
                   text="signin_with"
                   shape="rectangular"
+                  locale="en"
+                  width="400"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleMicrosoftLogin}
-                className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.98] w-full max-w-[400px] mx-auto"
+                className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.98] w-full"
                 style={{ height: '40px' }}
               >
                 <img src="https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg" alt="Microsoft" className="h-5 w-5" />
