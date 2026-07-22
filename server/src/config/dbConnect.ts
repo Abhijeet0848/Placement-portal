@@ -13,7 +13,8 @@ export async function connectDB() {
   }
 
   // Using the user's provided Atlas connection string as fallback if env var is missing
-  const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://gautamabhijeet050_db_user:YrHVtolXoqDopbtt@cluster0.pt91ykf.mongodb.net/Smart-placement?retryWrites=true&w=majority&appName=Cluster0';
+  // Removing /Smart-placement so it defaults to the 'test' database where their data is
+  const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://gautamabhijeet050_db_user:YrHVtolXoqDopbtt@cluster0.pt91ykf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
   if (!process.env.MONGODB_URI) {
     logger.warn('No MONGODB_URI found in environment variables. Using the hardcoded Atlas fallback.');
