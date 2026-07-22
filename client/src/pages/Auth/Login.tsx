@@ -196,7 +196,7 @@ export const Login: React.FC = () => {
                     className={`relative py-2 px-3 rounded-xl text-xs font-bold transition-all text-center border ${
                       isSelected
                         ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm'
-                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                        : 'border-slate-200 bg-white text-slate-600'
                     }`}
                   >
                     {isSelected && <span className="mr-1 text-indigo-600">✓</span>}
@@ -323,7 +323,7 @@ export const Login: React.FC = () => {
               <button
                 type="button"
                 onClick={() => alert('Google login is not configured yet. Please use email/password login.')}
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98]"
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-all active:scale-[0.98]"
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[9px] font-black text-white">G</span>
                 Google
@@ -331,7 +331,7 @@ export const Login: React.FC = () => {
               <button
                 type="button"
                 onClick={() => alert('Microsoft login is not configured yet. Please use email/password login.')}
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98]"
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm transition-all active:scale-[0.98]"
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[9px] font-black text-white">M</span>
                 Microsoft
@@ -345,7 +345,7 @@ export const Login: React.FC = () => {
                 setIsRegister(!isRegister);
                 setError('');
               }}
-              className="text-xs text-indigo-600 hover:text-indigo-700 font-bold transition-all"
+              className="text-xs text-indigo-600 font-bold transition-all"
             >
               {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
             </button>
