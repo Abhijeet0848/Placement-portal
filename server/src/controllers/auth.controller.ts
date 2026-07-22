@@ -343,7 +343,7 @@ export async function updateProfile(req: AuthenticatedRequest, res: Response) {
   }
 
   if (phone !== undefined) {
-    const phoneRegex = /^\+?[\d\s-]{10,15}$/;
+    const phoneRegex = /^\+?[\d\s\-\(\)\.]{10,20}$/;
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({ message: 'Invalid phone number format.' });
     }
