@@ -7,6 +7,7 @@ export interface User {
   email: string;
   passwordHash: string;
   role: 'Student' | 'Recruiter' | 'PlacementOfficer' | 'Admin';
+  status: 'Active' | 'Blocked';
   profile: {
     phone?: string;
     address?: string;
@@ -178,6 +179,7 @@ class MockDatabase {
         email: 'student@placement.com',
         passwordHash,
         role: 'Student',
+        status: 'Active',
         profile: {
           phone: '+91 9876543210',
           cgpa: 8.5,
@@ -216,6 +218,7 @@ class MockDatabase {
         email: 'recruiter@placement.com',
         passwordHash,
         role: 'Recruiter',
+        status: 'Active',
         profile: {
           skills: [],
           experience: [],
@@ -232,6 +235,7 @@ class MockDatabase {
         email: 'officer@placement.com',
         passwordHash,
         role: 'PlacementOfficer',
+        status: 'Active',
         profile: {
           skills: [],
           experience: [],
@@ -248,6 +252,7 @@ class MockDatabase {
         email: 'admin@placement.com',
         passwordHash,
         role: 'Admin',
+        status: 'Active',
         profile: {
           skills: [],
           experience: [],
