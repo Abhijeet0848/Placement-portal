@@ -3,6 +3,9 @@ import logger from '../utils/logger';
 
 export let isMockDb = false;
 
+// Disable Mongoose buffering globally to prevent Vercel 504 Gateway Timeouts
+mongoose.set('bufferCommands', false);
+
 // Global cache for serverless environments
 let isConnected = false;
 
