@@ -4,6 +4,8 @@ import AssessmentResult from '../models/AssessmentResult';
 import User from '../models/User';
 import Notification from '../models/Notification';
 import logger from '../utils/logger';
+import { isMockDb } from '../config/dbConnect';
+import { mockDb } from '../db/mockDb';
 
 export async function getStudentDashboardStats(req: AuthenticatedRequest, res: Response) {
   try {
@@ -157,14 +159,28 @@ export async function sendEmail(req: AuthenticatedRequest, res: Response) {
 
   if (success) {
     try {
-      const recipient = await User.findOne({ email: to.toLowerCase() });
-      if (recipient) {
-        await Notification.create({
-          userId: recipient._id,
-          title: subject,
-          message: message,
-          read: false
-        });
+      if (isMockDb) {
+        const recipient = mockDb.users.find(u => u.email === to.toLowerCase());
+        if (recipient) {
+          mockDb.notifications.push({
+            _id: 'notif_' + Math.random().toString(36).substr(2, 9),
+            userId: recipient._id,
+            title: subject,
+            message: message,
+            read: false,
+            createdAt: new Date()
+          } as any);
+        }
+      } else {
+        const recipient = await User.findOne({ email: to.toLowerCase() });
+        if (recipient) {
+          await Notification.create({
+            userId: recipient._id,
+            title: subject,
+            message: message,
+            read: false
+          });
+        }
       }
     } catch (dbErr) {
       logger.error('Failed to save notification to DB: ' + dbErr);
