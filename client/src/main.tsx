@@ -29,7 +29,7 @@ const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy-google-cl
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <GoogleOAuthProvider clientId={googleClientId}>
+      <GoogleOAuthProvider clientId={googleClientId} locale="en">
         <MsalProvider instance={msalInstance}>
           <AuthProvider>
             <App />
