@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import {
   FileText, Upload, Plus, Trash2, ExternalLink, Award,
-  Phone, GraduationCap, Code2, Sparkles, User
+  Phone, GraduationCap, Code2, Sparkles, User, X, Download, Eye
 } from 'lucide-react';
 
 export const Profile: React.FC = () => {
@@ -29,6 +29,7 @@ export const Profile: React.FC = () => {
   const [saveMessage, setSaveMessage] = useState({ text: '', type: '' });
   const [certificates, setCertificates] = useState<any[]>(user?.profile.certificates || []);
   const [uploadingCertificates, setUploadingCertificates] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState<{ url: string; name: string } | null>(null);
 
   const handleViewDocument = (dataUrl: string, filename = 'Document.pdf') => {
     if (dataUrl.startsWith('data:')) {
@@ -44,24 +45,12 @@ export const Profile: React.FC = () => {
         }
         const blob = new Blob([u8arr], {type: mime});
         const url = URL.createObjectURL(blob);
-        
-        // Use download to bypass strict browser popup/blob blockers (like Brave)
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        setPreviewDoc({ url, name: filename });
       } catch(e) {
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        setPreviewDoc({ url: dataUrl, name: filename });
       }
     } else {
-      window.open(dataUrl, '_blank');
+      setPreviewDoc({ url: dataUrl, name: filename });
     }
   };
 
@@ -301,8 +290,8 @@ export const Profile: React.FC = () => {
               onClick={() => handleViewDocument(user.profile.resumeUrl!, 'Resume.pdf')}
               className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-md hover:bg-indigo-700 transition-all"
             >
-              <ExternalLink className="h-4 w-4" />
-              <span>View Resume</span>
+              <Eye className="h-4 w-4" />
+              <span>Preview Resume</span>
             </button>
             <button
               type="button"
@@ -359,8 +348,8 @@ export const Profile: React.FC = () => {
                         onClick={() => handleViewDocument(certificate.url, certificate.name)}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all flex items-center gap-1"
                       >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                        View
+                        <Eye className="h-3.5 w-3.5" />
+                        Preview
                       </button>
                     )}
                     <span className={`rounded-full px-3 py-1.5 text-xs font-bold ${certificate.verified ? 'bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 border-2 border-emerald-300' : 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 border-2 border-amber-300'}`}>
@@ -614,6 +603,53 @@ export const Profile: React.FC = () => {
           )}
         </div>
       </form>
+
+      {/* Document Preview Modal */}
+      {previewDoc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h3 className="font-extrabold text-slate-800 text-lg flex items-center gap-2">
+                <FileText className="h-5 w-5 text-indigo-500" />
+                {previewDoc.name}
+              </h3>
+              <button 
+                onClick={() => setPreviewDoc(null)}
+                className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="flex-1 w-full bg-slate-200 p-2">
+              <iframe 
+                src={previewDoc.url} 
+                className="w-full h-full border-none rounded-xl bg-white shadow-inner"
+                title="Document Preview"
+              />
+            </div>
+            <div className="px-5 py-4 border-t border-slate-100 flex justify-end bg-slate-50 gap-3">
+              <button
+                onClick={() => setPreviewDoc(null)}
+                className="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-bold rounded-xl transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = previewDoc.url;
+                  link.download = previewDoc.name;
+                  link.click();
+                }}
+                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-colors flex items-center gap-2 shadow-md shadow-indigo-600/20"
+              >
+                <Download className="h-4 w-4" />
+                Download PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
