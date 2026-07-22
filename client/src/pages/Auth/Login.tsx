@@ -361,7 +361,6 @@ export const Login: React.FC = () => {
                   size="large"
                   text="signin_with"
                   shape="rectangular"
-                  locale="en"
                   width="400"
                 />
               </div>
