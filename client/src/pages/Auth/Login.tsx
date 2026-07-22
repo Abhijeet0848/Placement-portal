@@ -25,6 +25,8 @@ export const Login: React.FC = () => {
   const [resetCodeInput, setResetCodeInput] = useState('');
   const [newPasswordInput, setNewPasswordInput] = useState('');
   const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [forgotMessage, setForgotMessage] = useState('');
   const [forgotError, setForgotError] = useState('');
   const [forgotLoading, setForgotLoading] = useState(false);
@@ -440,14 +442,21 @@ export const Login: React.FC = () => {
                   <label className="text-xs font-bold text-slate-500 uppercase tracking-wider pl-1">New Password</label>
                   <div className="relative">
                     <input
-                      type="password"
+                      type={showNewPassword ? "text" : "password"}
                       required
                       placeholder="Minimum 6 characters"
                       value={newPasswordInput}
                       onChange={(e) => setNewPasswordInput(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
                     />
                     <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                    >
+                      {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
 
@@ -455,14 +464,21 @@ export const Login: React.FC = () => {
                   <label className="text-xs font-bold text-slate-500 uppercase tracking-wider pl-1">Confirm Password</label>
                   <div className="relative">
                     <input
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       required
                       placeholder="Repeat new password"
                       value={confirmPasswordInput}
                       onChange={(e) => setConfirmPasswordInput(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
                     />
                     <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
 
