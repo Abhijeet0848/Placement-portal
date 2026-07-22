@@ -276,7 +276,8 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
   }
 
   try {
-    const meetLink = `https://meet.google.com/abc-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 3)}`;
+    const roomCode = Math.random().toString(36).substring(2, 10);
+    const meetLink = `https://meet.jit.si/PlacementPortal-${roomCode}`;
 
     let studentEmail = '';
     let studentName = '';

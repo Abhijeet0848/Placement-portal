@@ -22,7 +22,7 @@ const InterviewSchema: Schema = new Schema({
   date: { type: String, required: true },
   time: { type: String, required: true },
   status: { type: String, enum: ['Scheduled', 'Completed', 'Cancelled'], default: 'Scheduled' },
-  meetLink: { type: String, default: 'https://meet.google.com/abc-defg-hij' },
+  meetLink: { type: String, default: 'https://meet.jit.si/PlacementPortal-default' },
   score: {
     confidence: { type: Number },
     communication: { type: Number },

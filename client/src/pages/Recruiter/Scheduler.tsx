@@ -218,7 +218,7 @@ export const Scheduler: React.FC = () => {
                           <span className="font-semibold">{i.date} at {i.time}</span>
                         </span>
                         <a 
-                          href={i.meetLink || 'https://meet.google.com/new'} 
+                          href={i.meetLink || 'https://meet.jit.si/PlacementPortal-fallback'} 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1.5 mt-1 hover:underline"

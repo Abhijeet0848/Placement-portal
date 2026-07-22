@@ -111,7 +111,7 @@ export const ApplicationsTracker: React.FC = () => {
                         <span className="font-semibold">{interview.date} at {interview.time}</span>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <a href={interview.meetLink || 'https://meet.google.com/new'} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500 transition-colors text-xs">
+                        <a href={interview.meetLink || 'https://meet.jit.si/PlacementPortal-fallback'} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500 transition-colors text-xs">
                           Join Meeting
                         </a>
                       </div>
