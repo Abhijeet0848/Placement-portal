@@ -51,6 +51,9 @@ export async function register(req: AuthenticatedRequest, res: Response) {
     logger.info(`Your verification code is: ${verificationToken}`);
     logger.info(`------------------`);
 
+    console.log("isMockDb =", isMockDb);
+    console.log("User Model =", User.modelName);
+
     if (isMockDb) {
       // Mock DB path
       const userExists = mockDb.users.find(u => u.email === email);
@@ -93,6 +96,7 @@ export async function register(req: AuthenticatedRequest, res: Response) {
       });
     } else {
       // Real DB path
+      console.log("Saving user to MongoDB...");
       const userExists = await User.findOne({ email });
       if (userExists) {
         return res.status(400).json({ message: 'User with this email already exists.' });
@@ -114,7 +118,16 @@ export async function register(req: AuthenticatedRequest, res: Response) {
         }
       });
 
-      await user.save();
+      console.log(user);
+      try {
+        await user.save();
+        console.log("Saved successfully");
+      } catch (err) {
+        console.error("Mongo Save Error:", err);
+        return res.status(500).json(err);
+      }
+      console.log("Saved User:", user);
+
       const tokens = generateTokens({ id: user._id.toString(), email: user.email, role: user.role, name: user.name });
 
       return res.status(201).json({

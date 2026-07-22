@@ -12,7 +12,11 @@ import mongoSanitize from 'express-mongo-sanitize';
 import Exam from './models/Exam';
 
 // Load environment variables
-dotenv.config();
+const result = dotenv.config();
+
+console.log("dotenv result:", result);
+console.log("Current Working Directory:", process.cwd());
+console.log("Loaded MONGODB_URI:", process.env.MONGODB_URI);
 
 const app = express();
 const server = http.createServer(app);
@@ -67,9 +71,9 @@ app.get('/health', (req, res) => {
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   // Always log the detailed error safely on the server
   logger.error(`Express error handler: ${err?.message || err}`);
-  
+
   const status = err?.status || 500;
-  
+
   // Only send specific error messages for 4xx client errors (like 400 Bad Request).
   // For 500 Internal Server errors (like MongoDB crashes), mask the message.
   const isClientError = status >= 400 && status < 500;
