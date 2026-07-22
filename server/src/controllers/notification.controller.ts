@@ -52,3 +52,66 @@ export const broadcastNotice = async (req: AuthenticatedRequest, res: Response) 
     return res.status(500).json({ message: 'Failed to broadcast notice.' });
   }
 };
+
+export async function getNotifications(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (isMockDb) {
+      const notifications = mockDb.notifications
+        .filter(n => n.userId.toString() === req.user?.id)
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 50);
+      return res.json({ notifications });
+    }
+
+    const notifications = await Notification.find({ userId: req.user?.id })
+      .sort({ createdAt: -1 })
+      .limit(50);
+
+    return res.json({ notifications });
+  } catch (error: any) {
+    logger.error(`Error fetching notifications: ${error.message}`);
+    return res.status(500).json({ message: 'Error fetching notifications' });
+  }
+}
+
+export async function markNotificationRead(req: AuthenticatedRequest, res: Response) {
+  try {
+    const { id } = req.params;
+    if (isMockDb) {
+      const notif = mockDb.notifications.find(n => n._id === id && n.userId.toString() === req.user?.id);
+      if (notif) notif.read = true;
+      return res.json({ message: 'Notification marked as read' });
+    }
+
+    await Notification.findOneAndUpdate(
+      { _id: id, userId: req.user?.id },
+      { read: true }
+    );
+    return res.json({ message: 'Notification marked as read' });
+  } catch (error: any) {
+    logger.error(`Error marking notification read: ${error.message}`);
+    return res.status(500).json({ message: 'Error marking notification read' });
+  }
+}
+
+export async function markAllNotificationsRead(req: AuthenticatedRequest, res: Response) {
+  try {
+    if (isMockDb) {
+      mockDb.notifications.forEach(n => {
+        if (n.userId.toString() === req.user?.id) {
+          n.read = true;
+        }
+      });
+      return res.json({ message: 'All notifications marked as read' });
+    }
+
+    await Notification.updateMany(
+      { userId: req.user?.id, read: false },
+      { read: true }
+    );
+    return res.json({ message: 'All notifications marked as read' });
+  } catch (error: any) {
+    logger.error(`Error marking all notifications read: ${error.message}`);
+    return res.status(500).json({ message: 'Error marking all notifications read' });
+  }
+}

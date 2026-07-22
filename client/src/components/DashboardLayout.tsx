@@ -7,6 +7,7 @@ import {
   Star, Users, Bell, LogOut, CheckSquare, Shield, ShieldAlert,
   Calendar, FileText, BarChart3, Search, Menu, X
 } from 'lucide-react';
+import api from '../services/api';
 
 interface SidebarItem {
   name: string;
@@ -33,9 +34,26 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
   const [showScrollBottom, setShowScrollBottom] = useState(true);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Initialize socket connection
+  // Initialize socket connection and fetch initial notifications
   useEffect(() => {
     if (!user) return;
+
+    const fetchNotifications = async () => {
+      try {
+        const data = await api.get('/notifications');
+        // Transform _id to id to match existing socket state format
+        const formattedNotifs = data.notifications.map((n: any) => ({
+          id: n._id,
+          title: n.title,
+          message: n.message,
+          read: n.read
+        }));
+        setNotifications(formattedNotifs);
+      } catch (err) {
+        console.error('Failed to fetch notifications', err);
+      }
+    };
+    fetchNotifications();
 
     const apiOrigin = import.meta.env.VITE_API_URL 
       ? new URL(import.meta.env.VITE_API_URL as string).origin 
@@ -202,8 +220,13 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
   const navItems = navCategories.flatMap(cat => cat.items);
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  const markAllRead = () => {
+  const markAllRead = async () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    try {
+      await api.put('/notifications/read', {});
+    } catch (err) {
+      console.error('Failed to mark notifications read', err);
+    }
   };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {

@@ -8,7 +8,7 @@ import { createThread, getAllThreads, editThread, deleteThread, addReply, create
 import { getRecommendedJobs } from '../controllers/recommendation.controller';
 import { getStudentDashboardStats, getRecruiterDashboardStats, getAdminDashboardStats, sendEmail } from '../controllers/dashboard.controller';
 import { getPermissions, updatePermissions, createBackup, restoreBackup, getActivityLogs, updateUserStatus } from '../controllers/admin.controller';
-import { broadcastNotice } from '../controllers/notification.controller';
+// Removed extra import
 import { authenticateJWT, requireRole } from '../middleware/auth';
 import { connectDB } from '../config/dbConnect';
 
@@ -115,8 +115,13 @@ router.get('/exams/:id', authenticateJWT, getExamById);
 router.post('/exams/:id/submit', authenticateJWT, submitExam);
 router.post('/exams', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), createExam);
 
+import { broadcastNotice, getNotifications, markNotificationRead, markAllNotificationsRead } from '../controllers/notification.controller';
+
 // Notification Routes
 router.post('/notifications/broadcast', authenticateJWT, requireRole(['PlacementOfficer', 'Admin']), broadcastNotice);
+router.get('/notifications', authenticateJWT, getNotifications);
+router.put('/notifications/read', authenticateJWT, markAllNotificationsRead);
+router.put('/notifications/:id/read', authenticateJWT, markNotificationRead);
 
 // Discussion Forum Routes
 router.get('/forum', authenticateJWT, getAllThreads);

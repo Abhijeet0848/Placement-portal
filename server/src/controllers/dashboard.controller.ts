@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthenticatedRequest } from '../middleware/auth';
 import AssessmentResult from '../models/AssessmentResult';
 import User from '../models/User';
+import Notification from '../models/Notification';
 import logger from '../utils/logger';
 
 export async function getStudentDashboardStats(req: AuthenticatedRequest, res: Response) {
@@ -155,6 +156,19 @@ export async function sendEmail(req: AuthenticatedRequest, res: Response) {
   });
 
   if (success) {
+    try {
+      const recipient = await User.findOne({ email: to.toLowerCase() });
+      if (recipient) {
+        await Notification.create({
+          userId: recipient._id,
+          title: subject,
+          message: message,
+          read: false
+        });
+      }
+    } catch (dbErr) {
+      logger.error('Failed to save notification to DB: ' + dbErr);
+    }
     return res.json({ message: 'Email sent successfully.' });
   } else {
     return res.status(500).json({ message: 'Failed to send email.' });
