@@ -23,6 +23,7 @@ export const Login: React.FC = () => {
   const [forgotStep, setForgotStep] = useState<1 | 2>(1);
   const [resetCodeInput, setResetCodeInput] = useState('');
   const [newPasswordInput, setNewPasswordInput] = useState('');
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
   const [forgotMessage, setForgotMessage] = useState('');
   const [forgotError, setForgotError] = useState('');
   const [forgotLoading, setForgotLoading] = useState(false);
@@ -55,7 +56,8 @@ export const Login: React.FC = () => {
       const data = await api.post('/auth/reset-password', {
         email: forgotEmail,
         code: resetCodeInput,
-        newPassword: newPasswordInput
+        newPassword: newPasswordInput,
+        confirmPassword: confirmPasswordInput
       });
       setForgotMessage(data.message);
       setEmail(forgotEmail);
@@ -65,6 +67,7 @@ export const Login: React.FC = () => {
         setForgotEmail('');
         setResetCodeInput('');
         setNewPasswordInput('');
+        setConfirmPasswordInput('');
       }, 1800);
     } catch (err: any) {
       setForgotError(err?.message || 'Failed to reset password.');
@@ -434,6 +437,21 @@ export const Login: React.FC = () => {
                       placeholder="Minimum 6 characters"
                       value={newPasswordInput}
                       onChange={(e) => setNewPasswordInput(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                    />
+                    <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider pl-1">Confirm Password</label>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      required
+                      placeholder="Repeat new password"
+                      value={confirmPasswordInput}
+                      onChange={(e) => setConfirmPasswordInput(e.target.value)}
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
                     />
                     <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
