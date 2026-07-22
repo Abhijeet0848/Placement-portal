@@ -64,6 +64,7 @@ export async function register(req: AuthenticatedRequest, res: Response) {
         email,
         passwordHash,
         role: role as any,
+        status: 'Active' as const,
         profile: {
           skills: [],
           experience: [],
