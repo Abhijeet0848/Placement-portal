@@ -625,9 +625,9 @@ export const Users: React.FC = () => {
       {/* User Detail Modal */}
       {showUserModal && selectedUser && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowUserModal(false)}>
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="glass-panel p-6 rounded-2xl border border-slate-200 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">User Details</h3>
+              <h3 className="text-lg font-extrabold text-slate-900">User Details</h3>
               <button
                 onClick={() => setShowUserModal(false)}
                 className="p-1 rounded-lg hover:bg-slate-800 transition-all"
@@ -638,42 +638,42 @@ export const Users: React.FC = () => {
             
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 flex items-center justify-center text-lg font-bold text-indigo-400">
+                <div className="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 flex items-center justify-center text-xl font-black text-indigo-600 shadow-sm">
                   {getInitials(selectedUser.name)}
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-white">{selectedUser.name}</h4>
-                  <p className="text-sm text-slate-400">{selectedUser.email}</p>
+                  <h4 className="text-base font-extrabold text-slate-900">{selectedUser.name}</h4>
+                  <p className="text-sm text-slate-500 font-medium">{selectedUser.email}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-800">
-                  <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Role</p>
-                  <span className={`px-2 py-1 rounded-lg text-xs font-bold border ${getRoleBadgeColor(selectedUser.role)}`}>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 shadow-inner">
+                  <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Role</p>
+                  <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${getRoleBadgeColor(selectedUser.role)}`}>
                     {selectedUser.role}
                   </span>
                 </div>
-                <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-800">
-                  <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Status</p>
-                  <span className={`px-2 py-1 rounded-lg text-xs font-bold border ${getStatusBadgeColor(selectedUser.status)}`}>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 shadow-inner">
+                  <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Status</p>
+                  <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${getStatusBadgeColor(selectedUser.status)}`}>
                     {selectedUser.status}
                   </span>
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2.5 bg-white border border-slate-100 rounded-xl p-4 shadow-sm">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">User ID:</span>
-                  <span className="text-white font-medium">{selectedUser.id}</span>
+                  <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">User ID:</span>
+                  <span className="text-slate-700 font-bold text-xs font-mono bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">{selectedUser.id}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Created:</span>
-                  <span className="text-white font-medium">{formatDate(selectedUser.createdAt)}</span>
+                <div className="flex justify-between text-sm items-center">
+                  <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">Created:</span>
+                  <span className="text-slate-800 font-semibold text-xs">{formatDate(selectedUser.createdAt)}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Last Login:</span>
-                  <span className="text-white font-medium">{formatDate(selectedUser.lastLogin)}</span>
+                <div className="flex justify-between text-sm items-center">
+                  <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">Last Login:</span>
+                  <span className="text-slate-800 font-semibold text-xs">{formatDate(selectedUser.lastLogin)}</span>
                 </div>
               </div>
 
@@ -683,7 +683,7 @@ export const Users: React.FC = () => {
                     setShowUserModal(false);
                     handleSendEmail(selectedUser.email);
                   }}
-                  className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 hover:bg-indigo-500/20 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-indigo-50 border border-indigo-100 text-indigo-700 hover:bg-indigo-100 transition-all flex items-center justify-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
                   Send Email
@@ -693,10 +693,10 @@ export const Users: React.FC = () => {
                     setShowUserModal(false);
                     handleToggleBlock(selectedUser.id, selectedUser.name);
                   }}
-                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium border transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all flex items-center justify-center gap-2 ${
                     selectedUser.status === 'Active'
-                      ? 'bg-rose-500/10 border-rose-500/20 text-rose-400 hover:bg-rose-500/20'
-                      : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20'
+                      ? 'bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-100'
+                      : 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100'
                   }`}
                 >
                   {selectedUser.status === 'Active' ? (
@@ -717,34 +717,36 @@ export const Users: React.FC = () => {
         </div>
       )}
 
-      {/* Confirmation Dialog */}
-      {showConfirmDialog && confirmAction && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 max-w-sm w-full">
+      {/* Confirmation Modal */}
+      {showConfirmModal && confirmAction && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowConfirmModal(false)}>
+          <div className="glass-panel p-6 rounded-2xl border border-slate-200 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-amber-100 rounded-lg border border-amber-200">
-                <AlertCircle className="h-5 w-5 text-amber-600" />
+              <div className={`p-3 rounded-full ${
+                confirmAction.type === 'block' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'
+              }`}>
+                {confirmAction.type === 'block' ? <ShieldOff className="h-6 w-6" /> : <Shield className="h-6 w-6" />}
               </div>
-              <h3 className="text-base font-bold text-slate-900">Confirm Action</h3>
+              <h3 className="text-lg font-extrabold text-slate-900">
+                {confirmAction.type === 'block' ? 'Block User' : 'Activate User'}
+              </h3>
             </div>
             
-            <p className="text-sm text-slate-600 mb-6">
-              Are you sure you want to {confirmAction.type} the account for <span className="font-bold text-slate-900">{confirmAction.userName}</span>?
+            <p className="text-slate-600 text-sm mb-6 font-medium">
+              Are you sure you want to {confirmAction.type} <strong className="text-slate-900">{confirmAction.userName}</strong>?
+              {confirmAction.type === 'block' && ' They will not be able to log in to the portal.'}
             </p>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
-                onClick={() => {
-                  setShowConfirmDialog(false);
-                  setConfirmAction(null);
-                }}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200 transition-all"
+                onClick={() => setShowConfirmModal(false)}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmActionHandler}
-                className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium border transition-all ${
+                className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all ${
                   confirmAction.type === 'block'
                     ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
                     : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-100'
