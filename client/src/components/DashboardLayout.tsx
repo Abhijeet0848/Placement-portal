@@ -40,8 +40,15 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
     const apiOrigin = import.meta.env.VITE_API_URL 
       ? new URL(import.meta.env.VITE_API_URL as string).origin 
       : 'http://localhost:5000';
+      
+    // Vercel Serverless Functions do not support WebSockets/Long Polling natively
+    // Skip Socket.io initialization if hitting Vercel to prevent console 404 network errors
+    if (apiOrigin.includes('vercel.app')) {
+      return;
+    }
+
     const newSocket = io(apiOrigin, {
-      reconnectionAttempts: 2, // Stop trying to reconnect if server doesn't support WebSockets (like Vercel)
+      reconnectionAttempts: 2, // Stop trying to reconnect if server doesn't support WebSockets
       reconnectionDelay: 5000
     });
 
