@@ -729,10 +729,22 @@ export async function forgotPassword(req: AuthenticatedRequest, res: Response) {
 
     // Generate 6-digit OTP code
     const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-    resetTokens[email.toLowerCase()] = {
-      code: resetCode,
-      expires: Date.now() + 15 * 60 * 1000 // 15 mins expiry
-    };
+    const expires = Date.now() + 15 * 60 * 1000; // 15 mins expiry
+
+    if (isMockDb) {
+      resetTokens[email.toLowerCase()] = {
+        code: resetCode,
+        expires
+      };
+    } else {
+      await User.findOneAndUpdate(
+        { email: email.toLowerCase() },
+        { 
+          'profile.resetPasswordToken': resetCode,
+          'profile.resetPasswordExpires': new Date(expires)
+        }
+      );
+    }
 
     await sendEmail({
       to: email,
@@ -777,28 +789,37 @@ export async function resetPassword(req: AuthenticatedRequest, res: Response) {
   }
 
   try {
-    const record = resetTokens[email.toLowerCase()];
-    if (!record || record.code !== code || record.expires < Date.now()) {
-      return res.status(400).json({ message: 'Invalid or expired reset code. Please request a new one.' });
-    }
-
     const salt = bcryptjs.genSaltSync(10);
     const passwordHash = bcryptjs.hashSync(newPassword, salt);
 
     if (isMockDb) {
+      const record = resetTokens[email.toLowerCase()];
+      if (!record || record.code !== code || record.expires < Date.now()) {
+        return res.status(400).json({ message: 'Invalid or expired reset code. Please request a new one.' });
+      }
       const user = mockDb.users.find(u => u.email.toLowerCase() === email.toLowerCase());
       if (user) {
         user.passwordHash = passwordHash;
       }
+      delete resetTokens[email.toLowerCase()];
     } else {
       const user = await User.findOne({ email: email.toLowerCase() });
-      if (user) {
-        user.passwordHash = passwordHash;
-        await user.save();
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
       }
+      
+      const token = user.profile.resetPasswordToken;
+      const expires = user.profile.resetPasswordExpires;
+      
+      if (!token || token !== code || !expires || expires.getTime() < Date.now()) {
+        return res.status(400).json({ message: 'Invalid or expired reset code. Please request a new one.' });
+      }
+      
+      user.passwordHash = passwordHash;
+      user.profile.resetPasswordToken = undefined;
+      user.profile.resetPasswordExpires = undefined;
+      await user.save();
     }
-
-    delete resetTokens[email.toLowerCase()];
     logger.info(`Password successfully reset for email: ${email}`);
 
     return res.json({ message: 'Password reset successful! You can now log in with your new password.' });

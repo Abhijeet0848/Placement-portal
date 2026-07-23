@@ -22,6 +22,8 @@ export interface IUser extends Document {
     verified: boolean;
     certificates: { name: string; url: string; verified: boolean; issueDate: string }[];
     verificationToken?: string;
+    resetPasswordToken?: string;
+    resetPasswordExpires?: Date;
     avatarUrl?: string;
   };
   createdAt: Date;
@@ -69,6 +71,8 @@ const UserSchema: Schema = new Schema({
       }
     ],
     verificationToken: { type: String },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
     avatarUrl: { type: String }
   },
   createdAt: { type: Date, default: Date.now }
