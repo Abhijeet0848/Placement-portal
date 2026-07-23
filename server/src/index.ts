@@ -1,23 +1,24 @@
+import dotenv from 'dotenv';
+
+// Load environment variables FIRST
+const result = dotenv.config();
+console.log("dotenv result:", result);
+console.log("Current Working Directory:", process.cwd());
+console.log("Loaded MONGODB_URI:", process.env.MONGODB_URI ? "Found" : "Not Found");
+
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
 import { connectDB, isMockDb } from './config/dbConnect';
 import router from './routes/api';
 import logger from './utils/logger';
 import mongoSanitize from 'express-mongo-sanitize';
 import Exam from './models/Exam';
 
-// Load environment variables
-const result = dotenv.config();
-
-console.log("dotenv result:", result);
-console.log("Current Working Directory:", process.cwd());
-console.log("Loaded MONGODB_URI:", process.env.MONGODB_URI);
-
+// ...
 const app = express();
 const server = http.createServer(app);
 
