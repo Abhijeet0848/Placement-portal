@@ -464,7 +464,17 @@ export const Login: React.FC = () => {
             ) : (
               <form onSubmit={handleResetPasswordSubmit} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider pl-1">6-Digit Reset Code</label>
+                  <div className="flex items-center justify-between pl-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">6-Digit Reset Code</label>
+                    <button 
+                      type="button" 
+                      onClick={handleRequestResetCode}
+                      disabled={forgotLoading}
+                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-all disabled:opacity-50"
+                    >
+                      {forgotLoading ? 'Sending...' : 'Resend Code'}
+                    </button>
+                  </div>
                   <input
                     type="text"
                     required
