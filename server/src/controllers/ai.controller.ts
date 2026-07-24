@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText } from '../services/ai.service';
+import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport } from '../services/ai.service';
 import { parseResumePDF } from '../services/parser.service';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { isMockDb } from '../config/dbConnect';
@@ -58,18 +58,35 @@ export async function analyzeResumeUpload(req: AuthenticatedRequest, res: Respon
 
 // 2. Mock Interview Round evaluation
 export async function evaluateInterview(req: AuthenticatedRequest, res: Response) {
-  const { questionText, studentAnswer } = req.body;
+  const { history } = req.body;
 
-  if (!questionText || !studentAnswer) {
-    return res.status(400).json({ message: 'Question text and student answer are required.' });
+  if (!history || !Array.isArray(history)) {
+    return res.status(400).json({ message: 'Chat history is required.' });
   }
 
   try {
-    const feedback = await evaluateInterviewAnswer(questionText, studentAnswer);
+    const feedback = await evaluateInterviewAnswer(history);
     return res.json({ feedback });
   } catch (error: any) {
     logger.error(`Evaluate interview failed: ${error?.message || error}`);
     return res.status(500).json({ message: error?.message || 'Server interview evaluation error' });
+  }
+}
+
+// 2.5 End Interview Session
+export async function endInterview(req: AuthenticatedRequest, res: Response) {
+  const { history } = req.body;
+
+  if (!history || !Array.isArray(history)) {
+    return res.status(400).json({ message: 'Chat history is required.' });
+  }
+
+  try {
+    const report = await generateInterviewReport(history);
+    return res.json({ report });
+  } catch (error: any) {
+    logger.error(`End interview failed: ${error?.message || error}`);
+    return res.status(500).json({ message: error?.message || 'Server interview report error' });
   }
 }
 

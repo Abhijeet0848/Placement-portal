@@ -105,34 +105,24 @@ export const MockInterview: React.FC = () => {
     setLoadingReply(true);
 
     try {
-      const lastAiMessage = chats.filter(c => c.sender === 'AI').pop();
-      const questionText = lastAiMessage ? lastAiMessage.text : 'Explain software engineering.';
-
       const response = await api.post('/ai/evaluate-interview', {
-        questionText,
-        studentAnswer: answer
+        history: updatedChats.map(c => ({ sender: c.sender, text: c.text }))
       });
 
       const feedback = response.feedback;
 
-      // Append AI reply with feedback scores
+      // Append AI reply
       setChats(prev => [
         ...prev,
         {
           sender: 'AI',
-          text: feedback.followUpQuestion,
-          scores: {
-            confidence: feedback.confidence || 7,
-            communication: feedback.communication || 7,
-            technicalAccuracy: feedback.technicalAccuracy,
-            feedback: feedback.feedback,
-          }
+          text: feedback.text
         }
       ]);
     } catch (err) {
       setChats(prev => [
         ...prev,
-        { sender: 'AI', text: 'Evaluation context lost. Let us move to the next question: Can you describe your system design experience?' }
+        { sender: 'AI', text: 'Sorry, I lost my connection. Can you repeat that?' }
       ]);
     } finally {
       setLoadingReply(false);
@@ -140,35 +130,22 @@ export const MockInterview: React.FC = () => {
   };
 
   // End interview and generate session feedback scores
-  const handleEndSession = () => {
-    // Collect all evaluated chat items
-    const evaluatedTurns = chats.filter(c => c.sender === 'AI' && c.scores);
-    
-    if (evaluatedTurns.length === 0) {
+  const handleEndSession = async () => {
+    if (chats.length <= 1) {
       setActiveSession(false);
       return;
     }
 
-    let totalConfidence = 0;
-    let totalComm = 0;
-    let totalTech = 0;
-
-    evaluatedTurns.forEach(turn => {
-      totalConfidence += turn.scores?.confidence || 0;
-      totalComm += turn.scores?.communication || 0;
-      totalTech += turn.scores?.technicalAccuracy || 0;
-    });
-
-    const turnsCount = evaluatedTurns.length;
-    const finalReport = {
-      avgConfidence: Math.round((totalConfidence / turnsCount) * 10), // out of 100
-      avgCommunication: Math.round((totalComm / turnsCount) * 10),
-      avgAccuracy: Math.round((totalTech / turnsCount) * 10),
-      feedbackSummary: 'You have good conceptual foundations. Focus on providing structured real-world scenarios and avoid short code summaries. Communication and technical accuracy are ready for placements!'
-    };
-
-    setReport(finalReport);
-    setActiveSession(false);
+    try {
+      const response = await api.post('/ai/end-interview', {
+        history: chats.map(c => ({ sender: c.sender, text: c.text }))
+      });
+      setReport(response.report);
+      setActiveSession(false);
+    } catch (err) {
+      console.error(err);
+      setActiveSession(false);
+    }
   };
 
   return (
@@ -319,19 +296,7 @@ export const MockInterview: React.FC = () => {
                 const isAi = chat.sender === 'AI';
                 return (
                   <div key={idx} className={`flex flex-col ${isAi ? 'items-start' : 'items-end'} space-y-2`}>
-                    {/* Rating widget on AI Response (Feedback for previous answer) */}
-                    {isAi && chat.scores && (
-                      <div className="p-4 bg-gradient-to-br from-slate-50 to-slate-100 border-2 border-slate-200 rounded-xl space-y-3 max-w-2xl mb-2">
-                        <div className="flex space-x-6 justify-between text-xs font-bold text-slate-700">
-                          <span>Confidence: <strong className="text-indigo-600">{chat.scores.confidence}/10</strong></span>
-                          <span>Comm: <strong className="text-purple-600">{chat.scores.communication}/10</strong></span>
-                          <span>Technical: <strong className="text-emerald-600">{chat.scores.technicalAccuracy}/10</strong></span>
-                        </div>
-                        <p className="text-xs text-slate-600 italic leading-relaxed border-t border-slate-200 pt-2">{chat.scores.feedback}</p>
-                      </div>
-                    )}
-
-                    {/* Next Question / Chat Text */}
+                    {/* Chat Text */}
                     <div className={`p-4 rounded-2xl text-sm max-w-2xl leading-relaxed font-medium ${
                       isAi 
                         ? 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-900 border-2 border-slate-300' 

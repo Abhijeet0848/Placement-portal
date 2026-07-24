@@ -369,22 +369,54 @@ Sincerely,
 ${studentName}`;
 }
 
-// 5. Mock Interview Chat Evaluator
-export async function evaluateInterviewAnswer(questionText: string, studentAnswer: string) {
+// 5. Mock Interview Chat Conversational Agent
+export async function evaluateInterviewAnswer(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
       const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
+      const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Interviewer' : 'Candidate'}: ${h.text}`).join('\n');
       const prompt = `
-        Evaluate the student's answer to the technical interview question.
-        Question: ${questionText}
-        Student's Answer: ${studentAnswer}
+        You are an expert technical interviewer conducting a mock interview.
+        Here is the conversation history so far:
+        ${formattedHistory}
 
-        Evaluate and return a JSON object with:
-        - confidence (number, 1-10)
-        - communication (number, 1-10)
-        - technicalAccuracy (number, 1-10)
-        - feedback (string with detailed correction, what they answered right, what they missed)
-        - followUpQuestion (string)
+        Provide your next response as the Interviewer. 
+        If the candidate answered a question, briefly and naturally acknowledge or correct their answer, then ask the next technical question.
+        If they say they don't know, provide a brief, polite explanation and move on to a different topic.
+        Do NOT output JSON. Just reply naturally with your text as the interviewer.
+      `;
+
+      const result = await model.generateContent(prompt);
+      return { text: result.response.text().trim() };
+    } catch (error: any) {
+      logger.error(`Gemini evaluateInterviewAnswer failed: ${error?.message || error}`);
+    }
+  }
+
+  // Fallback Simulation
+  const lastUserMsg = history[history.length - 1]?.text?.toLowerCase() || '';
+  if (lastUserMsg.includes('not know') || lastUserMsg.includes("don't know")) {
+    return { text: "That's completely fine! Let's move on to a different topic. Can you explain what REST APIs are and what HTTP methods are commonly used?" };
+  }
+  return { text: "Good attempt. To build on that, how would you ensure that your code is scalable and maintainable in a large production environment?" };
+}
+
+// 6. Final Mock Interview Report Generator
+export async function generateInterviewReport(history: { sender: string, text: string }[]) {
+  if (genAI) {
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
+      const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Interviewer' : 'Candidate'}: ${h.text}`).join('\n');
+      const prompt = `
+        You are an expert technical interviewer evaluating a completed mock interview.
+        Here is the full transcript:
+        ${formattedHistory}
+
+        Evaluate the candidate's overall performance and return a JSON object with:
+        - avgConfidence (number, 0-100)
+        - avgCommunication (number, 0-100)
+        - avgAccuracy (number, 0-100)
+        - feedbackSummary (string: 3-4 sentences summarizing their strengths and areas for improvement)
 
         Output strictly valid JSON:
       `;
@@ -394,74 +426,16 @@ export async function evaluateInterviewAnswer(questionText: string, studentAnswe
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
     } catch (error: any) {
-      logger.error(`Gemini evaluateInterviewAnswer failed: ${error?.message || error}`);
+      logger.error(`Gemini generateInterviewReport failed: ${error?.message || error}`);
     }
   }
 
-  // Fallback Simulation with Contextual Keyword Matching
-  const lowerQuestion = questionText.toLowerCase();
-  const lowerAnswer = studentAnswer.toLowerCase();
-
-  // Determine expected keywords based on the question context
-  let expectedKeywords: string[] = [];
-  if (lowerQuestion.includes('virtual dom') || lowerQuestion.includes('react')) {
-    expectedKeywords = ['reconciliation', 'diffing', 'memory', 'performance', 'state', 'ui', 'render'];
-  } else if (lowerQuestion.includes('node') || lowerQuestion.includes('stream')) {
-    expectedKeywords = ['buffer', 'memory', 'chunk', 'pipe', 'event', 'asynchronous', 'large files', 'data'];
-  } else if (lowerQuestion.includes('database') || lowerQuestion.includes('index')) {
-    expectedKeywords = ['b-tree', 'scan', 'speed', 'read', 'write', 'penalty', 'lookup', 'performance'];
-  } else if (lowerQuestion.includes('url shortener') || lowerQuestion.includes('design')) {
-    expectedKeywords = ['hash', 'base62', 'load balancer', 'cache', 'redis', 'nosql', 'sharding', 'throughput'];
-  } else if (lowerQuestion.includes('docker') || lowerQuestion.includes('container')) {
-    expectedKeywords = ['image', 'kernel', 'isolation', 'lightweight', 'namespace', 'cgroups', 'virtual machine', 'overhead'];
-  } else if (lowerQuestion.includes('supervised') || lowerQuestion.includes('learning')) {
-    expectedKeywords = ['labels', 'classification', 'regression', 'clustering', 'training', 'data', 'algorithm', 'target'];
-  } else if (lowerQuestion.includes('garbage collection') || lowerQuestion.includes('jvm')) {
-    expectedKeywords = ['heap', 'reference', 'unreachable', 'memory', 'mark', 'sweep', 'generation', 'eden'];
-  } else if (lowerQuestion.includes('gil') || lowerQuestion.includes('interpreter lock')) {
-    expectedKeywords = ['thread', 'mutex', 'cpython', 'concurrency', 'cpu-bound', 'i/o-bound', 'multiprocessing', 'parallelism'];
-  } else if (lowerQuestion.includes('smart pointers') || lowerQuestion.includes('c++')) {
-    expectedKeywords = ['memory leak', 'ownership', 'unique_ptr', 'shared_ptr', 'reference counting', 'delete', 'raii', 'scope'];
-  } else if (lowerQuestion.includes('closure') || lowerQuestion.includes('javascript')) {
-    expectedKeywords = ['lexical', 'scope', 'function', 'inner', 'outer', 'encapsulation', 'private', 'variables'];
-  } else {
-    expectedKeywords = ['design', 'architecture', 'scalable', 'efficient', 'optimize'];
-  }
-
-  // Calculate technical accuracy based on keyword hits
-  let matches = 0;
-  expectedKeywords.forEach(kw => {
-    if (lowerAnswer.includes(kw)) matches++;
-  });
-
-  const wordCount = studentAnswer.split(' ').length;
-  const isTooShort = wordCount < 15;
-
-  let techScore = 4;
-  if (matches >= 3) techScore = 9;
-  else if (matches >= 1) techScore = 7;
-  
-  if (isTooShort) techScore -= 2;
-
-  let feedbackMsg = '';
-  if (techScore >= 8) {
-    feedbackMsg = `Excellent answer! You correctly identified key concepts like ${expectedKeywords.filter(k => lowerAnswer.includes(k)).slice(0, 2).join(' and ')}. Your technical understanding is very solid.`;
-  } else if (techScore >= 5) {
-    feedbackMsg = `Good attempt. You mentioned some correct points, but try to use more precise terminology like "${expectedKeywords[0]}" or "${expectedKeywords[1]}" to strengthen your answer.`;
-  } else {
-    feedbackMsg = isTooShort 
-      ? 'Your answer was too brief. Try to elaborate on the concepts and provide specific examples.'
-      : 'You missed the core technical concepts. Review the fundamental mechanisms behind this technology.';
-  }
-
+  // Fallback simulation
   return {
-    confidence: isTooShort ? 5 : 8,
-    communication: isTooShort ? 4 : 8,
-    technicalAccuracy: techScore,
-    feedback: feedbackMsg,
-    followUpQuestion: techScore >= 7 
-      ? 'Great. Can you elaborate on how you would optimize this in a high-traffic production environment?'
-      : 'Let us try another one. Can you describe a recent technical challenge you solved?'
+    avgConfidence: 80,
+    avgCommunication: 75,
+    avgAccuracy: 70,
+    feedbackSummary: "You showed a good fundamental understanding of core concepts. Moving forward, try to provide more detailed real-world examples when explaining technical definitions. Keep practicing!"
   };
 }
 
