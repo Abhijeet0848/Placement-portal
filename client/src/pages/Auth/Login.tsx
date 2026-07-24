@@ -140,6 +140,7 @@ export const Login: React.FC = () => {
   };
 
   return (
+    <>
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-sky-200 via-sky-100 to-white px-4 relative py-10">
       
       {/* Decorative background arcs/lines */}
@@ -488,6 +489,6 @@ export const Login: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
