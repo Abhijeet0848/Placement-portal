@@ -291,7 +291,7 @@ export const CodingLab: React.FC = () => {
       ) : !activeExam ? (
         <>
           {/* Premium Hero Header */}
-          <div className="bg-[#111315] relative overflow-hidden rounded-[2rem] p-10 lg:p-12 border border-slate-800 shadow-2xl">
+          <div className="bg-slate-900 relative overflow-hidden rounded-[2rem] p-10 lg:p-12 border border-slate-800 shadow-2xl">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 "></div>
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 " style={{ animationDelay: '1s' }}></div>
             
