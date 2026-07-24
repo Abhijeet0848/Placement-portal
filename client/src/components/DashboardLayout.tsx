@@ -255,11 +255,11 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f5f7ff] text-slate-700">
+    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-800">
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -268,19 +268,19 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-50 print:hidden
         w-64 bg-white border-r border-slate-200 
-        flex flex-col p-4 shadow-lg
-        transform   ease-in-out
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        flex flex-col p-5
+        transform transition-transform duration-300 ease-in-out
+        ${isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Logo Header */}
-        <div className="flex items-center justify-between mb-6 px-2">
+        <div className="flex items-center justify-between mb-8 px-2">
           <div className="flex items-center space-x-3">
-            <div className="h-9 w-9 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/20">
+            <div className="h-10 w-10 rounded-xl bg-slate-900 flex items-center justify-center font-bold text-white shadow-soft">
               S
             </div>
             <div>
-              <h1 className="font-extrabold text-sm tracking-wide text-slate-900 uppercase">Placement Portal</h1>
-              <span className="text-xs text-indigo-600 font-semibold">{user.role} Hub</span>
+              <h1 className="font-extrabold text-sm tracking-widest text-slate-900 uppercase">Smart Portal</h1>
+              <span className="text-xs text-emerald-600 font-semibold">{user.role} Hub</span>
             </div>
           </div>
           {/* Close button for mobile */}
@@ -316,13 +316,13 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
                     <Link
                       key={item.name}
                       to={item.path}
-                      className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium  ${
+                      className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                         isActive 
-                          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/10' 
+                          ? 'bg-slate-900 text-white shadow-soft' 
                           : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                       }`}
                     >
-                      <Icon className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                      <Icon className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'}`} />
                       <span>{item.name}</span>
                     </Link>
                   );
@@ -333,19 +333,19 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         </nav>
 
         {/* User Info & Signout - Fixed at bottom */}
-        <div className="border-t border-slate-200 pt-4 px-2 space-y-4 mt-4">
+        <div className="border-t border-slate-200 pt-5 px-2 space-y-4 mt-4">
           <div className="flex items-center space-x-3">
-            <div className="h-10 w-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-semibold text-indigo-600">
+            <div className="h-10 w-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-semibold text-slate-700">
               {user.name.charAt(0)}
             </div>
             <div className="truncate">
-              <p className="text-sm font-semibold text-slate-900 leading-tight">{user.name}</p>
+              <p className="text-sm font-semibold text-slate-900 leading-tight truncate">{user.name}</p>
               <p className="text-xs text-slate-500 truncate">{user.email}</p>
             </div>
           </div>
           <button 
             onClick={logout}
-            className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50  border border-transparent hover:border-rose-200"
+            className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors"
           >
             <LogOut className="h-4.5 w-4.5" />
             <span>Sign Out</span>
@@ -356,16 +356,16 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Main Container */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="h-16 border-b border-slate-200 px-4 lg:px-6 flex items-center justify-between z-10 bg-white/80 backdrop-blur print:hidden">
-          <div className="flex items-center space-x-3">
+        <header className="h-16 bg-white border-b border-slate-200 px-4 lg:px-8 flex items-center justify-between z-10 print:hidden">
+          <div className="flex items-center space-x-4">
             {/* Mobile menu button */}
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 "
+              className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 transition-colors"
             >
               <Menu className="h-5 w-5 text-slate-600" />
             </button>
-            <h2 className="text-base lg:text-lg font-bold text-slate-900 uppercase tracking-wider">
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
               {navItems.find(item => item.path === location.pathname)?.name || 'Smart Portal'}
             </h2>
           </div>
@@ -375,19 +375,19 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100  relative border border-transparent hover:border-slate-200"
+                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 relative transition-colors"
               >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white "></span>
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white"></span>
                 )}
               </button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-3 w-72 lg:w-80 bg-white border border-slate-200 rounded-xl shadow-2xl p-4 space-y-3 z-50 ">
-                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                <div className="absolute right-0 mt-3 w-72 lg:w-80 bg-white border border-slate-200 rounded-xl shadow-elevated p-4 space-y-3 z-50">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 className="font-bold text-sm text-slate-900">Notifications ({unreadCount})</h3>
-                    <button onClick={markAllRead} className="text-xs text-indigo-600 hover:text-indigo-700">
+                    <button onClick={markAllRead} className="text-xs text-slate-500 hover:text-slate-900 transition-colors">
                       Mark all read
                     </button>
                   </div>
@@ -396,9 +396,9 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
                       <p className="text-xs text-slate-500 py-4 text-center">No notifications yet.</p>
                     ) : (
                       notifications.map(n => (
-                        <div key={n.id} className={`p-2.5 rounded-lg text-xs  ${n.read ? 'bg-slate-50' : 'bg-indigo-50 border-l-2 border-indigo-500'}`}>
-                          <h4 className="font-semibold text-slate-800">{n.title}</h4>
-                          <p className="text-slate-500 mt-1 leading-normal">{n.message}</p>
+                        <div key={n.id} className={`p-3 rounded-lg text-xs ${n.read ? 'bg-white border border-slate-100' : 'bg-slate-50 border border-slate-200'}`}>
+                          <h4 className="font-semibold text-slate-900">{n.title}</h4>
+                          <p className="text-slate-500 mt-1 leading-relaxed">{n.message}</p>
                         </div>
                       ))
                     )}
@@ -408,16 +408,16 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
             </div>
 
             {/* Profile pill - hidden on small mobile */}
-            <div className="hidden sm:flex items-center space-x-2 border border-slate-200 px-3 py-1.5 rounded-full bg-slate-50">
+            <div className="hidden sm:flex items-center space-x-2 border border-slate-200 px-3 py-1.5 rounded-full bg-white shadow-sm">
               <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-              <span className="text-xs font-semibold text-slate-600 uppercase">{user.role} mode</span>
+              <span className="text-xs font-semibold text-slate-700 tracking-wide">{user.role} mode</span>
             </div>
           </div>
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative bg-[#f5f7ff]">
-          <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8 ">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative bg-slate-50">
+          <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
             {children}
           </div>
         </main>

@@ -79,16 +79,15 @@ export const Dashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-300 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="saas-card p-8 bg-slate-900 text-white">
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-black text-white tracking-tight">Welcome back, {user.name}!</h3>
+              <h3 className="text-2xl font-black tracking-tight">Welcome back, {user.name}!</h3>
               {user.profile.branch && user.profile.cgpa && (
-                <p className="text-sm text-indigo-100 mt-2 font-medium">Branch: {user.profile.branch} | Current GPA: {user.profile.cgpa}</p>
+                <p className="text-sm text-slate-300 mt-2 font-medium">Branch: {user.profile.branch} | Current GPA: {user.profile.cgpa}</p>
               )}
             </div>
-            <Link to="/profile" className="px-4 py-2 bg-white hover:bg-indigo-50 rounded-xl text-sm font-bold text-indigo-700  shadow-lg">
+            <Link to="/profile" className="px-4 py-2 bg-white hover:bg-slate-100 rounded-lg text-sm font-bold text-slate-900 transition-colors">
               Complete Profile
             </Link>
           </div>
@@ -96,47 +95,43 @@ export const Dashboard: React.FC = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Resume Score</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Resume Score</p>
                 <h4 className="text-2xl font-black text-slate-900 mt-1.5">{resumeScore > 0 ? `${resumeScore}/100` : 'Analyze Resume'}</h4>
               </div>
-              <Award className="h-8 w-8 text-indigo-600" />
+              <Award className="h-8 w-8 text-slate-400" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Applications</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Applications</p>
                 <h4 className="text-2xl font-black text-slate-900 mt-1.5">{apps.length}</h4>
               </div>
-              <Briefcase className="h-8 w-8 text-indigo-600" />
+              <Briefcase className="h-8 w-8 text-slate-400" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Skills Evaluated</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Skills Evaluated</p>
                 <h4 className="text-2xl font-black text-slate-900 mt-1.5">{skillsEvaluatedCount}</h4>
               </div>
-              <CheckCircle className="h-8 w-8 text-emerald-600" />
+              <CheckCircle className="h-8 w-8 text-emerald-500" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Hiring Readiness</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hiring Readiness</p>
                 <h4 className="text-2xl font-black text-slate-900 mt-1.5">{hiringReadiness}%</h4>
               </div>
-              <TrendingUp className="h-8 w-8 text-indigo-600" />
+              <TrendingUp className="h-8 w-8 text-blue-500" />
             </div>
           </div>
         </div>
@@ -144,18 +139,17 @@ export const Dashboard: React.FC = () => {
         {/* Charts & Details */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Linear Line Chart */}
-          <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl lg:col-span-2">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-6 lg:col-span-2">
             <div className="relative z-10">
               <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Placement Readiness Journey</h4>
               <div className="h-60">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={readinessJourney}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={11} domain={[0, 100]} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
+                    <YAxis stroke="#94a3b8" fontSize={11} domain={[0, 100]} />
                     <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#1e293b' }} />
-                    <Line type="monotone" dataKey="Score" stroke="#6366f1" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="Score" stroke="#0f172a" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -163,37 +157,36 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Job matching summary */}
-          <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-6">
             <div className="relative z-10 space-y-4">
-              <div className="flex items-center gap-2 text-indigo-600">
+              <div className="flex items-center gap-2 text-slate-800">
                 <Sparkles className="h-5 w-5" />
                 <h4 className="text-sm font-bold uppercase tracking-wider">AI Skill Match Engine</h4>
               </div>
               <div className="space-y-3">
-                <div className="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl border-2 border-indigo-200">
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-700 font-medium">ATS Eligibility</span>
+                    <span className="text-slate-600 font-medium">ATS Eligibility</span>
                     <span className="font-bold text-emerald-600">PASSED</span>
                   </div>
-                  <div className="h-1.5 w-full bg-indigo-100 rounded-full mt-2 overflow-hidden">
+                  <div className="h-1.5 w-full bg-slate-200 rounded-full mt-2 overflow-hidden">
                     <div className="h-full bg-emerald-500" style={{ width: '88%' }}></div>
                   </div>
                 </div>
 
-                <div className="p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200">
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-700 font-medium">Coding assessments</span>
-                    <span className="font-bold text-indigo-600">{avgCodingScore}% Avg Score</span>
+                    <span className="text-slate-600 font-medium">Coding assessments</span>
+                    <span className="font-bold text-blue-600">{avgCodingScore}% Avg Score</span>
                   </div>
-                  <div className="h-1.5 w-full bg-purple-100 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-indigo-500" style={{ width: `${avgCodingScore}%` }}></div>
+                  <div className="h-1.5 w-full bg-slate-200 rounded-full mt-2 overflow-hidden">
+                    <div className="h-full bg-blue-500" style={{ width: `${avgCodingScore}%` }}></div>
                   </div>
                 </div>
 
-                <div className="p-3 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl border-2 border-amber-200">
+                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200">
                   <p className="text-xs font-bold text-amber-700">AI Placement Tip</p>
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  <p className="text-xs text-amber-800 mt-1 leading-relaxed">
                     {aiPlacementTip}
                   </p>
                 </div>
@@ -202,38 +195,37 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+        <div className="saas-card p-6">
           <div className="relative z-10 space-y-4">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Placement Statistics Snapshot</h4>
-                <p className="text-xs text-slate-600 mt-1">Track how your profile strength, resume score, and application momentum are shaping your placement outlook.</p>
+                <p className="text-xs text-slate-500 mt-1">Track how your profile strength, resume score, and application momentum are shaping your placement outlook.</p>
               </div>
-              <Link to="/applications" className="px-4 py-2 rounded-xl border-2 border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 ">
+              <Link to="/applications" className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">
                 Track Applications
               </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl border-2 border-indigo-200">
-                <p className="text-[10px] uppercase tracking-wider text-slate-600 font-bold">Placement Score</p>
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Placement Score</p>
                 <p className="text-lg font-black text-slate-900 mt-1">88%</p>
                 <p className="text-[11px] text-emerald-600 mt-1 font-medium">+6% from last month</p>
               </div>
-              <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200">
-                <p className="text-[10px] uppercase tracking-wider text-slate-600 font-bold">Resume Strength</p>
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Resume Strength</p>
                 <p className="text-lg font-black text-slate-900 mt-1">{resumeScore > 0 ? `${resumeScore}/100` : 'Pending'}</p>
-                <p className="text-[11px] text-indigo-600 mt-1 font-medium">ATS-ready profile</p>
+                <p className="text-[11px] text-blue-600 mt-1 font-medium">ATS-ready profile</p>
               </div>
-              <div className="p-4 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl border-2 border-cyan-200">
-                <p className="text-[10px] uppercase tracking-wider text-slate-600 font-bold">Active Applications</p>
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Active Applications</p>
                 <p className="text-lg font-black text-slate-900 mt-1">{apps.length}</p>
-                <p className="text-[11px] text-slate-600 mt-1 font-medium">Monitoring recruiter response</p>
+                <p className="text-[11px] text-slate-500 mt-1 font-medium">Monitoring recruiter response</p>
               </div>
             </div>
 
-            <div className="h-48">
+            <div className="h-48 mt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={[
                   { name: 'Resume', score: resumeScore > 0 ? resumeScore : 72 },
@@ -241,11 +233,11 @@ export const Dashboard: React.FC = () => {
                   { name: 'Applications', score: Math.min(apps.length * 20, 100) },
                   { name: 'Mock Interviews', score: 78 }
                 ]}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
-                  <YAxis stroke="#64748b" fontSize={11} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
+                  <YAxis stroke="#94a3b8" fontSize={11} />
                   <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#1e293b' }} />
-                  <Bar dataKey="score" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="score" fill="#0f172a" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -253,14 +245,13 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Application List */}
-        <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+        <div className="saas-card p-6">
           <div className="relative z-10 space-y-4">
             <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Job Applications Timeline</h4>
             {apps.length === 0 ? (
               <div className="text-center py-6">
                 <p className="text-sm text-slate-500">You have not applied to any job postings yet.</p>
-                <Link to="/jobs" className="text-xs text-indigo-600 hover:text-indigo-700 font-bold mt-2 inline-block">
+                <Link to="/jobs" className="text-xs text-blue-600 hover:text-blue-700 font-bold mt-2 inline-block transition-colors">
                   View open positions →
                 </Link>
               </div>
@@ -273,16 +264,16 @@ export const Dashboard: React.FC = () => {
                   const matchScore = app.matchScore;
 
                   return (
-                    <div key={app._id} className="p-4 bg-gradient-to-br from-slate-50 to-slate-100 border-2 border-slate-200 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:shadow-md ">
+                    <div key={app._id} className="p-4 bg-white border border-slate-200 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:border-slate-300 transition-colors">
                       <div>
                         <h5 className="font-bold text-slate-900">{jobTitle}</h5>
-                        <p className="text-xs text-slate-600 mt-0.5">{companyName} • Applied {new Date(app.appliedAt).toLocaleDateString()}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{companyName} • Applied {new Date(app.appliedAt).toLocaleDateString()}</p>
                       </div>
 
                       <div className="flex items-center space-x-6">
                         {/* Match rating */}
                         <div className="text-center md:text-right">
-                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">AI Match</span>
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">AI Match</span>
                           <span className={`text-xs font-extrabold ${matchScore >= 80 ? 'text-emerald-600' : 'text-amber-600'}`}>
                             {matchScore}%
                           </span>
@@ -290,11 +281,11 @@ export const Dashboard: React.FC = () => {
 
                         {/* Status Stepper */}
                         <div className="flex items-center space-x-1">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold border-2 ${
-                            status === 'Selected' ? 'bg-gradient-to-r from-emerald-100 to-green-100 border-emerald-300 text-emerald-700' :
-                            status === 'Shortlisted' ? 'bg-gradient-to-r from-indigo-100 to-blue-100 border-indigo-300 text-indigo-700' :
-                            status === 'Rejected' ? 'bg-gradient-to-r from-rose-100 to-red-100 border-rose-300 text-rose-700' :
-                            'bg-gradient-to-r from-slate-100 to-gray-100 border-slate-300 text-slate-700'
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${
+                            status === 'Selected' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' :
+                            status === 'Shortlisted' ? 'bg-blue-50 border-blue-200 text-blue-700' :
+                            status === 'Rejected' ? 'bg-rose-50 border-rose-200 text-rose-700' :
+                            'bg-slate-50 border-slate-200 text-slate-700'
                           }`}>
                             {status}
                           </span>
@@ -330,14 +321,13 @@ export const Dashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-300 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-8 shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="saas-card p-8 bg-slate-900 text-white">
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-black text-white tracking-tight">Recruiter Workspace</h3>
-              <p className="text-sm text-indigo-200 mt-2">Coordinate campaigns, examine parsed profiles, and run automated interview schedules.</p>
+              <h3 className="text-2xl font-black tracking-tight">Recruiter Workspace</h3>
+              <p className="text-sm text-slate-300 mt-2">Coordinate campaigns, examine parsed profiles, and run automated interview schedules.</p>
             </div>
-            <Link to="/jobs/manage" className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   flex items-center gap-2">
+            <Link to="/jobs/manage" className="px-4 py-2 bg-white hover:bg-slate-100 text-slate-900 rounded-lg text-sm font-bold transition-colors flex items-center gap-2">
               <PlusCircle className="h-4 w-4" />
               <span>Create New Job</span>
             </Link>
@@ -346,34 +336,31 @@ export const Dashboard: React.FC = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total job posts</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">{totalJobs}</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total job posts</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{totalJobs}</h4>
               </div>
-              <Briefcase className="h-8 w-8 text-indigo-500" />
+              <Briefcase className="h-8 w-8 text-slate-400" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total applicants</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">{totalApplicants}</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total applicants</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{totalApplicants}</h4>
               </div>
-              <Users className="h-8 w-8 text-indigo-500" />
+              <Users className="h-8 w-8 text-slate-400" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Selection Ratio</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">{selectionRatio}%</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Selection Ratio</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{selectionRatio}%</h4>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500" />
             </div>
@@ -382,18 +369,17 @@ export const Dashboard: React.FC = () => {
 
         {/* Chart panel */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="relative overflow-hidden rounded-3xl border-2 border-slate-700 bg-slate-900 p-6 shadow-2xl lg:col-span-2">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-6 lg:col-span-2">
             <div className="relative z-10 space-y-4">
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Candidate Pipeline Funnel</h4>
+              <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Candidate Pipeline Funnel</h4>
               <div className="h-60">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={recruiterFunnelData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#2e2e42" />
-                    <XAxis dataKey="name" stroke="#8787aa" fontSize={11} />
-                    <YAxis stroke="#8787aa" fontSize={11} />
-                    <Tooltip contentStyle={{ backgroundColor: '#1b1b2a', border: '1px solid #2e2e42', borderRadius: '8px' }} />
-                    <Bar dataKey="Count" fill="#6366f1" radius={[4, 4, 0, 0]}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
+                    <YAxis stroke="#94a3b8" fontSize={11} />
+                    <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px' }} />
+                    <Bar dataKey="Count" fill="#0f172a" radius={[4, 4, 0, 0]}>
                       {recruiterFunnelData.map((_, index) => (
                         <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                       ))}
@@ -404,27 +390,26 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-3xl border-2 border-slate-700 bg-slate-900 p-6 shadow-2xl">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-6">
             <div className="relative z-10 space-y-4 flex flex-col justify-between h-full">
               <div>
-                <h4 className="text-sm font-bold text-white uppercase tracking-wider">ATS Matching Metric</h4>
-                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">ATS Matching Metric</h4>
+                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                   Google Geminis matching algorithms check applicant resumes against job requirements to filter profiles.
                 </p>
               </div>
               <div className="space-y-2.5">
-                <div className="flex justify-between items-center text-xs p-3 bg-slate-800/60 rounded-xl border border-slate-700">
-                  <span className="text-slate-400">High Match (&gt;80%)</span>
-                  <span className="font-bold text-emerald-400">{ats.High} Candidates</span>
+                <div className="flex justify-between items-center text-xs p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <span className="text-slate-600">High Match (&gt;80%)</span>
+                  <span className="font-bold text-emerald-600">{ats.High} Candidates</span>
                 </div>
-                <div className="flex justify-between items-center text-xs p-3 bg-slate-800/60 rounded-xl border border-slate-700">
-                  <span className="text-slate-400">Medium Match (50-80%)</span>
-                  <span className="font-bold text-indigo-400">{ats.Medium} Candidates</span>
+                <div className="flex justify-between items-center text-xs p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <span className="text-slate-600">Medium Match (50-80%)</span>
+                  <span className="font-bold text-blue-600">{ats.Medium} Candidates</span>
                 </div>
-                <div className="flex justify-between items-center text-xs p-3 bg-slate-800/60 rounded-xl border border-slate-700">
-                  <span className="text-slate-400">Unmatched (&lt;50%)</span>
-                  <span className="font-bold text-rose-400">{ats.Low} Candidates</span>
+                <div className="flex justify-between items-center text-xs p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <span className="text-slate-600">Unmatched (&lt;50%)</span>
+                  <span className="font-bold text-rose-600">{ats.Low} Candidates</span>
                 </div>
               </div>
             </div>
@@ -441,55 +426,50 @@ export const Dashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-300 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-8 shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="saas-card p-8 bg-slate-900 text-white">
           <div className="relative z-10">
-            <h3 className="text-2xl font-black text-white tracking-tight">Campus Placement Administration</h3>
-            <p className="text-sm text-indigo-200 mt-2">Audit student records, verify Coursera certificates, configure CGPA rules, and generate drive statistics.</p>
+            <h3 className="text-2xl font-black tracking-tight">Campus Placement Administration</h3>
+            <p className="text-sm text-slate-300 mt-2">Audit student records, verify Coursera certificates, configure CGPA rules, and generate drive statistics.</p>
           </div>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-amber-400 to-yellow-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Highest Package</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">0 LPA</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Top Package</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">0 LPA</h4>
               </div>
-              <Award className="h-8 w-8 text-amber-500" />
+              <Award className="h-8 w-8 text-slate-400" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Average Package</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">0 LPA</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Average Package</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">0 LPA</h4>
               </div>
-              <TrendingUp className="h-8 w-8 text-indigo-500" />
+              <TrendingUp className="h-8 w-8 text-slate-400" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Eligible Students</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">0</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Eligible Students</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">0</h4>
               </div>
-              <Users className="h-8 w-8 text-indigo-500" />
+              <Users className="h-8 w-8 text-slate-400" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Overall Placement</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">0%</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Overall Placement</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">0%</h4>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500" />
             </div>
@@ -498,19 +478,18 @@ export const Dashboard: React.FC = () => {
 
         {/* Recharts Department Metrics */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="relative overflow-hidden rounded-3xl border-2 border-slate-700 bg-slate-900 p-6 shadow-2xl lg:col-span-2">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-6 lg:col-span-2">
             <div className="relative z-10 space-y-4">
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider">Average Package (LPA) & Placement Ratio by Dept</h4>
+              <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Average Package (LPA) & Placement Ratio by Dept</h4>
               <div className="h-60">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={officerDepartmentData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#2e2e42" />
-                    <XAxis dataKey="name" stroke="#8787aa" fontSize={11} />
-                    <YAxis stroke="#8787aa" fontSize={11} />
-                    <Tooltip contentStyle={{ backgroundColor: '#1b1b2a', border: '1px solid #2e2e42', borderRadius: '8px' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
+                    <YAxis stroke="#94a3b8" fontSize={11} />
+                    <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#1e293b' }} />
                     <Legend />
-                    <Bar dataKey="Package" name="Avg Package (LPA)" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Package" name="Avg Package (LPA)" fill="#0f172a" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="Placed" name="Placement Rate (%)" fill="#10b981" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -518,17 +497,16 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-3xl border-2 border-slate-700 bg-slate-900 p-6 shadow-2xl">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-6">
             <div className="relative z-10 space-y-4 flex flex-col justify-between h-full">
               <div>
-                <h4 className="text-sm font-bold text-white uppercase tracking-wider">Documents Verification</h4>
-                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Documents Verification</h4>
+                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
                   Verify student certificate updates (Coursera/Udemy/NPTEL) to ensure integrity for recruiter drives.
                 </p>
               </div>
               <div className="space-y-2.5">
-                <Link to="/officer/verify" className="w-full py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-bold text-center block  shadow-lg">
+                <Link to="/officer/verify" className="w-full py-2 saas-button-primary text-xs font-bold text-center block">
                   Go to Verification panel
                 </Link>
               </div>
@@ -550,65 +528,60 @@ export const Dashboard: React.FC = () => {
 
     return (
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-300 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-8 shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="saas-card p-8 bg-slate-900 text-white">
           <div className="relative z-10">
-            <h3 className="text-2xl font-black text-white tracking-tight">System Security Administration</h3>
-            <p className="text-sm text-indigo-200 mt-2">Configure role permissions, back up datasets, and inspect application logs.</p>
+            <h3 className="text-2xl font-black tracking-tight">System Security Administration</h3>
+            <p className="text-sm text-slate-300 mt-2">Configure role permissions, back up datasets, and inspect application logs.</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link to="/admin/users" className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl  cursor-pointer hover:border-indigo-500">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <Link to="/admin/users" className="saas-card p-5 saas-card-interactive cursor-pointer">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Registered Users</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">{totalUsers}</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Registered Users</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{totalUsers}</h4>
               </div>
-              <Users className="h-8 w-8 text-indigo-500" />
+              <Users className="h-8 w-8 text-slate-400" />
             </div>
           </Link>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">System Health</p>
-                <h4 className="text-2xl font-black text-emerald-400 mt-1.5">{systemHealth}</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">System Health</p>
+                <h4 className="text-2xl font-black text-emerald-600 mt-1.5">{systemHealth}</h4>
               </div>
               <ShieldCheck className="h-8 w-8 text-emerald-500" />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 p-5 shadow-md hover:shadow-xl ">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+          <div className="saas-card p-5 saas-card-interactive">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Audit Activity</p>
-                <h4 className="text-2xl font-black text-white mt-1.5">{auditActivity}</h4>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Audit Activity</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{auditActivity}</h4>
               </div>
-              <Database className="h-8 w-8 text-indigo-500" />
+              <Database className="h-8 w-8 text-slate-400" />
             </div>
           </div>
         </div>
 
         {/* Admin Action logs */}
-        <div className="relative overflow-hidden rounded-3xl border-2 border-slate-700 bg-slate-900 p-6 shadow-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
+        <div className="saas-card p-6">
           <div className="relative z-10 space-y-4">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">System Event Log</h4>
+            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">System Event Log</h4>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400">
+                  <tr className="border-b border-slate-200 text-slate-500">
                     <th className="py-2.5">Timestamp</th>
                     <th className="py-2.5">Category</th>
                     <th className="py-2.5">User</th>
                     <th className="py-2.5">Event</th>
                   </tr>
                 </thead>
-                <tbody className="text-slate-300">
+                <tbody className="text-slate-700">
                   <tr>
                     <td colSpan={4} className="py-4 text-center text-slate-500">No events found.</td>
                   </tr>

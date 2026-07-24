@@ -198,11 +198,11 @@ export const Profile: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Resume Analyzer Header Box */}
-      <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-indigo-50 p-8 shadow-2xl">
+      <div className="saas-card p-8">
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
-              <Sparkles className="h-6 w-6 text-white" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 border border-slate-200">
+              <Sparkles className="h-6 w-6 text-slate-800" />
             </div>
             <h3 className="text-2xl font-black text-slate-900 tracking-tight">AI Resume Upload & Parser</h3>
           </div>
@@ -212,7 +212,7 @@ export const Profile: React.FC = () => {
 
           {/* Upload Button */}
           <div className="flex items-center space-x-4">
-            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg">
+            <label className="group flex cursor-pointer items-center space-x-2 saas-button-primary">
               <Upload className="h-5 w-5" />
               <span>{uploading ? 'Parsing PDF...' : 'Upload Resume PDF'}</span>
               <input
@@ -228,31 +228,31 @@ export const Profile: React.FC = () => {
 
           {/* Parser ATS Metrics Card */}
           {parserResult && (
-            <div className="mt-6 p-6 bg-white/80 backdrop-blur-sm border-2 border-indigo-200 rounded-2xl space-y-4 shadow-xl">
+            <div className="mt-6 p-6 saas-card bg-slate-50 border-slate-200 space-y-4">
               <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider">ATS Scoreboard & Recommendations</h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-2">
-                <div className="bg-gradient-to-br from-emerald-50 to-green-50 p-4 rounded-xl border-2 border-emerald-200 text-center shadow-md">
-                  <span className="text-[10px] font-bold text-slate-700 block uppercase mb-1">ATS Score</span>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                  <span className="text-[10px] font-bold text-slate-500 block uppercase mb-1">ATS Score</span>
                   <span className="text-2xl font-black text-emerald-600">{parserResult.analysis.score}/100</span>
                 </div>
-                <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-4 rounded-xl border-2 border-indigo-200 text-center shadow-md">
-                  <span className="text-[10px] font-bold text-slate-700 block uppercase mb-1">ATS Compatibility</span>
-                  <span className="text-2xl font-black text-indigo-600">{parserResult.analysis.atsCompatibility}%</span>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                  <span className="text-[10px] font-bold text-slate-500 block uppercase mb-1">ATS Compatibility</span>
+                  <span className="text-2xl font-black text-blue-600">{parserResult.analysis.atsCompatibility}%</span>
                 </div>
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border-2 border-purple-200 text-center shadow-md">
-                  <span className="text-[10px] font-bold text-slate-700 block uppercase mb-1">Grammar Issues</span>
-                  <span className="text-2xl font-black text-purple-600">{parserResult.analysis.grammarErrors}</span>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                  <span className="text-[10px] font-bold text-slate-500 block uppercase mb-1">Grammar Issues</span>
+                  <span className="text-2xl font-black text-rose-600">{parserResult.analysis.grammarErrors}</span>
                 </div>
-                <div className="bg-gradient-to-br from-cyan-50 to-blue-50 p-4 rounded-xl border-2 border-cyan-200 text-center shadow-md">
-                  <span className="text-[10px] font-bold text-slate-700 block uppercase mb-1">ATS Strength</span>
-                  <span className="text-2xl font-black text-cyan-600">{parserResult.analysis.resumeStrength}</span>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                  <span className="text-[10px] font-bold text-slate-500 block uppercase mb-1">ATS Strength</span>
+                  <span className="text-2xl font-black text-slate-900">{parserResult.analysis.resumeStrength}</span>
                 </div>
               </div>
 
               {/* Suggestions */}
               {parserResult.analysis.suggestions && (
-                <div className="space-y-2 bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border-2 border-indigo-200">
-                  <p className="text-sm font-bold text-indigo-700">Actionable ATS Suggestions:</p>
+                <div className="space-y-2 bg-white p-4 rounded-xl border border-slate-200">
+                  <p className="text-sm font-bold text-slate-900">Actionable ATS Suggestions:</p>
                   <ul className="list-disc list-inside text-sm text-slate-700 space-y-1 mt-2 leading-relaxed">
                     {parserResult.analysis.suggestions.map((s: string, idx: number) => (
                       <li key={idx} className="font-medium">{s}</li>
@@ -266,16 +266,16 @@ export const Profile: React.FC = () => {
       </div>
 
       {message && (
-        <div className="p-4 bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 rounded-xl text-sm text-emerald-700 font-bold text-center shadow-lg">
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 font-bold text-center">
           {message}
         </div>
       )}
 
       {/* Render Uploaded Resume if exists */}
       {user.profile.resumeUrl && (
-        <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-gradient-to-r from-slate-50 to-white p-6 shadow-xl flex items-center justify-between">
+        <div className="saas-card p-6 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
+            <div className="p-3 bg-slate-100 text-slate-600 rounded-xl">
               <FileText className="h-6 w-6" />
             </div>
             <div>
@@ -287,7 +287,7 @@ export const Profile: React.FC = () => {
             <button
               type="button"
               onClick={() => handleViewDocument(user.profile.resumeUrl!, 'Resume.pdf')}
-              className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-md hover:bg-indigo-700"
+              className="flex items-center space-x-2 px-4 py-2 saas-button-secondary"
             >
               <Eye className="h-4 w-4" />
               <span>Preview Resume</span>
@@ -298,7 +298,7 @@ export const Profile: React.FC = () => {
                 await updateUser({ resumeUrl: '' });
                 setMessage('Resume deleted successfully.');
               }}
-              className="flex items-center space-x-2 px-4 py-2 bg-rose-100 text-rose-700 text-sm font-bold rounded-xl shadow-md hover:bg-rose-200 border border-rose-200"
+              className="flex items-center space-x-2 px-4 py-2 bg-rose-50 text-rose-600 text-sm font-bold rounded-lg hover:bg-rose-100 transition-colors"
             >
               <Trash2 className="h-4 w-4" />
               <span>Delete</span>
@@ -307,18 +307,17 @@ export const Profile: React.FC = () => {
         </div>
       )}
 
-      <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
+      <div className="saas-card p-8">
         <div className="relative z-10">
           <div className="flex items-center justify-between gap-3 mb-6">
             <div>
               <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2">
-                <FileText className="h-5 w-5 text-indigo-600" />
+                <FileText className="h-5 w-5 text-slate-600" />
                 <span>Certificates & Achievements</span>
               </h4>
               <p className="text-base text-slate-600 mt-2">Upload academic, course, and internship certificates to strengthen your placement profile.</p>
             </div>
-            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg hover:shadow-xl">
+            <label className="group flex cursor-pointer items-center space-x-2 saas-button-secondary">
               <Upload className="h-4 w-4" />
               <span>{uploadingCertificates ? 'Uploading...' : 'Upload Certificate'}</span>
               <input type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={handleCertificateUpload} disabled={uploadingCertificates} className="hidden" />
@@ -330,9 +329,9 @@ export const Profile: React.FC = () => {
           ) : (
             <div className="space-y-2">
               {certificates.map((certificate, index) => (
-                <div key={`${certificate.name}-${index}`} className="flex items-center justify-between rounded-xl border-2 border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100 px-4 py-3 shadow-md">
+                <div key={`${certificate.name}-${index}`} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <Award className="h-5 w-5 text-indigo-600 shrink-0" />
+                    <Award className="h-5 w-5 text-slate-600 shrink-0" />
                     <div>
                       <p className="text-sm font-bold text-slate-900">{certificate.name}</p>
                       <p className="text-xs text-slate-600">
@@ -345,13 +344,13 @@ export const Profile: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleViewDocument(certificate.url, certificate.name)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 flex items-center gap-1"
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-1 transition-colors"
                       >
                         <Eye className="h-3.5 w-3.5" />
                         Preview
                       </button>
                     )}
-                    <span className={`rounded-full px-3 py-1.5 text-xs font-bold ${certificate.verified ? 'bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 border-2 border-emerald-300' : 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 border-2 border-amber-300'}`}>
+                    <span className={`rounded-full px-3 py-1.5 text-xs font-bold border ${certificate.verified ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
                       {certificate.verified ? 'Verified' : 'Pending'}
                     </span>
                     <button
@@ -379,11 +378,10 @@ export const Profile: React.FC = () => {
       <form onSubmit={handleSave} className="space-y-6">
         
         {/* Basic & Contact Details */}
-        <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 shadow-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
+        <div className="saas-card p-8">
           <div className="relative z-10">
             <h4 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2 mb-6">
-              <span className="p-2 bg-indigo-100 rounded-xl"><User className="h-5 w-5 text-indigo-600" /></span>
+              <span className="p-2 bg-slate-100 rounded-lg"><User className="h-5 w-5 text-slate-600" /></span>
               <span>Basic & Contact Details</span>
             </h4>
 
@@ -395,7 +393,7 @@ export const Profile: React.FC = () => {
                   placeholder="John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                  className="saas-input w-full"
                 />
               </div>
 
@@ -406,7 +404,7 @@ export const Profile: React.FC = () => {
                   placeholder="john@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                  className="saas-input w-full"
                 />
               </div>
               
@@ -417,7 +415,7 @@ export const Profile: React.FC = () => {
                   placeholder="+91 99999 99999"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                  className="saas-input w-full"
                 />
               </div>
 
@@ -428,7 +426,7 @@ export const Profile: React.FC = () => {
                   placeholder="123 Tech Park, Bangalore, India"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                  className="saas-input w-full"
                 />
               </div>
             </div>
@@ -437,11 +435,10 @@ export const Profile: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Core details */}
-          <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 shadow-2xl">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
+          <div className="saas-card p-6">
             <div className="relative z-10">
             <h4 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2 mb-6">
-              <GraduationCap className="h-5 w-5 text-indigo-600" />
+              <span className="p-2 bg-slate-100 rounded-lg"><GraduationCap className="h-5 w-5 text-slate-600" /></span>
               <span>Academic Profile Details</span>
             </h4>
 
@@ -451,7 +448,7 @@ export const Profile: React.FC = () => {
                 <select
                   value={branch}
                   onChange={(e) => setBranch(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                  className="saas-input w-full"
                 >
                   <option value="MCA">MCA</option>
                   <option value="B.Tech CSE">B.Tech CSE</option>
@@ -474,12 +471,12 @@ export const Profile: React.FC = () => {
                     value={cgpa}
                     onChange={(e) => setCgpa(e.target.value)}
                     placeholder={`Score in ${cgpaScale}`}
-                    className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                    className="saas-input w-full"
                   />
                   <select
                     value={cgpaScale}
                     onChange={(e) => setCgpaScale(e.target.value)}
-                    className="px-3 py-2.5 rounded-xl text-xs font-bold bg-indigo-50 border-2 border-indigo-200 text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+                    className="saas-input"
                     title="Select Grading Scale"
                   >
                     <option value="10.0">10.0 Scale</option>
@@ -498,25 +495,24 @@ export const Profile: React.FC = () => {
         </div>
 
         {/* Skills & Experience details */}
-        <div className="relative overflow-hidden rounded-3xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 via-white to-pink-50 p-6 shadow-2xl">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
+        <div className="saas-card p-6">
           <div className="relative z-10">
             <h4 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center space-x-2 mb-6">
-              <Code2 className="h-5 w-5 text-purple-600" />
+              <span className="p-2 bg-slate-100 rounded-lg"><Code2 className="h-5 w-5 text-slate-600" /></span>
               <span>Tech Stack & Work Experience</span>
             </h4>
 
             {/* Skill lists */}
             <div className="space-y-3">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Programming & Tech Skills</label>
-              <div className="flex flex-wrap gap-2 min-h-12 p-3 bg-white border-2 border-slate-200 rounded-xl shadow-sm">
+              <div className="flex flex-wrap gap-2 min-h-12 p-3 bg-slate-50 border border-slate-200 rounded-xl">
                 {skills.length === 0 ? (
                   <span className="text-xs text-slate-500 italic">No skills listed yet.</span>
                 ) : (
                   skills.map(s => (
-                    <span key={s} className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-100 to-purple-100 border-2 border-indigo-300 text-indigo-700 rounded-lg text-xs font-bold shadow-sm">
+                    <span key={s} className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-lg text-xs font-bold">
                       <span>{s}</span>
-                      <button type="button" onClick={() => handleRemoveSkill(s)} className="text-rose-600 hover:text-rose-700 font-extrabold ml-1">×</button>
+                      <button type="button" onClick={() => handleRemoveSkill(s)} className="text-slate-400 hover:text-rose-600 font-extrabold ml-1">×</button>
                     </span>
                   ))
                 )}
@@ -527,12 +523,12 @@ export const Profile: React.FC = () => {
                   placeholder="Add skill (e.g. Docker, Python)"
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
-                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm"
+                  className="saas-input flex-1"
                 />
                 <button
                   type="button"
                   onClick={handleAddSkill}
-                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl"
+                  className="saas-button-primary px-4 py-2.5"
                 >
                   <Plus className="h-5 w-5" />
                 </button>
@@ -547,9 +543,9 @@ export const Profile: React.FC = () => {
                   <p className="text-xs text-slate-500 italic">No items listed.</p>
                 ) : (
                   experience.map((exp, idx) => (
-                    <div key={idx} className="flex items-center justify-between gap-3 p-3 bg-white border-2 border-slate-200 rounded-xl shadow-sm">
-                      <span className="text-sm font-semibold text-slate-900 leading-relaxed">{exp}</span>
-                      <button type="button" onClick={() => handleRemoveExp(idx)} className="text-rose-600 hover:text-rose-700 flex-shrink-0">
+                    <div key={idx} className="flex items-center justify-between gap-3 p-3 bg-white border border-slate-200 rounded-xl">
+                      <span className="text-sm font-semibold text-slate-700 leading-relaxed">{exp}</span>
+                      <button type="button" onClick={() => handleRemoveExp(idx)} className="text-slate-400 hover:text-rose-600 flex-shrink-0">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
@@ -559,15 +555,15 @@ export const Profile: React.FC = () => {
               <div className="flex space-x-2">
                 <input
                   type="text"
-                  placeholder="Add project/experience (e.g. Intern at Google)"
+                  placeholder="Add project/experience"
                   value={newExp}
                   onChange={(e) => setNewExp(e.target.value)}
-                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm"
+                  className="saas-input flex-1"
                 />
                 <button
                   type="button"
                   onClick={handleAddExp}
-                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl"
+                  className="saas-button-primary px-4 py-2.5"
                 >
                   <Plus className="h-5 w-5" />
                 </button>
@@ -580,12 +576,12 @@ export const Profile: React.FC = () => {
           <button
             type="submit"
             disabled={isSaving}
-            className={`w-full lg:w-1/2 px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-lg font-black shadow-xl hover:shadow-2xl flex items-center justify-center space-x-2 ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full lg:w-1/2 saas-button-primary text-lg flex items-center justify-center space-x-2 ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             <span>{isSaving ? 'Saving...' : 'Save Entire Profile'}</span>
           </button>
           {saveMessage.text && (
-            <div className={`mt-4 w-full lg:w-1/2 p-4 rounded-xl text-sm font-bold text-center shadow-lg ${saveMessage.type === 'success' ? 'bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 text-emerald-700' : 'bg-gradient-to-r from-rose-50 to-red-50 border-2 border-rose-300 text-rose-700'}`}>
+            <div className={`mt-4 w-full lg:w-1/2 p-4 rounded-xl text-sm font-bold text-center border ${saveMessage.type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-rose-50 border-rose-200 text-rose-700'}`}>
               {saveMessage.text}
             </div>
           )}
@@ -629,7 +625,7 @@ export const Profile: React.FC = () => {
                   link.download = previewDoc.name;
                   link.click();
                 }}
-                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl  flex items-center gap-2 shadow-md shadow-indigo-600/20"
+                className="saas-button-primary flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
                 Download PDF
