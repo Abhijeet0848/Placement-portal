@@ -151,18 +151,6 @@ export const Login: React.FC = () => {
 
       {/* Main card container */}
       <div className="w-full max-w-[420px] z-10 bg-white/90 backdrop-blur-xl border border-white/50 rounded-[32px] p-8 shadow-2xl shadow-sky-200/50 flex flex-col relative">
-        
-        {/* Floating Top Icon */}
-        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-lg border border-slate-100 w-16 h-16 flex items-center justify-center">
-          <div className="text-slate-800">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-              <polyline points="10 17 15 12 10 7" />
-              <line x1="15" y1="12" x2="3" y2="12" />
-            </svg>
-          </div>
-        </div>
-
         <div className="text-center mt-8 mb-6">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">
             {isRegister ? 'Create an account' : 'Sign in with email'}
@@ -292,27 +280,18 @@ export const Login: React.FC = () => {
           <div className="flex-grow border-t border-slate-100 border-dashed"></div>
         </div>
 
-        <div className="flex items-center justify-center gap-3 w-full">
-          {/* We wrap GoogleLogin so it matches the design loosely. Google restricts extreme styling of their iframe, but we can contain it */}
-          <div className="flex-1 flex justify-center bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow rounded-2xl py-1 overflow-hidden h-12 relative items-center">
-            <div className="absolute inset-0 opacity-0 z-10">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => setError('Google authentication failed.')}
-                type="icon"
-                shape="rectangular"
-              />
-            </div>
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+        <div className="flex flex-col gap-3 max-w-[400px] mx-auto w-full">
+          <div className="flex justify-center w-full">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('Google authentication failed.')}
+              theme="outline"
+              size="large"
+              text={isRegister ? "signup_with" : "signin_with"}
+              shape="rectangular"
+              width="400"
+            />
           </div>
-
-          <button type="button" className="flex-1 flex justify-center items-center bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow rounded-2xl h-12">
-             <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" className="w-5 h-5" alt="Facebook" />
-          </button>
-          
-          <button type="button" className="flex-1 flex justify-center items-center bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow rounded-2xl h-12">
-             <img src="https://www.svgrepo.com/show/511330/apple-173.svg" className="w-5 h-5" alt="Apple" />
-          </button>
         </div>
 
         <div className="text-center pt-8">
