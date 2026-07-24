@@ -362,6 +362,7 @@ export const Login: React.FC = () => {
                 shape="rectangular"
                 width="400"
               />
+            </div>
           </div>
 
           <div className="text-center pt-2">
