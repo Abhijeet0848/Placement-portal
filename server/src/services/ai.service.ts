@@ -25,7 +25,7 @@ if (GEMINI_API_KEY) {
 export async function analyzeResume(resumeText: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const prompt = `
         You are an expert ATS (Applicant Tracking System) Resume Screener. 
         Analyze the following resume text comprehensively and return a JSON object with accurate scoring:
@@ -161,7 +161,7 @@ export async function analyzeResume(resumeText: string) {
 export async function matchResumeToJob(resumeText: string, jobDetails: { title: string; description: string; skills: string[] }) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const prompt = `
         Compare this resume text with the job requirements:
         Job Title: ${jobDetails.title}
@@ -222,7 +222,7 @@ export async function matchResumeToJob(resumeText: string, jobDetails: { title: 
 export async function getCareerSuggestions(skills: string[], cgpa: number, interests: string[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const prompt = `
         Based on these parameters:
         Skills: ${skills.join(', ')}
@@ -257,7 +257,7 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
 export async function generateCoverLetter(studentName: string, skills: string[], jobTitle: string, company: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const prompt = `
         Write a professional, impressive cover letter for ${studentName} applying for the ${jobTitle} role at ${company}.
         Candidate Skills: ${skills.join(', ')}.
@@ -291,7 +291,7 @@ ${studentName}`;
 export async function evaluateInterviewAnswer(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Interviewer' : 'Candidate'}: ${h.text}`).join('\n');
       const prompt = `
         You are an expert technical interviewer conducting a mock interview.
@@ -323,7 +323,7 @@ export async function evaluateInterviewAnswer(history: { sender: string, text: s
 export async function generateInterviewReport(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Interviewer' : 'Candidate'}: ${h.text}`).join('\n');
       const prompt = `
         You are an expert technical interviewer evaluating a completed mock interview.
@@ -361,7 +361,7 @@ export async function generateInterviewReport(history: { sender: string, text: s
 export async function generateGeneralChatResponse(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Assistant' : 'Student'}: ${h.text}`).join('\n');
       const prompt = `
         You are a helpful, encouraging, and intelligent AI Assistant embedded within the Smart Placement Portal for students.
@@ -390,7 +390,7 @@ export async function generateGeneralChatResponse(history: { sender: string, tex
 export async function generateExamQuestions(topic: string, difficulty: string, count: number) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const prompt = `
         You are an expert technical assessment creator.
         Generate exactly ${count} multiple choice questions (MCQs) about the topic "${topic}" at a "${difficulty}" difficulty level.
@@ -438,7 +438,7 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
 export async function parseExamQuestionsFromText(pdfText: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite-lite' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-lite' });
       const prompt = `
         You are an expert technical assessment creator.
         Extract Multiple Choice Questions (MCQs) from the following text (which is a parsed PDF exam).
