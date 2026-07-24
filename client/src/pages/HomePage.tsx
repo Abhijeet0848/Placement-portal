@@ -60,14 +60,6 @@ export const HomePage: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-semibold">
-          <div className="relative">
-            <Search className="h-4 w-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input 
-              type="text" 
-              placeholder="Search roles..." 
-              className="pl-9 pr-4 py-1.5 bg-white/50 border border-slate-200 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 w-48 text-slate-900"
-            />
-          </div>
           <Link to="#" className="text-slate-400 hover:text-slate-900 transition-colors">Why Us?</Link>
           <div className="flex flex-col items-center">
             <Link to="#" className="text-slate-900 font-bold">About</Link>
@@ -148,9 +140,9 @@ export const HomePage: React.FC = () => {
             </div>
             <div>
               <p className="text-xs font-semibold text-slate-400">Recruiter's Recommendation</p>
-              <p className="text-sm font-bold text-slate-900 flex items-center gap-1 cursor-pointer hover:text-sky-500 transition-colors">
+              <Link to={user ? "/forum" : "/login"} className="text-sm font-bold text-slate-900 flex items-center gap-1 hover:text-sky-500 transition-colors">
                 View top interview tips <ArrowRight className="h-3 w-3" />
-              </p>
+              </Link>
             </div>
           </div>
         </div>
@@ -231,10 +223,10 @@ export const HomePage: React.FC = () => {
 
                 {/* Apply Pill */}
                 <div className="absolute bottom-5 right-5 z-10">
-                  <div className="bg-sky-500 text-[#111315] px-3 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-lg shadow-sky-500/20 cursor-pointer hover:scale-105 transition-transform">
+                  <Link to={user ? "/jobs" : "/login"} className="bg-sky-500 text-[#111315] px-3 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-lg shadow-sky-500/20 cursor-pointer hover:scale-105 transition-transform">
                     <Clock className="h-3 w-3" />
                     Apply Now
-                  </div>
+                  </Link>
                 </div>
 
                 {/* Decorative swooshes matching the design */}
