@@ -90,21 +90,7 @@ export const HomePage: React.FC = () => {
                 </a>
               </div>
 
-              {/* Stats */}
-              <div className="grid gap-4 sm:grid-cols-3">
-                {stats.map((stat, idx) => {
-                  const Icon = stat.icon;
-                  return (
-                    <div key={idx} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Icon className="h-5 w-5 text-emerald-600" />
-                        <p className="text-3xl font-black text-slate-900">{stat.value}</p>
-                      </div>
-                      <p className="text-sm text-slate-500 font-medium">{stat.label}</p>
-                    </div>
-                  );
-                })}
-              </div>
+
             </section>
 
             {/* Feature Preview Card */}
