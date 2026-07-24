@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { requestOtp, verifyOtp, googleLogin, microsoftLogin, refreshToken, getProfile, updateProfile, getAllStudents, getAllUsers, deleteStudent, updateStudentProfile, logout, uploadProfilePicture } from '../controllers/auth.controller';
 import { createJob, getAllJobs, applyJob, getRecruiterApplications, updateApplicationStatus, getStudentApplications } from '../controllers/jobs.controller';
-import { analyzeResumeUpload, evaluateInterview, endInterview, getCareerRoadmap, createCoverLetter, matchJob, parseExamUpload } from '../controllers/ai.controller';
+import { analyzeResumeUpload, evaluateInterview, endInterview, getCareerRoadmap, createCoverLetter, matchJob, parseExamUpload, handleGeneralChat } from '../controllers/ai.controller';
 import { getExams, getExamById, submitExam, createExam } from '../controllers/exam.controller';
 import { createThread, getAllThreads, editThread, deleteThread, addReply, createReview, getAllReviews, scheduleInterview, getInterviews } from '../controllers/discussion.controller';
 import { getRecommendedJobs } from '../controllers/recommendation.controller';
@@ -102,6 +102,7 @@ router.put('/admin/users/:id/status', authenticateJWT, requireRole(['Admin']), u
 router.post('/ai/analyze-resume', authenticateJWT, upload.single('resume'), analyzeResumeUpload);
 router.post('/ai/evaluate-interview', authenticateJWT, evaluateInterview);
 router.post('/ai/end-interview', authenticateJWT, endInterview);
+router.post('/ai/chat', authenticateJWT, handleGeneralChat);
 router.post('/ai/career-roadmap', authenticateJWT, getCareerRoadmap);
 router.post('/ai/cover-letter', authenticateJWT, createCoverLetter);
 router.post('/ai/match-job', authenticateJWT, matchJob);

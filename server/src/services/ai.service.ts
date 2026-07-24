@@ -439,7 +439,36 @@ export async function generateInterviewReport(history: { sender: string, text: s
   };
 }
 
-// 6. PDF Exam Question Parser
+// General AI Assistant Chat
+export async function generateGeneralChatResponse(history: { sender: string, text: string }[]) {
+  if (genAI) {
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
+      const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Assistant' : 'Student'}: ${h.text}`).join('\n');
+      const prompt = `
+        You are a helpful, encouraging, and intelligent AI Assistant embedded within the Smart Placement Portal for students.
+        Your goal is to help students with career guidance, platform navigation, interview preparation, and technical questions.
+        
+        Here is the conversation history:
+        ${formattedHistory}
+
+        Provide your next response as the Assistant. Be conversational, concise, and helpful. Do NOT output JSON.
+      `;
+
+      const result = await model.generateContent(prompt);
+      return { text: result.response.text().trim() };
+    } catch (error: any) {
+      logger.error(`Gemini generateGeneralChatResponse failed: ${error?.message || error}`);
+    }
+  }
+
+  // Fallback simulation
+  return {
+    text: "I am the Smart Placement Portal AI Assistant! However, it seems my AI connection is currently offline. How else can I help you today?"
+  };
+}
+
+// 7. PDF Exam Question Parser
 export async function parseExamQuestionsFromText(pdfText: string) {
   if (genAI) {
     try {

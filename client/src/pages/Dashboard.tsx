@@ -10,6 +10,7 @@ import {
   Briefcase, ShieldCheck, Database, PlusCircle, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { AiChatWidget } from '../components/AiChatWidget';
 
 export const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -642,6 +643,9 @@ export const Dashboard: React.FC = () => {
       {user.role === 'Recruiter' && renderRecruiterDashboard()}
       {user.role === 'PlacementOfficer' && renderOfficerDashboard()}
       {user.role === 'Admin' && renderAdminDashboard()}
+      
+      {/* AI Assistant for Students */}
+      {user.role === 'Student' && <AiChatWidget />}
     </div>
   );
 };

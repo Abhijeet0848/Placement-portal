@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport } from '../services/ai.service';
+import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport, generateGeneralChatResponse } from '../services/ai.service';
 import { parseResumePDF } from '../services/parser.service';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { isMockDb } from '../config/dbConnect';
@@ -87,6 +87,23 @@ export async function endInterview(req: AuthenticatedRequest, res: Response) {
   } catch (error: any) {
     logger.error(`End interview failed: ${error?.message || error}`);
     return res.status(500).json({ message: error?.message || 'Server interview report error' });
+  }
+}
+
+// 2.6 General AI Chat
+export async function handleGeneralChat(req: AuthenticatedRequest, res: Response) {
+  const { history } = req.body;
+
+  if (!history || !Array.isArray(history)) {
+    return res.status(400).json({ message: 'Chat history is required.' });
+  }
+
+  try {
+    const response = await generateGeneralChatResponse(history);
+    return res.json(response);
+  } catch (error: any) {
+    logger.error(`General AI chat failed: ${error?.message || error}`);
+    return res.status(500).json({ message: error?.message || 'Server AI chat error' });
   }
 }
 
