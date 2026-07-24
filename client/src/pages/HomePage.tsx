@@ -249,7 +249,7 @@ export const HomePage: React.FC = () => {
       {/* Stats Section */}
       <section className="relative z-10 bg-[#111315] py-20 lg:py-24 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center divide-x divide-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             {[
               { label: 'Registered Students', value: stats.totalStudents, icon: GraduationCap },
               { label: 'Active Recruiters', value: stats.totalRecruiters, icon: Users },
