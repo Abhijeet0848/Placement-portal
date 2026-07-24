@@ -36,7 +36,7 @@ export async function getActivityLogs(req: AuthenticatedRequest, res: Response) 
     }
     const logs = await ActivityLog.find({}).sort({ timestamp: -1 }).limit(50);
     return res.json({ logs });
-  } catch (error) {
+  } catch (error: any) {
     logger.error(`Failed to fetch activity logs: ${error}`);
     return res.status(500).json({ message: error?.message || 'Internal server error' });
   }

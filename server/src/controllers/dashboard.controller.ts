@@ -187,7 +187,7 @@ export async function sendEmail(req: AuthenticatedRequest, res: Response) {
     }
     return res.json({ message: 'Email sent successfully.' });
   } else {
-    return res.status(500).json({ message: error?.message || 'Failed to send email.' });
+    return res.status(500).json({ message: 'Failed to send email.' });
   }
 }
 

@@ -13,8 +13,8 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string, role: string) => Promise<void>;
-  register: (name: string, email: string, password: string, role: string) => Promise<void>;
+  requestOtp: (email: string, role: string, name?: string) => Promise<void>;
+  verifyOtp: (email: string, otp: string, role: string) => Promise<void>;
   ssoLogin: (provider: 'google' | 'microsoft', token: string, role?: string) => Promise<void>;
   logout: () => void;
   updateUser: (profileData: any) => Promise<void>;
@@ -55,14 +55,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  const login = async (email: string, password: string, role: string) => {
-    const data = await api.post('/auth/login', { email, password, role });
-    localStorage.setItem('tokens', JSON.stringify(data.tokens));
-    setUser(data.user);
+  const requestOtp = async (email: string, role: string, name?: string) => {
+    await api.post('/auth/request-otp', { email, role, name });
   };
 
-  const register = async (name: string, email: string, password: string, role: string) => {
-    const data = await api.post('/auth/register', { name, email, password, role });
+  const verifyOtp = async (email: string, otp: string, role: string) => {
+    const data = await api.post('/auth/verify-otp', { email, otp, role });
     localStorage.setItem('tokens', JSON.stringify(data.tokens));
     setUser(data.user);
   };
@@ -86,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, ssoLogin, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, requestOtp, verifyOtp, ssoLogin, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

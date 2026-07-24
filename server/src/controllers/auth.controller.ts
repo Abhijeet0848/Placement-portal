@@ -19,27 +19,15 @@ const BANNED_EMAIL_DOMAINS = [
   'aol.com', 'icloud.com', 'rediffmail.com', 'mail.com', 'protonmail.com'
 ];
 
-// 1. Sign Up
-export async function register(req: AuthenticatedRequest, res: Response) {
-  const { name, email, password, role } = req.body;
 
-  if (!name || !email || !password || !role) {
-    return res.status(400).json({ message: 'All fields (name, email, password, role) are required.' });
+// 1. Request OTP (Signup & Login)
+export async function requestOtp(req: AuthenticatedRequest, res: Response) {
+  const { email, role, name } = req.body;
+
+  if (!email || !role) {
+    return res.status(400).json({ message: 'Email and role are required.' });
   }
 
-  // Name validation
-  const nameRegex = /^[A-Za-z\s]{2,50}$/;
-  if (!nameRegex.test(name)) {
-    return res.status(400).json({ message: 'Invalid name. Must be 2-50 characters and contain only letters and spaces.' });
-  }
-
-
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-  if (!passwordRegex.test(password)) {
-    return res.status(400).json({ message: 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.' });
-  }
-
-  // Strict email regex validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Invalid email format.' });
@@ -51,213 +39,120 @@ export async function register(req: AuthenticatedRequest, res: Response) {
   }
 
   try {
-    const salt = bcryptjs.genSaltSync(10);
-    const passwordHash = bcryptjs.hashSync(password, salt);
-    
-    // Generate 6 digit verification code
-    const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
-    
+    const loginOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const loginOtpExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
     await sendEmail({
       to: email,
-      subject: 'Verify Your Email - Smart Placement Portal',
-      text: `Welcome to the Smart Placement Portal!\n\nYour verification code is: ${verificationToken}\n\nPlease enter this code to complete your registration.`,
+      subject: 'Your OTP - Smart Placement Portal',
+      text: `Your OTP is: ${loginOtp}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-          <h2 style="color: #4f46e5;">Welcome to Smart Placement Portal!</h2>
-          <p>Thank you for registering. Please use the verification code below to complete your sign-up process:</p>
+          <h2 style="color: #4f46e5;">Your Login OTP</h2>
+          <p>Please use the verification code below to proceed:</p>
           <div style="background-color: #f8fafc; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 4px; margin: 20px 0;">
-            ${verificationToken}
+            ${loginOtp}
           </div>
-          <p style="color: #64748b; font-size: 14px;">If you did not request this code, please ignore this email.</p>
+          <p><strong>Note:</strong> This code will expire in 15 minutes.</p>
         </div>
       `
     });
 
-    console.log("isMockDb =", isMockDb);
-    console.log("User Model =", User.modelName);
-
     if (isMockDb) {
-      // Mock DB path
-      const userExists = mockDb.users.find(u => u.email === email);
-      if (userExists) {
-        return res.status(400).json({ message: 'User with this email already exists.' });
+      let user = mockDb.users.find(u => u.email === email);
+      if (name && user) return res.status(400).json({ message: 'User with this email already exists.' });
+      if (!name && !user) return res.status(400).json({ message: 'User not found. Please register first.' });
+      if (user && user.role !== role) return res.status(400).json({ message: `This email is registered as a ${user.role}.` });
+
+      if (!user && name) {
+        const nameRegex = /^[A-Za-z\s]{2,50}$/;
+        if (!nameRegex.test(name)) return res.status(400).json({ message: 'Invalid name.' });
+        user = {
+          _id: `usr_${Date.now()}`,
+          name, email, passwordHash: '', role: role as any, status: 'Active' as const,
+          profile: { skills: [], experience: [], projects: [], education: [], verified: false, certificates: [], loginOtp, loginOtpExpires },
+          createdAt: new Date()
+        };
+        mockDb.users.push(user);
+      } else if (user) {
+        user.profile.loginOtp = loginOtp;
+        user.profile.loginOtpExpires = loginOtpExpires;
       }
-
-      const newUser = {
-        _id: `usr_${Date.now()}`,
-        name,
-        email,
-        passwordHash,
-        role: role as any,
-        status: 'Active' as const,
-        profile: {
-          skills: [],
-          experience: [],
-          projects: [],
-          education: [],
-          verified: false,
-          certificates: [],
-          verificationToken
-        },
-        createdAt: new Date()
-      };
-
-      mockDb.users.push(newUser);
-      const tokens = generateTokens({ id: newUser._id, email: newUser.email, role: newUser.role, name: newUser.name });
-
-      return res.status(201).json({
-        message: 'Registration successful (Mock DB)',
-        tokens,
-        user: {
-          id: newUser._id,
-          name: newUser.name,
-          email: newUser.email,
-          role: newUser.role,
-          profile: newUser.profile
-        }
-      });
+      return res.json({ message: 'OTP sent to your email.' });
     } else {
-      // Real DB path
-      console.log("Saving user to MongoDB...");
-      const userExists = await User.findOne({ email });
-      if (userExists) {
-        return res.status(400).json({ message: 'User with this email already exists.' });
-      }
+      let user = await User.findOne({ email });
+      if (name && user) return res.status(400).json({ message: 'User with this email already exists.' });
+      if (!name && !user) return res.status(400).json({ message: 'User not found. Please register first.' });
+      if (user && user.role !== role) return res.status(400).json({ message: `This email is registered as a ${user.role}.` });
 
-      const user = new User({
-        name,
-        email,
-        passwordHash,
-        role,
-        profile: {
-          skills: [],
-          experience: [],
-          projects: [],
-          education: [],
-          verified: false,
-          certificates: [],
-          verificationToken
-        }
-      });
-
-      console.log(user);
-      try {
+      if (!user && name) {
+        const nameRegex = /^[A-Za-z\s]{2,50}$/;
+        if (!nameRegex.test(name)) return res.status(400).json({ message: 'Invalid name.' });
+        user = new User({
+          name, email, passwordHash: '', role,
+          profile: { skills: [], experience: [], projects: [], education: [], verified: false, certificates: [], loginOtp, loginOtpExpires }
+        });
         await user.save();
-        console.log("Saved successfully");
-      } catch (err) {
-        console.error("Mongo Save Error:", err);
-        return res.status(500).json(err);
+      } else if (user) {
+        user.profile.loginOtp = loginOtp;
+        user.profile.loginOtpExpires = loginOtpExpires;
+        await user.save();
       }
-      console.log("Saved User:", user);
-
-      const tokens = generateTokens({ id: user._id.toString(), email: user.email, role: user.role, name: user.name });
-
-      return res.status(201).json({
-        message: 'Registration successful',
-        tokens,
-        user: {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          profile: user.profile
-        }
-      });
+      return res.json({ message: 'OTP sent to your email.' });
     }
   } catch (error: any) {
-    logger.error(`Register failed: ${error?.message || error}`);
-    return res.status(500).json({ message: error?.message || 'Server registration error' });
+    logger.error(`OTP request failed: ${error?.message || error}`);
+    return res.status(500).json({ message: error?.message || 'Failed to send OTP.' });
   }
 }
 
-// 2. Login
-export async function login(req: AuthenticatedRequest, res: Response) {
-  const { email, password, role } = req.body;
-
-  if (!email || !password || !role) {
-    return res.status(400).json({ message: 'Email, password, and role are required.' });
-  }
+// 2. Verify OTP
+export async function verifyOtp(req: AuthenticatedRequest, res: Response) {
+  const { email, otp, role } = req.body;
+  if (!email || !otp || !role) return res.status(400).json({ message: 'Email, OTP, and role are required.' });
 
   try {
     if (isMockDb) {
-      const user = mockDb.users.find(u => u.email === email);
-      if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials.' });
+      const user = mockDb.users.find(u => u.email === email && u.role === role);
+      if (!user) return res.status(400).json({ message: 'Invalid request.' });
+      if (user.status === 'Blocked') return res.status(403).json({ message: 'Account suspended.' });
+      if (!user.profile.loginOtp || user.profile.loginOtp !== otp || !user.profile.loginOtpExpires || new Date(user.profile.loginOtpExpires).getTime() < Date.now()) {
+        return res.status(400).json({ message: 'Invalid or expired OTP.' });
       }
-
-      if (user.role !== role) {
-        return res.status(400).json({ message: `This email is registered as a ${user.role}. Please select the correct role to log in.` });
-      }
-
-      if (user.status === 'Blocked') {
-        return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
-      }
-
-      const isMatch = bcryptjs.compareSync(password, user.passwordHash);
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials.' });
-      }
-
-      // Fetch role permissions (Mock)
+      user.profile.loginOtp = undefined;
+      user.profile.loginOtpExpires = undefined;
+      user.profile.verified = true;
       const mockRolePerms = mockPermissions.find(p => p.role === user.role);
       const permissions = mockRolePerms ? mockRolePerms.permissions : {};
-
       const tokens = generateTokens({ id: user._id, email: user.email, role: user.role, name: user.name });
       return res.json({
-        message: 'Login successful (Mock DB)',
-        tokens,
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          profile: user.profile,
-          permissions
-        }
+        message: 'Login successful', tokens,
+        user: { id: user._id, name: user.name, email: user.email, role: user.role, profile: user.profile, permissions }
       });
     } else {
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials.' });
+      const user = await User.findOne({ email, role });
+      if (!user) return res.status(400).json({ message: 'Invalid request.' });
+      if (user.status === 'Blocked') return res.status(403).json({ message: 'Account suspended.' });
+      if (!user.profile.loginOtp || user.profile.loginOtp !== otp || !user.profile.loginOtpExpires || new Date(user.profile.loginOtpExpires).getTime() < Date.now()) {
+        return res.status(400).json({ message: 'Invalid or expired OTP.' });
       }
-
-      if (user.role !== role) {
-        return res.status(400).json({ message: `This email is registered as a ${user.role}. Please select the correct role to log in.` });
-      }
-
-      if (user.status === 'Blocked') {
-        return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
-      }
-
-      const isMatch = bcryptjs.compareSync(password, user.passwordHash);
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials.' });
-      }
-
-      // Fetch role permissions
+      user.profile.loginOtp = undefined;
+      user.profile.loginOtpExpires = undefined;
+      user.profile.verified = true;
+      await user.save();
       const permDoc = await Permission.findOne({ role: user.role });
       const permissions = permDoc && permDoc.permissions ? Object.fromEntries(permDoc.permissions) : {};
-
       const tokens = generateTokens({ id: user._id.toString(), email: user.email, role: user.role, name: user.name });
       return res.json({
-        message: 'Login successful',
-        tokens,
-        user: {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          profile: user.profile,
-          permissions
-        }
+        message: 'Login successful', tokens,
+        user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role, profile: user.profile, permissions }
       });
     }
   } catch (error: any) {
-    logger.error(`Login failed: ${error?.message || error}`);
-    return res.status(500).json({ message: error?.message || 'Server login error' });
+    logger.error(`OTP verify failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Failed to verify OTP.' });
   }
 }
-
 // 2.1 Google SSO Login
 export async function googleLogin(req: AuthenticatedRequest, res: Response) {
   const { credential, role } = req.body;
@@ -722,129 +617,6 @@ export async function getAllUsers(req: AuthenticatedRequest, res: Response) {
   }
 }
 
-// In-memory reset tokens map for mock DB or fallback
-const resetTokens: Record<string, { code: string; expires: number }> = {};
-
-// 7. Forgot Password (Request OTP / Token)
-export async function forgotPassword(req: AuthenticatedRequest, res: Response) {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ message: 'Email address is required.' });
-
-  try {
-    let userFound = false;
-    if (isMockDb) {
-      userFound = mockDb.users.some(u => u.email.toLowerCase() === email.toLowerCase());
-    } else {
-      const u = await User.findOne({ email: email.toLowerCase() });
-      userFound = !!u;
-    }
-
-    if (!userFound) {
-      return res.status(404).json({ message: 'No account found with this email address.' });
-    }
-
-    // Generate 6-digit OTP code
-    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const expires = Date.now() + 15 * 60 * 1000; // 15 mins expiry
-
-    if (isMockDb) {
-      resetTokens[email.toLowerCase()] = {
-        code: resetCode,
-        expires
-      };
-    } else {
-      await User.findOneAndUpdate(
-        { email: email.toLowerCase() },
-        { 
-          'profile.resetPasswordToken': resetCode,
-          'profile.resetPasswordExpires': new Date(expires)
-        }
-      );
-    }
-
-    await sendEmail({
-      to: email,
-      subject: 'Password Reset Request - Smart Placement Portal',
-      text: `You have requested a password reset.\n\nYour reset code is: ${resetCode}\n\nThis code will expire in 15 minutes.`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-          <h2 style="color: #4f46e5;">Password Reset Request</h2>
-          <p>We received a request to reset the password for your account. Please use the following code to reset your password:</p>
-          <div style="background-color: #f8fafc; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 4px; margin: 20px 0;">
-            ${resetCode}
-          </div>
-          <p><strong>Note:</strong> This code will expire in 15 minutes.</p>
-          <p style="color: #64748b; font-size: 14px;">If you did not request a password reset, please ignore this email or contact support.</p>
-        </div>
-      `
-    });
-
-    return res.json({
-      message: `Reset code generated! Please check your email.`,
-    });
-  } catch (error: any) {
-    logger.error(`Forgot password error: ${error?.message || error}`);
-    return res.status(500).json({ message: error?.message || 'Failed to process forgot password request.' });
-  }
-}
-
-// 8. Reset Password (Verify OTP & Set New Password)
-export async function resetPassword(req: AuthenticatedRequest, res: Response) {
-  const { email, code, newPassword, confirmPassword } = req.body;
-  if (!email || !code || !newPassword || !confirmPassword) {
-    return res.status(400).json({ message: 'Email, reset code, new password, and confirm password are required.' });
-  }
-
-  if (newPassword !== confirmPassword) {
-    return res.status(400).json({ message: 'Passwords do not match.' });
-  }
-
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-  if (!passwordRegex.test(newPassword)) {
-    return res.status(400).json({ message: 'New password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.' });
-  }
-
-  try {
-    const salt = bcryptjs.genSaltSync(10);
-    const passwordHash = bcryptjs.hashSync(newPassword, salt);
-
-    if (isMockDb) {
-      const record = resetTokens[email.toLowerCase()];
-      if (!record || record.code !== code || record.expires < Date.now()) {
-        return res.status(400).json({ message: 'Invalid or expired reset code. Please request a new one.' });
-      }
-      const user = mockDb.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (user) {
-        user.passwordHash = passwordHash;
-      }
-      delete resetTokens[email.toLowerCase()];
-    } else {
-      const user = await User.findOne({ email: email.toLowerCase() });
-      if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
-      }
-      
-      const token = user.profile.resetPasswordToken;
-      const expires = user.profile.resetPasswordExpires;
-      
-      if (!token || token !== code || !expires || expires.getTime() < Date.now()) {
-        return res.status(400).json({ message: 'Invalid or expired reset code. Please request a new one.' });
-      }
-      
-      user.passwordHash = passwordHash;
-      user.profile.resetPasswordToken = undefined;
-      user.profile.resetPasswordExpires = undefined;
-      await user.save();
-    }
-    logger.info(`Password successfully reset for email: ${email}`);
-
-    return res.json({ message: 'Password reset successful! You can now log in with your new password.' });
-  } catch (error: any) {
-    logger.error(`Reset password error: ${error?.message || error}`);
-    return res.status(500).json({ message: error?.message || 'Failed to reset password.' });
-  }
-}
-
 // 9. Delete Student (For Placement Officer / Admin)
 export async function deleteStudent(req: AuthenticatedRequest, res: Response) {
   try {
@@ -904,45 +676,6 @@ export async function updateStudentProfile(req: AuthenticatedRequest, res: Respo
   } catch (error: any) {
     logger.error(`Update student profile failed: ${error?.message || error}`);
     return res.status(500).json({ message: error?.message || 'Server student profile update error' });
-  }
-}
-
-// 12. Verify Email
-export async function verifyEmail(req: AuthenticatedRequest, res: Response) {
-  const { code } = req.body;
-  if (!code) {
-    return res.status(400).json({ message: 'Verification code is required.' });
-  }
-  if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
-
-  try {
-    if (isMockDb) {
-      const user = mockDb.users.find(u => u._id === req.user?.id);
-      if (!user) return res.status(404).json({ message: 'User not found' });
-      
-      if (user.profile.verificationToken === code) {
-        user.profile.verified = true;
-        user.profile.verificationToken = undefined;
-        return res.json({ message: 'Email verified successfully' });
-      } else {
-        return res.status(400).json({ message: 'Invalid verification code' });
-      }
-    } else {
-      const user = await User.findById(req.user.id);
-      if (!user) return res.status(404).json({ message: 'User not found' });
-
-      if (user.profile.verificationToken === code) {
-        user.profile.verified = true;
-        user.profile.verificationToken = undefined;
-        await user.save();
-        return res.json({ message: 'Email verified successfully' });
-      } else {
-        return res.status(400).json({ message: 'Invalid verification code' });
-      }
-    }
-  } catch (error: any) {
-    logger.error(`Verify email failed: ${error?.message || error}`);
-    return res.status(500).json({ message: error?.message || 'Server verification error' });
   }
 }
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { register, login, googleLogin, microsoftLogin, refreshToken, getProfile, updateProfile, getAllStudents, getAllUsers, forgotPassword, resetPassword, deleteStudent, updateStudentProfile, logout, verifyEmail, uploadProfilePicture } from '../controllers/auth.controller';
+import { requestOtp, verifyOtp, googleLogin, microsoftLogin, refreshToken, getProfile, updateProfile, getAllStudents, getAllUsers, deleteStudent, updateStudentProfile, logout, uploadProfilePicture } from '../controllers/auth.controller';
 import { createJob, getAllJobs, applyJob, getRecruiterApplications, updateApplicationStatus, getStudentApplications } from '../controllers/jobs.controller';
 import { analyzeResumeUpload, evaluateInterview, getCareerRoadmap, createCoverLetter, matchJob, parseExamUpload } from '../controllers/ai.controller';
 import { getExams, getExamById, submitExam, createExam } from '../controllers/exam.controller';
@@ -64,16 +64,13 @@ const imageUpload = multer({
 });
 
 // Auth Routes
-router.post('/auth/register', authLimiter, register);
-router.post('/auth/login', authLimiter, login);
+router.post('/auth/request-otp', authLimiter, requestOtp);
+router.post('/auth/verify-otp', authLimiter, verifyOtp);
 router.post('/auth/google', authLimiter, googleLogin);
 router.post('/auth/microsoft', authLimiter, microsoftLogin);
 router.post('/auth/logout', authenticateJWT, logout);
 router.post('/auth/refresh', refreshToken);
-router.post('/auth/verify-email', authenticateJWT, verifyEmail);
 router.post('/auth/profile/picture', authenticateJWT, imageUpload.single('avatar'), uploadProfilePicture);
-router.post('/auth/forgot-password', authLimiter, forgotPassword);
-router.post('/auth/reset-password', authLimiter, resetPassword);
 router.get('/auth/profile', authenticateJWT, getProfile);
 router.put('/auth/profile', authenticateJWT, updateProfile);
 router.get('/auth/students', authenticateJWT, getAllStudents);

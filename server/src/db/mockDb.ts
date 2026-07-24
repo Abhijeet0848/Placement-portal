@@ -24,6 +24,8 @@ export interface User {
     verified: boolean;
     certificates: { name: string; url: string; verified: boolean; issueDate: string }[];
     verificationToken?: string;
+    loginOtp?: string;
+    loginOtpExpires?: Date;
     avatarUrl?: string;
   };
   createdAt: Date;
