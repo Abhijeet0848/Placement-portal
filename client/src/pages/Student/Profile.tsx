@@ -203,7 +203,7 @@ export const Profile: React.FC = () => {
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
-              <Sparkles className="h-6 w-6 text-white animate-pulse" />
+              <Sparkles className="h-6 w-6 text-white" />
             </div>
             <h3 className="text-2xl font-black text-slate-900 tracking-tight">AI Resume Upload & Parser</h3>
           </div>
