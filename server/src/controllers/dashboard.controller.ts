@@ -218,8 +218,8 @@ export async function getPublicStats(req: any, res: Response) {
     let latestJob = null;
 
     if (isMockDb) {
-      totalStudents = mockDb.users.filter(u => u.role === 'Student').length;
-      totalRecruiters = mockDb.users.filter(u => ['Recruiter', 'PlacementOfficer', 'Admin'].includes(u.role)).length;
+      totalStudents = mockDb.users.filter(u => u.role === 'Student' && u.profile?.verified === true).length;
+      totalRecruiters = mockDb.users.filter(u => ['Recruiter', 'PlacementOfficer', 'Admin'].includes(u.role) && u.profile?.verified === true).length;
       totalJobs = mockDb.jobs.length;
       
       // Get the most recent active job
@@ -234,9 +234,9 @@ export async function getPublicStats(req: any, res: Response) {
     } else {
       const JobModel = (await import('../models/Job')).default;
       
-      // Count specific roles
-      totalStudents = await User.countDocuments({ role: 'Student' });
-      totalRecruiters = await User.countDocuments({ role: { $in: ['Recruiter', 'PlacementOfficer', 'Admin'] } });
+      // Count specific roles (only verified users)
+      totalStudents = await User.countDocuments({ role: 'Student', 'profile.verified': true });
+      totalRecruiters = await User.countDocuments({ role: { $in: ['Recruiter', 'PlacementOfficer', 'Admin'] }, 'profile.verified': true });
       
       totalJobs = await JobModel.countDocuments();
       

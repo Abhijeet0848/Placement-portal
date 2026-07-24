@@ -183,10 +183,16 @@ export const Dashboard: React.FC = () => {
                 <div>
                   <div className="flex justify-between items-center text-xs mb-1.5">
                     <span className="text-slate-600 font-bold uppercase tracking-wider">ATS Eligibility</span>
-                    <span className="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-[10px]">PASSED</span>
+                    {resumeScore === 0 ? (
+                      <span className="font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded text-[10px]">PENDING</span>
+                    ) : resumeScore > 70 ? (
+                      <span className="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-[10px]">PASSED</span>
+                    ) : (
+                      <span className="font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded text-[10px]">NEEDS WORK</span>
+                    )}
                   </div>
                   <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: '88%' }}></div>
+                    <div className={`h-full rounded-full ${resumeScore > 70 ? 'bg-emerald-500' : resumeScore > 0 ? 'bg-amber-500' : 'bg-slate-300'}`} style={{ width: `${resumeScore || 0}%` }}></div>
                   </div>
                 </div>
 

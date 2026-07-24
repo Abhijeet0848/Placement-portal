@@ -8,14 +8,14 @@ export const ResumeBuilder: React.FC = () => {
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.profile?.phone || '',
-    summary: 'Motivated computer applications student with strong web development and problem-solving skills.',
-    skills: 'React, Node.js, MongoDB, TypeScript',
-    experience: 'Built full-stack campus placement portal using React, Node.js, and MongoDB.\nDeveloped feature-rich dashboards for students, recruiters, and placement officers.',
-    education: 'MCA • XYZ University • 2024-2026\nBCA • ABC College • 2021-2024',
-    projects: 'Smart Placement Portal • Full-stack placement management system\nE-commerce Dashboard • React + Node + MongoDB',
+    summary: '',
+    skills: '',
+    experience: '',
+    education: '',
+    projects: '',
     certifications: '',
     achievements: '',
-    links: 'github.com/johndoe • linkedin.com/in/johndoe'
+    links: ''
   });
   const [preview, setPreview] = useState<string>('');
 
