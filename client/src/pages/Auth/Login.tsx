@@ -156,27 +156,13 @@ export const Login: React.FC = () => {
             </div>
             <div>
               <h3 className="text-2xl font-extrabold tracking-tight text-white">Smart Placement Portal</h3>
-              <p className="text-xs text-emerald-400 tracking-wider font-semibold uppercase mt-1">Jawaharlal University</p>
+              <p className="text-xs text-emerald-400 tracking-wider font-semibold uppercase mt-1">Global University</p>
             </div>
             <p className="text-sm text-slate-300 max-w-sm leading-relaxed">
               Step into the future of campus hiring. Powered by AI resume review, analytics, skill tracking, and mock interviews to guide you to your dream offer.
             </p>
           </div>
 
-          {/* Portal Stats Grid */}
-          <div className="grid grid-cols-2 gap-4 my-8 z-10">
-            {[
-              { value: '2500+', label: 'Active Students' },
-              { value: '150+', label: 'Hiring Partners' },
-              { value: '92%', label: 'Placement Rate' },
-              { value: '4200+', label: 'Job Offers' },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition-colors">
-                <div className="text-xl font-black text-white tracking-tight">{stat.value}</div>
-                <div className="text-xs font-medium text-slate-400 mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
 
           {/* Banner Footer */}
           <div className="z-10 text-xs text-slate-400 border-t border-white/10 pt-4 flex items-center justify-between">
