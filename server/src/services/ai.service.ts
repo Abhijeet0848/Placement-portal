@@ -19,7 +19,7 @@ if (GEMINI_API_KEY) {
 export async function analyzeResume(resumeText: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const prompt = `
         You are an expert ATS (Applicant Tracking System) Resume Screener. 
         Analyze the following resume text comprehensively and return a JSON object with accurate scoring:
@@ -155,7 +155,7 @@ export async function analyzeResume(resumeText: string) {
 export async function matchResumeToJob(resumeText: string, jobDetails: { title: string; description: string; skills: string[] }) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const prompt = `
         Compare this resume text with the job requirements:
         Job Title: ${jobDetails.title}
@@ -216,7 +216,7 @@ export async function matchResumeToJob(resumeText: string, jobDetails: { title: 
 export async function getCareerSuggestions(skills: string[], cgpa: number, interests: string[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const prompt = `
         Based on these parameters:
         Skills: ${skills.join(', ')}
@@ -339,7 +339,7 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
 export async function generateCoverLetter(studentName: string, skills: string[], jobTitle: string, company: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const prompt = `
         Write a professional, impressive cover letter for ${studentName} applying for the ${jobTitle} role at ${company}.
         Candidate Skills: ${skills.join(', ')}.
@@ -373,7 +373,7 @@ ${studentName}`;
 export async function evaluateInterviewAnswer(questionText: string, studentAnswer: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const prompt = `
         Evaluate the student's answer to the technical interview question.
         Question: ${questionText}
@@ -469,7 +469,7 @@ export async function evaluateInterviewAnswer(questionText: string, studentAnswe
 export async function parseExamQuestionsFromText(pdfText: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const prompt = `
         You are an expert technical assessment creator.
         Extract Multiple Choice Questions (MCQs) from the following text (which is a parsed PDF exam).

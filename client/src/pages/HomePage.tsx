@@ -2,28 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRight, Briefcase, GraduationCap, Sparkles, ChevronRight, ChevronLeft, ChevronDown, CheckCircle, Search, Clock, FileText, Brain, TrendingUp, Users, Target } from 'lucide-react';
+import { ArrowRight, Briefcase, GraduationCap, Sparkles, ChevronRight, ChevronLeft, ChevronDown, CheckCircle, Search, Clock, FileText, Brain, TrendingUp, Users, Target, Compass } from 'lucide-react';
 
 const features = [
   {
     title: 'AI Resume Analysis',
     description: 'Upload resumes and receive ATS-style feedback, score predictions, and skill suggestions.',
     icon: FileText,
+    link: '/resume-analyzer'
   },
   {
-    title: 'Skill Assessments',
-    description: 'Practice coding labs and MCQs that align with modern placement drives.',
-    icon: GraduationCap,
+    title: 'AI Career Coach',
+    description: 'Get personalized career roadmaps and intelligent cover letter generation tailored to your profile.',
+    icon: Compass,
+    link: '/career-roadmap'
   },
   {
     title: 'Mock Interviews',
     description: 'Run AI-guided interview simulations and improve communication and technical accuracy.',
     icon: Brain,
+    link: '/mock-interview'
   },
   {
     title: 'Placement Tracking',
     description: 'Track job applications, recruiter updates, and your placement readiness in one view.',
     icon: Target,
+    link: '/applications'
   },
 ];
 
@@ -274,13 +278,13 @@ export const HomePage: React.FC = () => {
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {features.map((feature, idx) => (
-              <div key={idx} className="group p-8 lg:p-10 rounded-[2rem] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)] transition-all duration-300">
+              <Link to={user ? feature.link : "/login"} key={idx} className="block group p-8 lg:p-10 rounded-[2rem] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)] transition-all duration-300">
                 <div className="h-16 w-16 rounded-2xl bg-[#111315] text-sky-500 flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300">
                   <feature.icon className="h-8 w-8" />
                 </div>
                 <h4 className="text-2xl font-bold text-slate-900 mb-4">{feature.title}</h4>
                 <p className="text-slate-500 leading-relaxed text-lg">{feature.description}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
