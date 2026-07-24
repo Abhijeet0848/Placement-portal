@@ -274,7 +274,12 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-800">
+    <div className="flex h-screen overflow-hidden bg-gradient-to-b from-sky-200 via-sky-100 to-white text-slate-800 relative">
+      {/* Decorative background arcs/lines */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center opacity-30 mix-blend-multiply">
+        <div className="w-[800px] h-[800px] border-[1px] border-white rounded-full absolute -top-40 -right-40" />
+        <div className="w-[1200px] h-[1200px] border-[1px] border-white rounded-full absolute -bottom-40 -left-40" />
+      </div>
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
@@ -286,7 +291,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Sidebar - Mobile: slide-in, Desktop: fixed */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-[70] print:hidden
-        w-64 bg-white border-r border-slate-200 
+        w-64 bg-white/70 backdrop-blur-2xl border-r border-white/50 
         flex flex-col p-5
         transform transition-transform duration-300 ease-in-out
         ${isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}
@@ -375,7 +380,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Main Container */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="relative h-16 bg-white border-b border-slate-200 px-4 lg:px-8 flex items-center justify-between z-40 print:hidden">
+        <header className="relative h-16 bg-white/40 backdrop-blur-md border-b border-white/50 px-4 lg:px-8 flex items-center justify-between z-40 print:hidden">
           <div className="flex items-center space-x-4">
             {/* Mobile menu button */}
             <button 
@@ -442,7 +447,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative bg-slate-50">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative bg-transparent">
           <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
             {children}
           </div>

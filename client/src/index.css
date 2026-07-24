@@ -65,12 +65,14 @@
   }
 }
 
-/* SaaS Card Tokens */
+/* SaaS Card Tokens (Glassmorphic) */
 .saas-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 1.5rem; /* Match 24px/3xl roughly */
+  box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.15), 0 8px 10px -6px rgba(56, 189, 248, 0.1);
 }
 
 /* Hover effects for interactive cards (only if explicitly opted-in) */
