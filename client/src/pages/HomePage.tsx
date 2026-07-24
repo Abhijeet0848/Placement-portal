@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../services/api';
+import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { ArrowRight, Briefcase, GraduationCap, Sparkles, ChevronRight, ChevronLeft, ChevronDown, CheckCircle, Search, Clock, FileText, Brain, TrendingUp, Users, Target } from 'lucide-react';
 
@@ -38,7 +38,7 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     api.get('/public/home-stats')
-      .then(res => setStats(res.data))
+      .then(data => setStats(data))
       .catch(err => console.error('Failed to fetch home stats', err));
   }, []);
 
