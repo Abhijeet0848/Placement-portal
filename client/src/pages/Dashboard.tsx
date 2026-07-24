@@ -348,11 +348,11 @@ export const Dashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="saas-card p-8 bg-slate-900 text-white">
+        <div className="saas-card p-8 bg-white border border-slate-200">
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div>
-              <h3 className="text-2xl font-black tracking-tight">Recruiter Workspace</h3>
-              <p className="text-sm text-slate-300 mt-2">Coordinate campaigns, examine parsed profiles, and run automated interview schedules.</p>
+              <h3 className="text-2xl font-black tracking-tight text-slate-900 capitalize">{user.role} Workspace</h3>
+              <p className="text-sm text-slate-500 mt-2">Coordinate campaigns, examine parsed profiles, and run automated interview schedules.</p>
             </div>
             <Link to="/jobs/manage" className="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-900 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 w-full sm:w-auto flex-shrink-0">
               <PlusCircle className="h-4 w-4 shrink-0" />
@@ -453,10 +453,10 @@ export const Dashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="saas-card p-8 bg-slate-900 text-white">
+        <div className="saas-card p-8 bg-white border border-slate-200">
           <div className="relative z-10">
-            <h3 className="text-2xl font-black tracking-tight">Campus Placement Administration</h3>
-            <p className="text-sm text-slate-300 mt-2">Audit student records, verify Coursera certificates, configure CGPA rules, and generate drive statistics.</p>
+            <h3 className="text-2xl font-black tracking-tight text-slate-900 capitalize">{user.role} Administration</h3>
+            <p className="text-sm text-slate-500 mt-2">Audit student records, verify Coursera certificates, configure CGPA rules, and generate drive statistics.</p>
           </div>
         </div>
 
