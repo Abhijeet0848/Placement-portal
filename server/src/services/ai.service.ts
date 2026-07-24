@@ -240,99 +240,11 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
     }
   }
 
-  // Fallback Simulation with dynamic contextual matching
-  const roles = new Set<string>();
-  const roadmapSteps = new Set<string>();
-  const resources = new Set<string>();
-
-  const lowerInterests = interests.map(i => i.toLowerCase());
-  const lowerSkills = skills.map(s => s.toLowerCase());
-
-  const hasInterest = (keywords: string[]) => lowerInterests.some(i => keywords.some(kw => i.includes(kw)));
-  const hasSkill = (keywords: string[]) => lowerSkills.some(s => keywords.some(kw => s.includes(kw)));
-
-  let matched = false;
-
-  // Check Data Science / ML
-  if (hasInterest(['data', 'machine learning', 'ai', 'artificial intelligence']) || (!lowerInterests.length && hasSkill(['python', 'pandas', 'tensorflow']))) {
-    roles.add('Data Scientist');
-    roles.add('Machine Learning Engineer');
-    roadmapSteps.add('Master Python, Pandas, and Scikit-Learn.');
-    roadmapSteps.add('Learn deep learning frameworks like TensorFlow or PyTorch.');
-    roadmapSteps.add('Build end-to-end ML pipelines and deploy them on AWS/GCP.');
-    resources.add('DeepLearning.AI Specialization');
-    resources.add('Fast.ai Practical Deep Learning');
-    matched = true;
+  if (!genAI) {
+    throw new Error('Gemini AI is not configured. Please set GEMINI_API_KEY.');
   }
-
-  // Check Full Stack (NEW)
-  if (hasInterest(['full stack', 'fullstack', 'full-stack'])) {
-    roles.add('Full Stack Developer');
-    roles.add('Software Engineer');
-    roadmapSteps.add('Master modern frontend frameworks (React/Next.js).');
-    roadmapSteps.add('Build robust backend APIs using Node.js, Java, or Python.');
-    roadmapSteps.add('Understand relational and NoSQL databases, and basic DevOps.');
-    resources.add('Full Stack Open (University of Helsinki)');
-    resources.add('The Odin Project');
-    matched = true;
-  }
-
-  // Check Frontend / UI
-  if (hasInterest(['frontend', 'ui', 'web', 'front-end']) || (!lowerInterests.length && hasSkill(['react', 'angular', 'vue', 'html', 'css']))) {
-    roles.add('Frontend Engineer');
-    roles.add('UI/UX Developer');
-    roadmapSteps.add('Master modern JavaScript/TypeScript and React/Next.js.');
-    roadmapSteps.add('Learn advanced CSS, Tailwind, and responsive design principles.');
-    roadmapSteps.add('Understand web performance optimization and accessibility.');
-    resources.add('Frontend Masters');
-    resources.add('Epic React by Kent C. Dodds');
-    matched = true;
-  }
-
-  // Check Backend / Systems
-  if (hasInterest(['backend', 'system', 'cloud', 'distributed', 'back-end']) || (!lowerInterests.length && hasSkill(['node', 'java', 'c++', 'go', 'sql']))) {
-    roles.add('Backend Engineer');
-    roles.add('Systems/Cloud Engineer');
-    roadmapSteps.add('Master Data Structures and Algorithms in a backend language.');
-    roadmapSteps.add('Learn microservices architecture and API design.');
-    roadmapSteps.add('Gain hands-on experience with Docker, Kubernetes, and Cloud providers.');
-    resources.add('Designing Data-Intensive Applications');
-    resources.add('AWS Certified Solutions Architect');
-    matched = true;
-  }
-
-  // Check CyberSecurity
-  if (hasInterest(['security', 'cyber', 'crypto']) || (!lowerInterests.length && hasSkill(['security', 'pentest']))) {
-    roles.add('Security Engineer');
-    roles.add('Penetration Tester');
-    roadmapSteps.add('Learn networking fundamentals and OSI model.');
-    roadmapSteps.add('Understand common vulnerabilities (OWASP Top 10) and cryptography.');
-    roadmapSteps.add('Practice on platforms like HackTheBox or TryHackMe.');
-    resources.add('CompTIA Security+');
-    resources.add('Offensive Security Certified Professional (OSCP)');
-    matched = true;
-  }
-
-  if (cgpa > 8.5 && roles.size > 0) {
-    roles.add('Research Scientist / R&D Engineer');
-  }
-
-  // Default fallbacks if nothing matched
-  if (!matched) {
-    roles.add('Software Engineer');
-    roles.add('Full Stack Developer');
-    roadmapSteps.add('Master core computer science fundamentals and data structures.');
-    roadmapSteps.add('Build full-stack side projects to gain practical experience.');
-    roadmapSteps.add('Learn version control (Git) and basic CI/CD concepts.');
-    resources.add('The Odin Project');
-    resources.add('System Design Primer');
-  }
-
-  return {
-    roles: Array.from(roles).slice(0, 4),
-    roadmap: Array.from(roadmapSteps).slice(0, 5),
-    learningResources: Array.from(resources).slice(0, 4)
-  };
+  
+  throw new Error('Failed to generate career suggestions using Gemini AI.');
 }
 
 // 4. Cover Letter Generator
