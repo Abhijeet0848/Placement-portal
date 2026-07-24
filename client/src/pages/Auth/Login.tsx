@@ -285,7 +285,6 @@ export const Login: React.FC = () => {
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => setError('Google authentication failed.')}
-              ux_mode="redirect"
               use_fedcm_for_prompt={true}
               theme="outline"
               size="large"
