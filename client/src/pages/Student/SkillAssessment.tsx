@@ -25,12 +25,14 @@ export const SkillAssessment: React.FC = () => {
   const handleRetake = () => {
     setAnswers({});
     setTestStarted(false);
+    setTestCompleted(false);
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(err => console.log(err));
     }
   };
 
   const [testStarted, setTestStarted] = useState(false);
+  const [testCompleted, setTestCompleted] = useState(false);
   const [fullscreenWarning, setFullscreenWarning] = useState(false);
 
   useEffect(() => {
@@ -188,9 +190,10 @@ export const SkillAssessment: React.FC = () => {
                     >
                       <input
                         type="radio"
+                        disabled={testCompleted}
                         checked={answers[index] === optionIndex}
                         onChange={() => handleAnswer(index, optionIndex)}
-                        className="h-4 w-4 text-indigo-600"
+                        className="h-4 w-4 text-indigo-600 disabled:opacity-50"
                       />
                       <span>{option}</span>
                     </label>
@@ -200,39 +203,50 @@ export const SkillAssessment: React.FC = () => {
             </div>
           ))}
 
-          {/* Score Display */}
-          <div className={`relative overflow-hidden rounded-2xl border-2 p-6 shadow-xl bg-gradient-to-br ${getScoreBg(score)}`}>
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-2">
-                <Award className="h-5 w-5 text-indigo-600" />
-                <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Skill Score</p>
-              </div>
-              <p className={`text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r ${getScoreColor(score)}`}>
-                {score}/10
-              </p>
-              <div className="mt-3 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-slate-700">
-                  <TrendingUp className="h-4 w-4" />
-                  <p className="text-sm font-medium">Use this score to track your readiness for placement rounds and interviews.</p>
+          {!testCompleted ? (
+            <div className="flex justify-end pt-4">
+              <button
+                onClick={() => setTestCompleted(true)}
+                disabled={Object.keys(answers).length < questions.length}
+                className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Submit Assessment
+              </button>
+            </div>
+          ) : (
+            <div className={`relative overflow-hidden rounded-2xl border-2 p-6 shadow-xl bg-gradient-to-br ${getScoreBg(score)} mt-8`}>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-2">
+                  <Award className="h-5 w-5 text-indigo-600" />
+                  <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Skill Score</p>
                 </div>
-                <div className="flex gap-2 print:hidden">
-                  <button
-                    onClick={() => window.print()}
-                    className="px-4 py-2 text-sm font-bold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500  shadow-sm flex items-center gap-2"
-                  >
-                    <FileText className="h-4 w-4" /> Download PDF
-                  </button>
-                  <button
-                    onClick={handleRetake}
-                    className="px-4 py-2 text-sm font-bold bg-white border-2 border-slate-200 rounded-xl hover:bg-slate-50  shadow-sm"
-                  >
-                    Retake Assessment
-                  </button>
+                <p className={`text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r ${getScoreColor(score)}`}>
+                  {score}/10
+                </p>
+                <div className="mt-3 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <TrendingUp className="h-4 w-4" />
+                    <p className="text-sm font-medium">Use this score to track your readiness for placement rounds and interviews.</p>
+                  </div>
+                  <div className="flex gap-2 print:hidden">
+                    <button
+                      onClick={() => window.print()}
+                      className="px-4 py-2 text-sm font-bold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500  shadow-sm flex items-center gap-2"
+                    >
+                      <FileText className="h-4 w-4" /> Download PDF
+                    </button>
+                    <button
+                      onClick={handleRetake}
+                      className="px-4 py-2 text-sm font-bold bg-white border-2 border-slate-200 rounded-xl hover:bg-slate-50  shadow-sm"
+                    >
+                      Retake Assessment
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
         </div>
       )}
