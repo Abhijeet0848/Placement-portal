@@ -229,10 +229,12 @@ export const Dashboard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-5 bg-slate-50 rounded-xl border border-slate-200 relative overflow-hidden">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Placement Score</p>
-                <p className="text-2xl font-black text-slate-900 mt-1.5">88%</p>
-                <div className="mt-2 inline-flex items-center gap-1 bg-emerald-100/50 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold">
-                  <TrendingUp className="w-3 h-3" /> +6% from last month
-                </div>
+                <p className="text-2xl font-black text-slate-900 mt-1.5">{hiringReadiness}%</p>
+                {hiringReadiness > 0 && (
+                  <div className="mt-2 inline-flex items-center gap-1 bg-emerald-100/50 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold">
+                    <TrendingUp className="w-3 h-3" /> Active profile
+                  </div>
+                )}
               </div>
               <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Resume Strength</p>
@@ -253,10 +255,10 @@ export const Dashboard: React.FC = () => {
             <div className="h-56 mt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={[
-                  { name: 'Resume', score: resumeScore > 0 ? resumeScore : 72 },
+                  { name: 'Resume', score: resumeScore > 0 ? resumeScore : 0 },
                   { name: 'Skills', score: Math.min((skills.length || 0) * 10, 100) },
                   { name: 'Applications', score: Math.min(apps.length * 20, 100) },
-                  { name: 'Mock Interviews', score: 78 }
+                  { name: 'Mock Interviews', score: dStats.mockInterviewScore || 0 }
                 ]} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f8fafc" vertical={false} />
                   <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
