@@ -19,7 +19,7 @@ if (GEMINI_API_KEY) {
 export async function analyzeResume(resumeText: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
       const prompt = `
         You are an expert ATS (Applicant Tracking System) Resume Screener. 
         Analyze the following resume text comprehensively and return a JSON object with accurate scoring:
@@ -443,7 +443,7 @@ export async function generateInterviewReport(history: { sender: string, text: s
 export async function generateGeneralChatResponse(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Assistant' : 'Student'}: ${h.text}`).join('\n');
       const prompt = `
         You are a helpful, encouraging, and intelligent AI Assistant embedded within the Smart Placement Portal for students.
@@ -472,7 +472,7 @@ export async function generateGeneralChatResponse(history: { sender: string, tex
 export async function generateExamQuestions(topic: string, difficulty: string, count: number) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
       const prompt = `
         You are an expert technical assessment creator.
         Generate exactly ${count} multiple choice questions (MCQs) about the topic "${topic}" at a "${difficulty}" difficulty level.

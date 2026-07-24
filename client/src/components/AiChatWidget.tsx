@@ -73,10 +73,10 @@ export const AiChatWidget: React.FC = () => {
                     <div className="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center bg-slate-200 mt-1">
                       {isAi ? <Bot className="w-4 h-4 text-slate-600" /> : <User className="w-4 h-4 text-slate-600" />}
                     </div>
-                    <div className={`p-3 rounded-2xl text-sm leading-relaxed ${
+                    <div className={`px-4 py-3 min-w-[60px] break-words rounded-2xl text-sm leading-relaxed ${
                       isAi 
                         ? 'bg-white text-slate-800 border border-slate-200 shadow-sm rounded-tl-none' 
-                        : 'bg-indigo-600 text-white shadow-md rounded-tr-none'
+                        : 'bg-indigo-600 text-white shadow-md rounded-tr-none text-left'
                     }`}>
                       {msg.text}
                     </div>
