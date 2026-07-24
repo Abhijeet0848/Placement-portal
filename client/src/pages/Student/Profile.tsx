@@ -198,8 +198,7 @@ export const Profile: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Resume Analyzer Header Box */}
-      <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+      <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-200 bg-indigo-50 p-8 shadow-2xl">
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
