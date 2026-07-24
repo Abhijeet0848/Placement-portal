@@ -94,7 +94,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Handle clicking outside of notification dropdown
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setShowNotifications(false);
       }
@@ -102,9 +102,11 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (showNotifications) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [showNotifications]);
 
@@ -404,7 +406,10 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
                 <div className="absolute right-0 mt-3 w-72 lg:w-80 bg-white border border-slate-200 rounded-xl shadow-elevated p-4 space-y-3 z-50">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 className="font-bold text-sm text-slate-900">Notifications ({unreadCount})</h3>
-                    <button onClick={markAllRead} className="text-xs text-slate-500 hover:text-slate-900 transition-colors">
+                    <button 
+                      onClick={() => { markAllRead(); setShowNotifications(false); }} 
+                      className="text-xs text-slate-500 hover:text-slate-900 transition-colors"
+                    >
                       Mark all read
                     </button>
                   </div>
@@ -413,7 +418,11 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
                       <p className="text-xs text-slate-500 py-4 text-center">No notifications yet.</p>
                     ) : (
                       notifications.map(n => (
-                        <div key={n.id} className={`p-3 rounded-lg text-xs ${n.read ? 'bg-white border border-slate-100' : 'bg-slate-50 border border-slate-200'}`}>
+                        <div 
+                          key={n.id} 
+                          onClick={() => setShowNotifications(false)}
+                          className={`p-3 rounded-lg text-xs cursor-pointer hover:bg-slate-100 transition-colors ${n.read ? 'bg-white border border-slate-100' : 'bg-slate-50 border border-slate-200'}`}
+                        >
                           <h4 className="font-semibold text-slate-900">{n.title}</h4>
                           <p className="text-slate-500 mt-1 leading-relaxed">{n.message}</p>
                         </div>
