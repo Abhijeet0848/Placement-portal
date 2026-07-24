@@ -31,9 +31,8 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="relative min-h-screen w-full bg-[#fffdfa] font-sans text-slate-900 flex flex-col">
-      {/* The Split Background Panel (Fixed to top viewport) */}
+      {/* The Split Background Panel (Fixed to top viewport on Desktop only) */}
       <div className="absolute right-0 top-0 h-[110vh] w-full lg:w-[58%] bg-[#111315] lg:rounded-bl-[200px] z-0 transition-all duration-700 pointer-events-none hidden lg:block shadow-2xl" />
-      <div className="absolute left-0 right-0 bottom-0 top-[40vh] h-[60vh] bg-[#111315] z-0 lg:hidden pointer-events-none" />
 
       {/* Header */}
       <header className="relative z-50 flex items-center justify-between px-6 lg:px-12 py-6">
@@ -86,10 +85,10 @@ export const HomePage: React.FC = () => {
       </header>
 
       {/* Main Hero Content */}
-      <main className="relative z-10 flex flex-col lg:flex-row flex-1 px-6 lg:px-12 pb-12">
+      <main className="relative z-10 flex flex-col lg:flex-row flex-1 px-0 lg:px-12 pb-0 lg:pb-12">
         
         {/* Left Side (White/Light area) */}
-        <div className="flex-1 flex flex-col justify-center pt-10 pb-20 lg:py-0 lg:pr-12 relative">
+        <div className="flex-1 flex flex-col justify-center pt-10 pb-16 lg:pb-20 px-6 lg:px-0 lg:py-0 lg:pr-12 relative bg-[#fffdfa] lg:bg-transparent">
           
           {/* Decorative squiggles */}
           <div className="absolute left-0 top-1/4 opacity-40 hidden sm:block">
@@ -144,7 +143,7 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Right Side (Dark area) */}
-        <div className="flex-1 flex flex-col justify-center items-center relative pt-20 lg:pt-0">
+        <div className="flex-1 flex flex-col justify-center items-center relative py-20 px-6 lg:px-0 lg:pt-0 bg-[#111315] lg:bg-transparent overflow-hidden rounded-t-[3rem] lg:rounded-none">
           
           {/* Central Floating Elements */}
           <div className="relative w-full max-w-md aspect-square flex items-center justify-center">
