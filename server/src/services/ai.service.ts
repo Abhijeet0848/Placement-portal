@@ -2,6 +2,12 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import logger from '../utils/logger';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+console.log(
+  "Gemini Key Prefix:",
+  GEMINI_API_KEY?.substring(0, 8)
+);
+
 let genAI: GoogleGenerativeAI | null = null;
 
 if (GEMINI_API_KEY) {
