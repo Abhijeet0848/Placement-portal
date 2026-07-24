@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { ShieldCheck, Mail, Lock, UserCheck, KeyRound, X, CheckCircle, Eye, EyeOff } from 'lucide-react';
@@ -9,9 +9,10 @@ import { useMsal } from '@azure/msal-react';
 export const Login: React.FC = () => {
   const { login, register, ssoLogin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { instance: msalInstance } = useMsal();
 
-  const [isRegister, setIsRegister] = useState(false);
+  const [isRegister, setIsRegister] = useState(location.state?.isRegister || false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

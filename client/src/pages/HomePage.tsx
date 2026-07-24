@@ -86,7 +86,7 @@ export const HomePage: React.FC = () => {
             </Link>
           ) : (
             <>
-              <Link to="/login" className="px-6 py-2.5 rounded-full border border-slate-700 lg:border-white/20 text-slate-900 lg:text-white text-sm font-bold hover:bg-slate-100 lg:hover:bg-white/10 transition-colors">
+              <Link to="/login" state={{ isRegister: true }} className="px-6 py-2.5 rounded-full border border-slate-700 lg:border-white/20 text-slate-900 lg:text-white text-sm font-bold hover:bg-slate-100 lg:hover:bg-white/10 transition-colors">
                 Sign Up
               </Link>
               <Link to="/login" className="px-6 py-2.5 rounded-full bg-sky-500 text-[#111315] text-sm font-bold shadow-lg shadow-sky-500/20 hover:scale-105 transition-transform">
