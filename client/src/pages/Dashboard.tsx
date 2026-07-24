@@ -349,14 +349,14 @@ export const Dashboard: React.FC = () => {
       <div className="space-y-6">
         {/* Welcome Section */}
         <div className="saas-card p-8 bg-slate-900 text-white">
-          <div className="relative z-10 flex items-center justify-between">
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div>
               <h3 className="text-2xl font-black tracking-tight">Recruiter Workspace</h3>
               <p className="text-sm text-slate-300 mt-2">Coordinate campaigns, examine parsed profiles, and run automated interview schedules.</p>
             </div>
-            <Link to="/jobs/manage" className="px-4 py-2 bg-white hover:bg-slate-100 text-slate-900 rounded-lg text-sm font-bold transition-colors flex items-center gap-2">
-              <PlusCircle className="h-4 w-4" />
-              <span>Create New Job</span>
+            <Link to="/jobs/manage" className="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-900 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 w-full sm:w-auto flex-shrink-0">
+              <PlusCircle className="h-4 w-4 shrink-0" />
+              <span className="whitespace-nowrap">Create New Job</span>
             </Link>
           </div>
         </div>
