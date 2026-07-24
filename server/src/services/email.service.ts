@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer';
 import logger from '../utils/logger';
 
-const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = Number(process.env.SMTP_PORT) || 587;
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
+const SMTP_HOST = process.env.SMTP_HOST || process.env.EMAIL_HOST;
+const SMTP_PORT = Number(process.env.SMTP_PORT || process.env.EMAIL_PORT) || 587;
+const SMTP_USER = process.env.SMTP_USER || process.env.EMAIL_USER;
+const SMTP_PASS = process.env.SMTP_PASS || process.env.EMAIL_PASS;
 
 let transporter: nodemailer.Transporter | null = null;
 
