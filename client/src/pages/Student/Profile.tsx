@@ -212,7 +212,7 @@ export const Profile: React.FC = () => {
 
           {/* Upload Button */}
           <div className="flex items-center space-x-4">
-            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl">
+            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg transition-all">
               <Upload className="h-5 w-5" />
               <span>{uploading ? 'Parsing PDF...' : 'Upload Resume PDF'}</span>
               <input
