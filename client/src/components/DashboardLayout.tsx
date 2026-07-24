@@ -299,7 +299,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
             </div>
             <div>
               <h1 className="font-extrabold text-sm tracking-widest text-slate-900 uppercase">Smart Portal</h1>
-              <span className="text-xs text-emerald-600 font-semibold">{user.role} Hub</span>
+              <span className="text-xs text-emerald-600 font-semibold">{user.name}</span>
             </div>
           </div>
           {/* Close button for mobile */}

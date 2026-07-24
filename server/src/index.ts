@@ -27,6 +27,13 @@ const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 // Middleware
 app.set('trust proxy', 1); // Trust the Vercel proxy for rate limiting
 
+// Add COOP/COEP headers for Google OAuth compatibility
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+  next();
+});
+
 app.use(helmet({
   crossOriginResourcePolicy: false // Allows loading local uploads if needed
 }));
