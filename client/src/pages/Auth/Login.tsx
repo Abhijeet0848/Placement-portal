@@ -342,39 +342,37 @@ export const Login: React.FC = () => {
             </button>
           </form>
 
-          {!isRegister && (
-            <div className="relative flex py-2 items-center">
-              <div className="flex-grow border-t border-slate-200"></div>
-              <span className="flex-shrink mx-4 text-slate-400 text-xs font-semibold uppercase tracking-wider">or login with</span>
-              <div className="flex-grow border-t border-slate-200"></div>
-            </div>
-          )}
+          <div className="relative flex py-2 items-center">
+            <div className="flex-grow border-t border-slate-200"></div>
+            <span className="flex-shrink mx-4 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+              {isRegister ? 'or sign up with' : 'or login with'}
+            </span>
+            <div className="flex-grow border-t border-slate-200"></div>
+          </div>
 
-          {!isRegister && (
-            <div className="flex flex-col gap-3 max-w-[400px] mx-auto w-full">
-              <div className="flex justify-center w-full">
-                <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={() => setError('Google login failed.')}
-                  useOneTap
-                  theme="outline"
-                  size="large"
-                  text="signin_with"
-                  shape="rectangular"
-                  width="400"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleMicrosoftLogin}
-                className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.98] w-full"
-                style={{ height: '40px' }}
-              >
-                <img src="https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg" alt="Microsoft" className="h-5 w-5" />
-                Sign in with Microsoft
-              </button>
+          <div className="flex flex-col gap-3 max-w-[400px] mx-auto w-full">
+            <div className="flex justify-center w-full">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError('Google authentication failed.')}
+                useOneTap
+                theme="outline"
+                size="large"
+                text={isRegister ? "signup_with" : "signin_with"}
+                shape="rectangular"
+                width="400"
+              />
             </div>
-          )}
+            <button
+              type="button"
+              onClick={handleMicrosoftLogin}
+              className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.98] w-full"
+              style={{ height: '40px' }}
+            >
+              <img src="https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg" alt="Microsoft" className="h-5 w-5" />
+              {isRegister ? 'Sign up with Microsoft' : 'Sign in with Microsoft'}
+            </button>
+          </div>
 
           <div className="text-center pt-2">
             <button
