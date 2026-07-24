@@ -42,7 +42,10 @@ app.use(helmet({
 
 // CORS configuration with COOP/COEP support
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Dynamically allow any origin (e.g. Netlify, Vercel, Localhost)
+    callback(null, origin || true);
+  },
   credentials: true,
   optionsSuccessStatus: 200
 }));
