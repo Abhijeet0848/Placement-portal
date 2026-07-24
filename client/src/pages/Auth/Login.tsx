@@ -285,6 +285,7 @@ export const Login: React.FC = () => {
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => setError('Google authentication failed.')}
+              use_fedcm_for_prompt={true}
               theme="outline"
               size="large"
               text={isRegister ? "signup_with" : "signin_with"}
