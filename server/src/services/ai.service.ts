@@ -468,7 +468,55 @@ export async function generateGeneralChatResponse(history: { sender: string, tex
   };
 }
 
-// 7. PDF Exam Question Parser
+// 7. Generate Exam Questions from AI
+export async function generateExamQuestions(topic: string, difficulty: string, count: number) {
+  if (genAI) {
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const prompt = `
+        You are an expert technical assessment creator.
+        Generate exactly ${count} multiple choice questions (MCQs) about the topic "${topic}" at a "${difficulty}" difficulty level.
+        
+        Output strictly valid JSON that matches the following schema:
+        [
+          {
+            "questionText": "Question text here",
+            "category": "${topic}",
+            "difficulty": "${difficulty}",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "options": ["Option A", "Option B", "Option C", "Option D"],
+            "correctAnswerIndex": 0,
+            "explanation": "Explanation for the correct answer"
+          }
+        ]
+        
+        Respond only with the JSON array. Do not include markdown blocks or any other text.
+      `;
+
+      const result = await model.generateContent(prompt);
+      const text = result.response.text().trim();
+      const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      return JSON.parse(cleanJson);
+    } catch (error: any) {
+      logger.error(`Gemini generateExamQuestions failed: ${error?.message || error}`);
+    }
+  }
+
+  // Fallback simulation
+  return Array.from({ length: count }).map((_, i) => ({
+    questionText: `Generated Question ${i + 1} about ${topic} (${difficulty})`,
+    category: topic,
+    difficulty,
+    marks: 2,
+    negativeMarks: 0.5,
+    options: ['A', 'B', 'C', 'D'],
+    correctAnswerIndex: 0,
+    explanation: 'Simulated fallback explanation.'
+  }));
+}
+
+// 8. PDF Exam Question Parser
 export async function parseExamQuestionsFromText(pdfText: string) {
   if (genAI) {
     try {

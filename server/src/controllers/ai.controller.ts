@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport, generateGeneralChatResponse } from '../services/ai.service';
+import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport, generateGeneralChatResponse, generateExamQuestions } from '../services/ai.service';
 import { parseResumePDF } from '../services/parser.service';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { isMockDb } from '../config/dbConnect';
@@ -142,7 +142,24 @@ export async function createCoverLetter(req: AuthenticatedRequest, res: Response
   }
 }
 
-// 5. Resume to Job Matching
+// 4.5 Generate Exam Questions with AI
+export async function generateExamQuestionsHandler(req: AuthenticatedRequest, res: Response) {
+  const { topic, difficulty, count } = req.body;
+
+  if (!topic || !difficulty || !count) {
+    return res.status(400).json({ message: 'Topic, difficulty, and count are required.' });
+  }
+
+  try {
+    const questions = await generateExamQuestions(topic, difficulty, parseInt(count, 10));
+    return res.json({ questions });
+  } catch (error: any) {
+    logger.error(`Generate exam questions failed: ${error?.message || error}`);
+    return res.status(500).json({ message: error?.message || 'Server AI generation error' });
+  }
+}
+
+// 5. Job Matching
 export async function matchJob(req: AuthenticatedRequest, res: Response) {
   const { resumeText, jobDetails } = req.body;
 

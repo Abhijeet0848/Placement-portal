@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
-import { Plus, Trash2, Calendar, Clock, BookOpen, Code2, Save, XCircle, CheckCircle2, Upload, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Calendar, Clock, BookOpen, Code2, Save, XCircle, CheckCircle2, Upload, Loader2, Sparkles } from 'lucide-react';
 
 export const ExamCreator: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -19,6 +19,13 @@ export const ExamCreator: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [parsingPdf, setParsingPdf] = useState(false);
   const [jobs, setJobs] = useState<any[]>([]);
+
+  // AI Generation States
+  const [showAiModal, setShowAiModal] = useState(false);
+  const [aiTopic, setAiTopic] = useState('');
+  const [aiDifficulty, setAiDifficulty] = useState('Medium');
+  const [aiCount, setAiCount] = useState(5);
+  const [generatingAi, setGeneratingAi] = useState(false);
 
   const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -57,6 +64,28 @@ export const ExamCreator: React.FC = () => {
     };
     fetchJobs();
   }, []);
+
+  const handleGenerateAiQuestions = async () => {
+    if (!aiTopic.trim()) return;
+    setGeneratingAi(true);
+    setStatus({ type: '', msg: '' });
+    try {
+      const res = await api.post('/ai/generate-exam', {
+        topic: aiTopic,
+        difficulty: aiDifficulty,
+        count: aiCount
+      });
+      if (res.questions && Array.isArray(res.questions)) {
+        setQuestions(prev => [...prev, ...res.questions]);
+        setStatus({ type: 'success', msg: `Successfully generated ${res.questions.length} AI questions!` });
+        setShowAiModal(false);
+      }
+    } catch (err: any) {
+      setStatus({ type: 'error', msg: err.message || 'Failed to generate AI questions.' });
+    } finally {
+      setGeneratingAi(false);
+    }
+  };
 
   const handleAddQuestion = () => {
     setQuestions([
@@ -219,9 +248,12 @@ export const ExamCreator: React.FC = () => {
         <div className="glass-card rounded-2xl p-6 space-y-6">
           <div className="flex justify-between items-center border-b pb-2">
             <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle2 className="h-5 w-5 text-emerald-500"/> 3. Multiple Choice Questions</h3>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 mt-4 sm:mt-0">
+              <button type="button" onClick={() => setShowAiModal(true)} className="flex items-center gap-1 px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg text-sm font-bold hover:bg-purple-100">
+                <Sparkles className="h-4 w-4" /> Generate with AI
+              </button>
               <label className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold hover:bg-emerald-100 cursor-pointer  relative">
-                {parsingPdf ? <Loader2 className="h-4 w-4 " /> : <Upload className="h-4 w-4" />}
+                {parsingPdf ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
                 {parsingPdf ? 'Parsing...' : 'Upload PDF'}
                 <input type="file" accept=".pdf" className="hidden" onChange={handlePDFUpload} disabled={parsingPdf} />
               </label>
@@ -305,6 +337,49 @@ export const ExamCreator: React.FC = () => {
           {submitting ? 'Creating Assessment...' : 'Publish Assessment'}
         </button>
       </form>
+
+      {/* AI Generator Modal */}
+      {showAiModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <Sparkles className="w-6 h-6 text-purple-600" /> AI Question Generator
+              </h3>
+              <button onClick={() => setShowAiModal(false)} className="text-slate-400 hover:text-slate-600">
+                <XCircle className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-1">Topic</label>
+                <input type="text" placeholder="e.g., React Hooks, Database Indexing" value={aiTopic} onChange={(e) => setAiTopic(e.target.value)} className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none" />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Difficulty</label>
+                  <select value={aiDifficulty} onChange={(e) => setAiDifficulty(e.target.value)} className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none">
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Count</label>
+                  <input type="number" min="1" max="15" value={aiCount} onChange={(e) => setAiCount(Number(e.target.value))} className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-purple-500 outline-none" />
+                </div>
+              </div>
+              
+              <button onClick={handleGenerateAiQuestions} disabled={generatingAi || !aiTopic.trim()} className="w-full mt-4 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50">
+                {generatingAi ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
+                {generatingAi ? 'Generating...' : 'Generate Questions'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
