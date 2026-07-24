@@ -44,17 +44,17 @@ export const HomePage: React.FC = () => {
     <div className="min-h-screen bg-slate-50">
       <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
-          <div className="flex items-center space-x-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 font-bold text-white">
+        <header className="flex flex-col sm:flex-row items-center justify-between rounded-xl border border-slate-200 bg-white px-4 sm:px-6 py-4 shadow-sm gap-4">
+          <div className="flex items-center space-x-3 sm:space-x-4 text-center sm:text-left w-full sm:w-auto">
+            <div className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 font-bold text-white mx-auto sm:mx-0">
               S
             </div>
-            <div>
-              <p className="text-lg font-bold text-slate-900">Smart Placement Portal</p>
-              <p className="text-sm text-slate-500">AI-driven campus recruitment</p>
+            <div className="flex-1">
+              <p className="text-base sm:text-lg font-bold text-slate-900 leading-tight">Smart Placement Portal</p>
+              <p className="text-xs sm:text-sm text-slate-500">AI-driven campus recruitment</p>
             </div>
           </div>
-          <Link to={user ? "/dashboard" : "/login"} className="saas-button-primary px-6 py-2">
+          <Link to={user ? "/dashboard" : "/login"} className="saas-button-primary px-6 py-2 w-full sm:w-auto text-center">
             <span>{user ? 'Go to Dashboard' : 'Get Started'}</span>
           </Link>
         </header>
