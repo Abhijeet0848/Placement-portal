@@ -212,18 +212,39 @@ export async function getAdminDashboardStats(req: AuthenticatedRequest, res: Res
 
 export async function getPublicStats(req: any, res: Response) {
   try {
-    const JobModel = (await import('../models/Job')).default;
-    
-    // Count specific roles
-    const totalStudents = await User.countDocuments({ role: 'Student' });
-    const totalRecruiters = await User.countDocuments({ role: { $in: ['Recruiter', 'PlacementOfficer', 'Admin'] } });
-    
-    const totalJobs = await JobModel.countDocuments();
-    
-    // Get the most recent active job
-    const latestJob = await JobModel.findOne()
-      .sort({ createdAt: -1 })
-      .populate('postedBy', 'name email profile');
+    let totalStudents = 0;
+    let totalRecruiters = 0;
+    let totalJobs = 0;
+    let latestJob = null;
+
+    if (isMockDb) {
+      totalStudents = mockDb.users.filter(u => u.role === 'Student').length;
+      totalRecruiters = mockDb.users.filter(u => ['Recruiter', 'PlacementOfficer', 'Admin'].includes(u.role)).length;
+      totalJobs = mockDb.jobs.length;
+      
+      // Get the most recent active job
+      const rawLatestJob = mockDb.jobs.length > 0 ? mockDb.jobs[mockDb.jobs.length - 1] : null;
+      if (rawLatestJob) {
+        const poster = mockDb.users.find(u => u._id === rawLatestJob.postedBy);
+        latestJob = {
+          ...rawLatestJob,
+          postedBy: poster ? { name: poster.name, email: poster.email, profile: poster.profile } : rawLatestJob.postedBy
+        };
+      }
+    } else {
+      const JobModel = (await import('../models/Job')).default;
+      
+      // Count specific roles
+      totalStudents = await User.countDocuments({ role: 'Student' });
+      totalRecruiters = await User.countDocuments({ role: { $in: ['Recruiter', 'PlacementOfficer', 'Admin'] } });
+      
+      totalJobs = await JobModel.countDocuments();
+      
+      // Get the most recent active job
+      latestJob = await JobModel.findOne()
+        .sort({ createdAt: -1 })
+        .populate('postedBy', 'name email profile');
+    }
 
     return res.json({
       totalStudents,
