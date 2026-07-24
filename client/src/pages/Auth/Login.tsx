@@ -362,16 +362,6 @@ export const Login: React.FC = () => {
                 shape="rectangular"
                 width="400"
               />
-            </div>
-            <button
-              type="button"
-              onClick={handleMicrosoftLogin}
-              className="flex items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.98] w-full"
-              style={{ height: '40px' }}
-            >
-              <img src="https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg" alt="Microsoft" className="h-5 w-5" />
-              {isRegister ? 'Sign up with Microsoft' : 'Sign in with Microsoft'}
-            </button>
           </div>
 
           <div className="text-center pt-2">
