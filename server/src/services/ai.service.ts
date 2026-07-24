@@ -45,7 +45,7 @@ export async function analyzeResume(resumeText: string) {
         Output strictly valid JSON only:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       const text = response.text.trim();
 
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -181,7 +181,7 @@ export async function matchResumeToJob(resumeText: string, jobDetails: { title: 
         Output strictly valid JSON:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
@@ -234,7 +234,7 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
         Output strictly valid JSON:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
@@ -260,7 +260,7 @@ export async function generateCoverLetter(studentName: string, skills: string[],
         Keep it concise, under 300 words. Format it in plain text.
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       return response.text.trim();
     } catch (error: any) {
       logger.error(`Gemini generateCoverLetter failed: ${error?.message || error}`);
@@ -299,7 +299,7 @@ export async function evaluateInterviewAnswer(history: { sender: string, text: s
         Do NOT output JSON. Just reply naturally with your text as the interviewer.
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       return { text: response.text.trim() };
     } catch (error: any) {
       logger.error(`Gemini evaluateInterviewAnswer failed: ${error?.message || error}`);
@@ -333,7 +333,7 @@ export async function generateInterviewReport(history: { sender: string, text: s
         Output strictly valid JSON:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
@@ -366,7 +366,7 @@ export async function generateGeneralChatResponse(history: { sender: string, tex
         Provide your next response as the Assistant. Be conversational, concise, and helpful. Do NOT output JSON.
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       return { text: response.text.trim() };
     } catch (error: any) {
       logger.error(`Gemini generateGeneralChatResponse failed: ${error?.message || error}`);
@@ -404,7 +404,7 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
         Respond only with the JSON array. Do not include markdown blocks or any other text.
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
@@ -461,7 +461,7 @@ export async function parseExamQuestionsFromText(pdfText: string) {
         Output strictly valid JSON array only:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
