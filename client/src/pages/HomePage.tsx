@@ -41,29 +41,21 @@ export const HomePage: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#020617] bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.15),_transparent_50%),radial-gradient(ellipse_at_bottom_right,_rgba(6,182,212,0.15),_transparent_50%)]">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/20 rounded-full mix-blend-screen filter blur-[100px] "></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-cyan-500/20 rounded-full mix-blend-screen filter blur-[100px]  "></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-500/10 rounded-full mix-blend-screen filter blur-[100px]  "></div>
-      </div>
-
+    <div className="min-h-screen bg-slate-50">
       <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-6 py-4 shadow-2xl backdrop-blur-xl">
+        <header className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
           <div className="flex items-center space-x-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 font-bold text-white shadow-lg shadow-emerald-500/20 ">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 font-bold text-white">
               S
             </div>
             <div>
-              <p className="text-lg font-bold text-white">Smart Placement Portal</p>
-              <p className="text-sm text-white/60">AI-driven campus recruitment</p>
+              <p className="text-lg font-bold text-slate-900">Smart Placement Portal</p>
+              <p className="text-sm text-slate-500">AI-driven campus recruitment</p>
             </div>
           </div>
-          <Link to={user ? "/dashboard" : "/login"} className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-6 py-2.5 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-500/20   hover:shadow-emerald-500/40">
-            <span className="relative z-10">{user ? 'Go to Dashboard' : 'Get Started'}</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-emerald-400 opacity-0 group-hover:opacity-100 "></div>
+          <Link to={user ? "/dashboard" : "/login"} className="saas-button-primary px-6 py-2">
+            <span>{user ? 'Go to Dashboard' : 'Get Started'}</span>
           </Link>
         </header>
 
@@ -71,29 +63,29 @@ export const HomePage: React.FC = () => {
         <main className="flex flex-1 flex-col justify-center py-16 lg:py-24">
           <div className="grid items-center gap-16 lg:grid-cols-[1.2fr_0.8fr]">
             <section className="space-y-8">
-              <div className="inline-flex items-center space-x-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300 backdrop-blur-sm ">
-                <Sparkles className="h-4 w-4 text-emerald-400" />
+              <div className="inline-flex items-center space-x-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
+                <Sparkles className="h-4 w-4 text-emerald-600" />
                 <span>Placement intelligence for students and recruiters</span>
               </div>
 
               <div className="space-y-6">
-                <h1 className="text-5xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl leading-tight">
+                <h1 className="text-5xl font-black tracking-tight text-slate-900 sm:text-6xl lg:text-7xl leading-tight">
                   Build your placement story with{' '}
-                  <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent ">
+                  <span className="text-emerald-600">
                     AI guidance.
                   </span>
                 </h1>
-                <p className="max-w-2xl text-lg text-white/90 leading-relaxed">
+                <p className="max-w-2xl text-lg text-slate-600 leading-relaxed">
                   From profile completion and resume scoring to mock interviews and job tracking, the Smart Placement Portal helps every student move from preparation to placement faster.
                 </p>
               </div>
 
               <div className="flex flex-col gap-4 sm:flex-row">
-                <Link to={user ? "/dashboard" : "/login"} className="group flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-6 py-3.5 text-base font-bold text-slate-950 shadow-lg shadow-emerald-500/20   hover:shadow-emerald-500/40">
+                <Link to={user ? "/dashboard" : "/login"} className="saas-button-primary px-8 py-3.5 flex items-center justify-center">
                   {user ? 'Continue to Dashboard' : 'Start your journey'}
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 " />
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
-                <a href="#features" className="flex items-center justify-center rounded-xl border-2 border-white/10 bg-white/5 px-6 py-3.5 text-base font-bold text-white backdrop-blur-sm  hover:bg-white/10 hover:border-white/20">
+                <a href="#features" className="saas-button-secondary px-8 py-3.5 flex items-center justify-center">
                   Explore features
                 </a>
               </div>
@@ -103,12 +95,12 @@ export const HomePage: React.FC = () => {
                 {stats.map((stat, idx) => {
                   const Icon = stat.icon;
                   return (
-                    <div key={idx} className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-lg backdrop-blur-sm   hover:bg-white/10 hover:border-emerald-500/30">
+                    <div key={idx} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                       <div className="flex items-center space-x-2 mb-2">
-                        <Icon className="h-5 w-5 text-emerald-400" />
-                        <p className="text-3xl font-black text-white">{stat.value}</p>
+                        <Icon className="h-5 w-5 text-emerald-600" />
+                        <p className="text-3xl font-black text-slate-900">{stat.value}</p>
                       </div>
-                      <p className="text-sm text-white/60 font-medium">{stat.label}</p>
+                      <p className="text-sm text-slate-500 font-medium">{stat.label}</p>
                     </div>
                   );
                 })}
@@ -116,27 +108,26 @@ export const HomePage: React.FC = () => {
             </section>
 
             {/* Feature Preview Card */}
-            <section className="rounded-[32px] border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-32 bg-emerald-500/10 blur-[100px] rounded-full"></div>
+            <section className="saas-card p-8">
               <div className="flex items-center justify-between mb-6 relative z-10">
                 <div>
-                  <p className="text-sm font-bold uppercase tracking-wider text-emerald-400">Portal overview</p>
-                  <h2 className="mt-2 text-3xl font-bold text-white">Built for modern campus hiring</h2>
+                  <p className="text-sm font-bold uppercase tracking-wider text-emerald-600">Portal overview</p>
+                  <h2 className="mt-2 text-3xl font-bold text-slate-900">Built for modern campus hiring</h2>
                 </div>
-                <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-emerald-400">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-emerald-600">
                   <Users className="h-6 w-6" />
                 </div>
               </div>
 
-              <div className="mt-6 space-y-3">
+              <div className="mt-6 space-y-3 relative z-10">
                 {[
                   'Complete student profile and upload documents',
                   'Apply to jobs with eligibility checks',
                   'Use AI mock interviews and career guidance',
                   'Track recruiter feedback and placement progress',
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-start rounded-xl border border-white/5 bg-white/5 p-4 text-sm text-white/90 backdrop-blur-sm  hover:bg-white/10 hover:border-emerald-500/30 ">
-                    <div className="mt-0.5 mr-3 h-3 w-3 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 shadow-lg shadow-emerald-500/50"></div>
+                  <div key={idx} className="flex items-start rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+                    <div className="mt-0.5 mr-3 h-2 w-2 rounded-full bg-emerald-500"></div>
                     <span className="font-medium">{item}</span>
                   </div>
                 ))}
@@ -146,13 +137,12 @@ export const HomePage: React.FC = () => {
         </main>
 
         {/* Features Section */}
-        <section id="features" className="border-t border-white/10 bg-[#040b16] py-20 relative">
-          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+        <section id="features" className="border-t border-slate-200 bg-white py-20 relative">
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
             <div className="mb-16 text-center">
-              <p className="text-sm font-bold uppercase tracking-widest text-emerald-400 mb-4">Core capabilities</p>
-              <h2 className="text-4xl font-black text-white mb-4">Everything a student needs to prepare and perform</h2>
-              <p className="text-lg text-white/80 max-w-2xl mx-auto">
+              <p className="text-sm font-bold uppercase tracking-widest text-emerald-600 mb-4">Core capabilities</p>
+              <h2 className="text-4xl font-black text-slate-900 mb-4">Everything a student needs to prepare and perform</h2>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
                 Comprehensive tools designed to accelerate your placement journey
               </p>
             </div>
@@ -163,23 +153,14 @@ export const HomePage: React.FC = () => {
                 return (
                   <div
                     key={feature.title}
-                    className="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-8 shadow-xl backdrop-blur-xl   hover:bg-white/10 hover:border-emerald-500/30 hover:shadow-emerald-500/10"
-                    style={{ animationDelay: `${idx * 100}ms` }}
+                    className="saas-card p-8 saas-card-interactive flex flex-col h-full"
                   >
-                    {/* Gradient background on hover */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-20 `}></div>
-
-                    <div className="relative z-10">
-                      <div className={`mb-6 inline-flex rounded-2xl bg-gradient-to-br ${feature.color} p-4 shadow-lg`}>
-                        <Icon className="h-6 w-6 text-white" />
+                    <div className="relative z-10 flex-1">
+                      <div className="mb-6 inline-flex rounded-xl bg-slate-100 p-4 text-emerald-600">
+                        <Icon className="h-6 w-6" />
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                      <p className="text-sm text-white/80 leading-relaxed">{feature.description}</p>
-
-                      <div className="mt-6 flex items-center text-sm font-semibold text-emerald-400 group-hover:text-emerald-300 ">
-                        Learn more
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 " />
-                      </div>
+                      <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
+                      <p className="text-sm text-slate-600 leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
                 );
@@ -189,55 +170,19 @@ export const HomePage: React.FC = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="border-t border-white/10 bg-[#020617] py-16 relative overflow-hidden">
-          <div className="absolute inset-0 bg-emerald-500/5 blur-[120px] rounded-full"></div>
+        <section className="border-t border-slate-200 bg-slate-50 py-16 relative overflow-hidden">
           <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-4xl font-black text-white mb-4">Ready to accelerate your placement journey?</h2>
-            <p className="text-lg text-white/60 mb-8">
+            <h2 className="text-4xl font-black text-slate-900 mb-4">Ready to accelerate your placement journey?</h2>
+            <p className="text-lg text-slate-600 mb-8">
               Join thousands of students who have already transformed their careers with AI-powered guidance
             </p>
-            <Link to={user ? "/dashboard" : "/login"} className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-base font-bold text-slate-950 shadow-lg shadow-emerald-500/20   hover:shadow-emerald-500/40">
+            <Link to={user ? "/dashboard" : "/login"} className="saas-button-primary px-8 py-4 inline-flex items-center">
               {user ? 'Go to Dashboard' : 'Get Started Now'}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </div>
         </section>
       </div>
-
-      <style>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        . {
-          animation: blob 7s infinite;
-        }
-        . {
-          animation-delay: 2s;
-        }
-        . {
-          animation-delay: 4s;
-        }
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        . {
-          animation: fade-in 1s ease-out;
-        }
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        . {
-          background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
-        }
-        .hover\\:scale-102:hover {
-          transform: scale(1.02);
-        }
-      `}</style>
     </div>
   );
 };
