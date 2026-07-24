@@ -140,221 +140,194 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 px-4 relative py-10">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-sky-200 via-sky-100 to-white px-4 relative py-10">
       
+      {/* Decorative background arcs/lines */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center opacity-30">
+        <div className="w-[800px] h-[800px] border-[1px] border-white rounded-full absolute" />
+        <div className="w-[1200px] h-[1200px] border-[1px] border-white rounded-full absolute" />
+      </div>
+
       {/* Main card container */}
-      <div className="w-full max-w-5xl z-10 grid md:grid-cols-[1fr_0.9fr] gap-6 bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm">
+      <div className="w-full max-w-[420px] z-10 bg-white/90 backdrop-blur-xl border border-white/50 rounded-[32px] p-8 shadow-2xl shadow-sky-200/50 flex flex-col relative">
         
-        {/* Left Column: Interactive Brand & Info Banner */}
-        <div className="hidden md:flex flex-col justify-between bg-slate-900 text-white rounded-xl p-8 relative overflow-hidden">
-
-
-          {/* Banner Header */}
-          <div className="space-y-4 z-10">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-              <ShieldCheck className="h-5 w-5 text-emerald-400" />
-            </div>
-            <div>
-              <h3 className="text-2xl font-extrabold tracking-tight text-white">Smart Placement Portal</h3>
-              <p className="text-xs text-emerald-400 tracking-wider font-semibold uppercase mt-1">Global University</p>
-            </div>
-            <p className="text-sm text-slate-300 max-w-sm leading-relaxed">
-              Step into the future of campus hiring. Powered by AI resume review, analytics, skill tracking, and mock interviews to guide you to your dream offer.
-            </p>
-          </div>
-
-
-          {/* Banner Footer */}
-          <div className="z-10 text-xs text-slate-400 border-t border-white/10 pt-4 flex items-center justify-between">
-            <span>© 2026 Smart Placement Portal</span>
-            <span className="font-semibold text-emerald-400">AI-Powered Career Cell</span>
+        {/* Floating Top Icon */}
+        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-lg border border-slate-100 w-16 h-16 flex items-center justify-center">
+          <div className="text-slate-800">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
           </div>
         </div>
 
-        {/* Right Column: Interactive Login Form */}
-        <div className="flex flex-col justify-center p-2 sm:p-4 lg:p-8 space-y-6">
-          <div className="space-y-2 text-center md:text-left">
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
-              {isRegister ? 'Create Account' : 'Welcome Back'}
-            </h2>
-            <p className="text-sm text-slate-500">
-              {isRegister 
-                ? 'Sign up to get access to custom career resources.' 
-                : 'Sign in to access your placement dashboard.'}
-            </p>
-          </div>
+        <div className="text-center mt-8 mb-6">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            {isRegister ? 'Create an account' : 'Sign in with email'}
+          </h2>
+          <p className="text-sm text-slate-500 mt-2 font-medium">
+            {isRegister 
+              ? 'Join the platform to kickstart your placement journey.' 
+              : 'Make a new doc to bring your words, data, and teams together. For free'}
+          </p>
+        </div>
 
-          {/* Quick Seeding Buttons */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider text-center">
-              Evaluation Quick Login
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { key: 'Student', label: '🎓 Student' },
-                { key: 'Recruiter', label: '💼 Recruiter' },
-                { key: 'PlacementOfficer', label: '🏛️ Officer' },
-                { key: 'Admin', label: '🛡️ Admin' },
-              ].map((option) => {
-                const isSelected = role === option.key;
-                return (
-                  <button
-                    key={option.key}
-                    type="button"
-                    onClick={() => handleAutofill(option.key as 'Student' | 'Recruiter' | 'PlacementOfficer' | 'Admin')}
-                    className={`relative py-2 px-3 rounded-lg text-xs font-bold text-center border transition-all ${
-                      isSelected
-                        ? 'border-emerald-600 bg-emerald-50 text-emerald-700 shadow-sm'
-                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                    }`}
-                  >
-                    {isSelected && <span className="mr-1 text-emerald-600">✓</span>}
-                    {option.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+        {/* Quick Seeding Buttons (Minimized for this design) */}
+        <div className="mb-6 flex justify-center gap-2 flex-wrap">
+          {['Student', 'Recruiter', 'PlacementOfficer', 'Admin'].map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => handleAutofill(opt as any)}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-bold transition-all ${
+                role === opt ? 'bg-slate-800 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+              }`}
+            >
+              {opt === 'PlacementOfficer' ? 'Officer' : opt}
+            </button>
+          ))}
+        </div>
 
-          {error && (
-            <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-600 font-semibold text-center ">
-              {error}
+        {error && (
+          <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-600 font-semibold text-center mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {isRegister && (
+            <div className="relative">
+              <input
+                type="text"
+                required
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-slate-50 border-transparent text-slate-900 focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 placeholder:text-slate-400 transition-all"
+              />
+              <UserCheck className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {isRegister && (
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider pl-1">Full Name</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter full name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
-                  />
-                  <UserCheck className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider pl-1">Email Address</label>
-              <div className="relative">
-                <input
-                  type="email"
-                  required
-                  placeholder="email@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
-                />
-                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between pl-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Password</label>
-                {!isRegister && (
-                  <button 
-                    type="button" 
-                    onClick={() => {
-                      setForgotEmail(email);
-                      setForgotStep(1);
-                      setForgotError('');
-                      setForgotMessage('');
-                      setShowForgotModal(true);
-                    }}
-                    className="text-xs font-semibold text-emerald-600 hover:text-emerald-700"
-                  >
-                    Forgot?
-                  </button>
-                )}
-              </div>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
-                />
-                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none "
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-
-            {isRegister && (
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider pl-1">Account Role</label>
-                <select
-                  value={role}
-                  onChange={(e: any) => setRole(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-lg text-sm font-medium bg-white border border-slate-200 text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
-                >
-                  <option value="Student">Student</option>
-                  <option value="Recruiter">Recruiter</option>
-                  <option value="PlacementOfficer">Placement Officer</option>
-                  <option value="Admin">Admin</option>
-                </select>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="saas-button-primary w-full py-2.5 mt-2"
-            >
-              {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Sign In'}
-            </button>
-          </form>
-
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-slate-200"></div>
-            <span className="flex-shrink mx-4 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-              {isRegister ? 'or sign up with' : 'or login with'}
-            </span>
-            <div className="flex-grow border-t border-slate-200"></div>
+          <div className="relative">
+            <input
+              type="email"
+              required
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-slate-50 border-transparent text-slate-900 focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 placeholder:text-slate-400 transition-all"
+            />
+            <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
           </div>
 
-          <div className="flex flex-col gap-3 max-w-[400px] mx-auto w-full">
-            <div className="flex justify-center w-full">
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              required
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 rounded-2xl text-sm font-medium bg-slate-50 border-transparent text-slate-900 focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 placeholder:text-slate-400 transition-all"
+            />
+            <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3.5 top-3.5 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+
+          {!isRegister && (
+            <div className="flex justify-end pt-1">
+              <button 
+                type="button" 
+                onClick={() => {
+                  setForgotEmail(email);
+                  setForgotStep(1);
+                  setForgotError('');
+                  setForgotMessage('');
+                  setShowForgotModal(true);
+                }}
+                className="text-xs font-bold text-slate-600 hover:text-slate-900"
+              >
+                Forgot password?
+              </button>
+            </div>
+          )}
+
+          {isRegister && (
+            <div className="relative pt-1">
+              <select
+                value={role}
+                onChange={(e: any) => setRole(e.target.value)}
+                className="w-full px-4 py-3 rounded-2xl text-sm font-medium bg-slate-50 border-transparent text-slate-900 focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 transition-all"
+              >
+                <option value="Student">Student Role</option>
+                <option value="Recruiter">Recruiter Role</option>
+                <option value="PlacementOfficer">Placement Officer Role</option>
+                <option value="Admin">Admin Role</option>
+              </select>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 mt-4 rounded-xl text-sm font-bold text-white bg-slate-900 hover:bg-black active:scale-[0.98] transition-all disabled:opacity-50"
+          >
+            {loading ? 'Processing...' : 'Get Started'}
+          </button>
+        </form>
+
+        <div className="relative flex py-6 items-center">
+          <div className="flex-grow border-t border-slate-100 border-dashed"></div>
+          <span className="flex-shrink mx-4 text-slate-400 text-[10px] font-semibold">
+            Or sign in with
+          </span>
+          <div className="flex-grow border-t border-slate-100 border-dashed"></div>
+        </div>
+
+        <div className="flex items-center justify-center gap-3 w-full">
+          {/* We wrap GoogleLogin so it matches the design loosely. Google restricts extreme styling of their iframe, but we can contain it */}
+          <div className="flex-1 flex justify-center bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow rounded-2xl py-1 overflow-hidden h-12 relative items-center">
+            <div className="absolute inset-0 opacity-0 z-10">
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => setError('Google authentication failed.')}
-                theme="outline"
-                size="large"
-                text={isRegister ? "signup_with" : "signin_with"}
+                type="icon"
                 shape="rectangular"
-                width="400"
               />
             </div>
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
           </div>
 
-          <div className="text-center pt-2">
-            <button
-              onClick={() => {
-                setIsRegister(!isRegister);
-                setError('');
-              }}
-              className="text-xs text-emerald-600 font-bold hover:text-emerald-700"
-            >
-              {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-            </button>
-          </div>
+          <button type="button" className="flex-1 flex justify-center items-center bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow rounded-2xl h-12">
+             <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" className="w-5 h-5" alt="Facebook" />
+          </button>
+          
+          <button type="button" className="flex-1 flex justify-center items-center bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow rounded-2xl h-12">
+             <img src="https://www.svgrepo.com/show/511330/apple-173.svg" className="w-5 h-5" alt="Apple" />
+          </button>
         </div>
 
+        <div className="text-center pt-8">
+          <button
+            onClick={() => {
+              setIsRegister(!isRegister);
+              setError('');
+            }}
+            className="text-xs text-slate-500 font-bold hover:text-slate-800 transition-colors"
+          >
+            {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+          </button>
+        </div>
       </div>
+    </div>
+
 
       {/* Forgot / Reset Password Modal */}
       {showForgotModal && (

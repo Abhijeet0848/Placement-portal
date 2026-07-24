@@ -79,59 +79,72 @@ export const Dashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="saas-card p-8 bg-slate-900 text-white">
-          <div className="relative z-10 flex items-center justify-between">
+        <div className="bg-slate-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
+          {/* Decorative background blur */}
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl" />
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-              <h3 className="text-2xl font-black tracking-tight">Welcome back, {user.name}!</h3>
+              <p className="text-emerald-400 font-bold uppercase tracking-wider text-xs mb-1">Student Portal</p>
+              <h3 className="text-3xl font-black tracking-tight text-white">Welcome back, {user.name}!</h3>
               {user.profile.branch && user.profile.cgpa && (
-                <p className="text-sm text-slate-300 mt-2 font-medium">Branch: {user.profile.branch} | Current GPA: {user.profile.cgpa}</p>
+                <p className="text-sm text-slate-300 mt-2 font-medium">
+                  Branch: <span className="text-white">{user.profile.branch}</span> <span className="mx-2 text-slate-600">|</span> Current GPA: <span className="text-white">{user.profile.cgpa}</span>
+                </p>
               )}
             </div>
-            <Link to="/profile" className="px-4 py-2 bg-white hover:bg-slate-100 rounded-lg text-sm font-bold text-slate-900 transition-colors">
+            <Link to="/profile" className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-sm font-bold text-white shadow-sm transition-all whitespace-nowrap">
               Complete Profile
             </Link>
           </div>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="saas-card p-5 saas-card-interactive">
-            <div className="relative z-10 flex items-center justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-slate-300 transition-all group">
+            <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Resume Score</p>
-                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{resumeScore > 0 ? `${resumeScore}/100` : 'Analyze Resume'}</h4>
+                <h4 className="text-2xl font-black text-slate-900 mt-1">{resumeScore > 0 ? `${resumeScore}/100` : 'Analyze'}</h4>
               </div>
-              <Award className="h-8 w-8 text-slate-400" />
+              <div className="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Award className="h-5 w-5 text-indigo-500" />
+              </div>
             </div>
           </div>
 
-          <div className="saas-card p-5 saas-card-interactive">
-            <div className="relative z-10 flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-slate-300 transition-all group">
+            <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Applications</p>
-                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{apps.length}</h4>
+                <h4 className="text-2xl font-black text-slate-900 mt-1">{apps.length}</h4>
               </div>
-              <Briefcase className="h-8 w-8 text-slate-400" />
+              <div className="h-10 w-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Briefcase className="h-5 w-5 text-blue-500" />
+              </div>
             </div>
           </div>
 
-          <div className="saas-card p-5 saas-card-interactive">
-            <div className="relative z-10 flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-slate-300 transition-all group">
+            <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Skills Evaluated</p>
-                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{skillsEvaluatedCount}</h4>
+                <h4 className="text-2xl font-black text-slate-900 mt-1">{skillsEvaluatedCount}</h4>
               </div>
-              <CheckCircle className="h-8 w-8 text-emerald-500" />
+              <div className="h-10 w-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <CheckCircle className="h-5 w-5 text-emerald-500" />
+              </div>
             </div>
           </div>
 
-          <div className="saas-card p-5 saas-card-interactive">
-            <div className="relative z-10 flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-slate-300 transition-all group">
+            <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hiring Readiness</p>
-                <h4 className="text-2xl font-black text-slate-900 mt-1.5">{hiringReadiness}%</h4>
+                <h4 className="text-2xl font-black text-slate-900 mt-1">{hiringReadiness}%</h4>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-500" />
+              <div className="h-10 w-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <TrendingUp className="h-5 w-5 text-amber-500" />
+              </div>
             </div>
           </div>
         </div>
@@ -139,105 +152,117 @@ export const Dashboard: React.FC = () => {
         {/* Charts & Details */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Linear Line Chart */}
-          <div className="saas-card p-6 lg:col-span-2">
-            <div className="relative z-10">
-              <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Placement Readiness Journey</h4>
-              <div className="h-60">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={readinessJourney}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
-                    <YAxis stroke="#94a3b8" fontSize={11} domain={[0, 100]} />
-                    <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#1e293b' }} />
-                    <Line type="monotone" dataKey="Score" stroke="#0f172a" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:col-span-2">
+            <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-emerald-500" /> Placement Readiness Journey
+            </h4>
+            <div className="h-[280px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={readinessJourney} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f8fafc" vertical={false} />
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={11} domain={[0, 100]} tickLine={false} axisLine={false} />
+                  <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#0f172a', fontWeight: 'bold', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }} />
+                  <Line type="monotone" dataKey="Score" stroke="#10b981" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, fill: '#fff' }} activeDot={{ r: 6, fill: '#10b981' }} />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </div>
 
           {/* Job matching summary */}
-          <div className="saas-card p-6">
-            <div className="relative z-10 space-y-4">
-              <div className="flex items-center gap-2 text-slate-800">
-                <Sparkles className="h-5 w-5" />
-                <h4 className="text-sm font-bold uppercase tracking-wider">AI Skill Match Engine</h4>
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-indigo-50 rounded-lg">
+                  <Sparkles className="h-5 w-5 text-indigo-600" />
+                </div>
+                <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider">AI Skill Match Engine</h4>
               </div>
-              <div className="space-y-3">
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-600 font-medium">ATS Eligibility</span>
-                    <span className="font-bold text-emerald-600">PASSED</span>
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between items-center text-xs mb-1.5">
+                    <span className="text-slate-600 font-bold uppercase tracking-wider">ATS Eligibility</span>
+                    <span className="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-[10px]">PASSED</span>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-200 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-emerald-500" style={{ width: '88%' }}></div>
+                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: '88%' }}></div>
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-600 font-medium">Coding assessments</span>
-                    <span className="font-bold text-blue-600">{avgCodingScore}% Avg Score</span>
+                <div>
+                  <div className="flex justify-between items-center text-xs mb-1.5">
+                    <span className="text-slate-600 font-bold uppercase tracking-wider">Coding assessments</span>
+                    <span className="font-bold text-blue-600">{avgCodingScore}% Avg</span>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-200 rounded-full mt-2 overflow-hidden">
-                    <div className="h-full bg-blue-500" style={{ width: `${avgCodingScore}%` }}></div>
+                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${avgCodingScore}%` }}></div>
                   </div>
-                </div>
-
-                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200">
-                  <p className="text-xs font-bold text-amber-700">AI Placement Tip</p>
-                  <p className="text-xs text-amber-800 mt-1 leading-relaxed">
-                    {aiPlacementTip}
-                  </p>
                 </div>
               </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 mt-6 relative overflow-hidden">
+              <div className="absolute -right-4 -top-4 w-16 h-16 bg-amber-500/10 rounded-full blur-xl" />
+              <p className="text-[11px] font-black uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500"></span> AI Placement Tip
+              </p>
+              <p className="text-xs text-slate-600 mt-2 leading-relaxed font-medium relative z-10">
+                {aiPlacementTip}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="saas-card p-6">
-          <div className="relative z-10 space-y-4">
-            <div className="flex items-center justify-between gap-3">
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <div className="space-y-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
-                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Placement Statistics Snapshot</h4>
+                <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider">Placement Statistics Snapshot</h4>
                 <p className="text-xs text-slate-500 mt-1">Track how your profile strength, resume score, and application momentum are shaping your placement outlook.</p>
               </div>
-              <Link to="/applications" className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+              <Link to="/applications" className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors whitespace-nowrap">
                 Track Applications
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-5 bg-slate-50 rounded-xl border border-slate-200 relative overflow-hidden">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Placement Score</p>
-                <p className="text-lg font-black text-slate-900 mt-1">88%</p>
-                <p className="text-[11px] text-emerald-600 mt-1 font-medium">+6% from last month</p>
+                <p className="text-2xl font-black text-slate-900 mt-1.5">88%</p>
+                <div className="mt-2 inline-flex items-center gap-1 bg-emerald-100/50 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold">
+                  <TrendingUp className="w-3 h-3" /> +6% from last month
+                </div>
               </div>
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+              <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Resume Strength</p>
-                <p className="text-lg font-black text-slate-900 mt-1">{resumeScore > 0 ? `${resumeScore}/100` : 'Pending'}</p>
-                <p className="text-[11px] text-blue-600 mt-1 font-medium">ATS-ready profile</p>
+                <p className="text-2xl font-black text-slate-900 mt-1.5">{resumeScore > 0 ? `${resumeScore}/100` : 'Pending'}</p>
+                <p className="text-xs text-blue-600 mt-2 font-bold flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5" /> ATS-ready profile
+                </p>
               </div>
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+              <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
                 <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Active Applications</p>
-                <p className="text-lg font-black text-slate-900 mt-1">{apps.length}</p>
-                <p className="text-[11px] text-slate-500 mt-1 font-medium">Monitoring recruiter response</p>
+                <p className="text-2xl font-black text-slate-900 mt-1.5">{apps.length}</p>
+                <p className="text-xs text-slate-500 mt-2 font-medium flex items-center gap-1">
+                  <Briefcase className="w-3.5 h-3.5" /> Monitoring responses
+                </p>
               </div>
             </div>
 
-            <div className="h-48 mt-4">
+            <div className="h-56 mt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={[
                   { name: 'Resume', score: resumeScore > 0 ? resumeScore : 72 },
                   { name: 'Skills', score: Math.min((skills.length || 0) * 10, 100) },
                   { name: 'Applications', score: Math.min(apps.length * 20, 100) },
                   { name: 'Mock Interviews', score: 78 }
-                ]}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} />
-                  <YAxis stroke="#94a3b8" fontSize={11} />
-                  <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#1e293b' }} />
-                  <Bar dataKey="score" fill="#0f172a" radius={[4, 4, 0, 0]} />
+                ]} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f8fafc" vertical={false} />
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                  <Tooltip cursor={{fill: '#f8fafc'}} contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#0f172a', fontWeight: 'bold' }} />
+                  <Bar dataKey="score" fill="#3b82f6" radius={[6, 6, 0, 0]} maxBarSize={50} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
