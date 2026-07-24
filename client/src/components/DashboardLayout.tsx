@@ -278,14 +278,14 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar - Mobile: slide-in, Desktop: fixed */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 print:hidden
+        fixed lg:static inset-y-0 left-0 z-[70] print:hidden
         w-64 bg-white border-r border-slate-200 
         flex flex-col p-5
         transform transition-transform duration-300 ease-in-out
@@ -314,7 +314,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         {/* Navigation Links - Scrollable */}
         <nav 
           ref={sidebarRef}
-          className="sidebar-nav flex-1 space-y-4 overflow-y-auto scroll-smooth pr-1"
+          className="sidebar-nav flex-1 space-y-4 overflow-y-auto scroll-smooth pr-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           onScroll={handleScroll}
         >
           {navCategories.map((category) => (
@@ -375,7 +375,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Main Container */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="relative h-16 bg-white border-b border-slate-200 px-4 lg:px-8 flex items-center justify-between z-50 print:hidden">
+        <header className="relative h-16 bg-white border-b border-slate-200 px-4 lg:px-8 flex items-center justify-between z-40 print:hidden">
           <div className="flex items-center space-x-4">
             {/* Mobile menu button */}
             <button 
