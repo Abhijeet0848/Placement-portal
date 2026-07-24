@@ -41,10 +41,16 @@ export const HomePage: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-sky-200 via-sky-100 to-white relative overflow-hidden">
+      {/* Decorative background arcs/lines */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center opacity-30 mix-blend-multiply z-0">
+        <div className="w-[800px] h-[800px] border-[1px] border-white rounded-full absolute -top-40 -right-40" />
+        <div className="w-[1200px] h-[1200px] border-[1px] border-white rounded-full absolute -bottom-40 -left-40" />
+      </div>
+
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-8 lg:px-8">
         {/* Header */}
-        <header className="flex flex-col sm:flex-row items-center justify-between rounded-xl border border-slate-200 bg-white px-4 sm:px-6 py-4 shadow-sm gap-4">
+        <header className="flex flex-col sm:flex-row items-center justify-between rounded-3xl border border-white/50 bg-white/40 backdrop-blur-xl px-4 sm:px-6 py-4 shadow-xl shadow-sky-200/50 gap-4">
           <div className="flex items-center space-x-3 sm:space-x-4 text-center sm:text-left w-full sm:w-auto">
             <div className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 font-bold text-white mx-auto sm:mx-0">
               S
@@ -112,7 +118,7 @@ export const HomePage: React.FC = () => {
                   'Use AI mock interviews and career guidance',
                   'Track recruiter feedback and placement progress',
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-start rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+                  <div key={idx} className="flex items-start rounded-xl border border-white/60 bg-white/50 backdrop-blur-md p-4 text-sm text-slate-700">
                     <div className="mt-0.5 mr-3 h-2 w-2 rounded-full bg-emerald-500"></div>
                     <span className="font-medium">{item}</span>
                   </div>
@@ -123,7 +129,7 @@ export const HomePage: React.FC = () => {
         </main>
 
         {/* Features Section */}
-        <section id="features" className="border-t border-slate-200 bg-white py-20 relative">
+        <section id="features" className="py-20 relative z-10">
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
             <div className="mb-16 text-center">
               <p className="text-sm font-bold uppercase tracking-widest text-emerald-600 mb-4">Core capabilities</p>
@@ -142,7 +148,7 @@ export const HomePage: React.FC = () => {
                     className="saas-card p-8 saas-card-interactive flex flex-col h-full"
                   >
                     <div className="relative z-10 flex-1">
-                      <div className="mb-6 inline-flex rounded-xl bg-slate-100 p-4 text-emerald-600">
+                      <div className="mb-6 inline-flex rounded-xl bg-white/60 backdrop-blur-md p-4 text-emerald-600 shadow-sm border border-white/50">
                         <Icon className="h-6 w-6" />
                       </div>
                       <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
@@ -156,8 +162,8 @@ export const HomePage: React.FC = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="border-t border-slate-200 bg-slate-50 py-16 relative overflow-hidden">
-          <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center relative z-10">
+        <section className="py-16 relative overflow-hidden z-10">
+          <div className="saas-card mx-auto max-w-4xl px-8 py-12 lg:px-12 text-center">
             <h2 className="text-4xl font-black text-slate-900 mb-4">Ready to accelerate your placement journey?</h2>
             <p className="text-lg text-slate-600 mb-8">
               Join thousands of students who have already transformed their careers with AI-powered guidance
