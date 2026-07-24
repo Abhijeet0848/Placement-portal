@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import logger from '../utils/logger';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -8,11 +8,11 @@ console.log(
   GEMINI_API_KEY?.substring(0, 8)
 );
 
-let genAI: GoogleGenerativeAI | null = null;
+let genAI: any = null;
 
 if (GEMINI_API_KEY) {
   try {
-    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
     logger.info('Initialized Google Gemini AI Service successfully.');
   } catch (error: any) {
     logger.error(`Error initializing Gemini AI: ${error?.message || error}`);
@@ -25,7 +25,6 @@ if (GEMINI_API_KEY) {
 export async function analyzeResume(resumeText: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `
         You are an expert ATS (Applicant Tracking System) Resume Screener. 
         Analyze the following resume text comprehensively and return a JSON object with accurate scoring:
@@ -46,8 +45,8 @@ export async function analyzeResume(resumeText: string) {
         Output strictly valid JSON only:
       `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const text = response.text.trim();
 
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       const parsedAi = JSON.parse(cleanJson);
@@ -161,7 +160,6 @@ export async function analyzeResume(resumeText: string) {
 export async function matchResumeToJob(resumeText: string, jobDetails: { title: string; description: string; skills: string[] }) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `
         Compare this resume text with the job requirements:
         Job Title: ${jobDetails.title}
@@ -183,8 +181,8 @@ export async function matchResumeToJob(resumeText: string, jobDetails: { title: 
         Output strictly valid JSON:
       `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
     } catch (error: any) {
@@ -222,7 +220,6 @@ export async function matchResumeToJob(resumeText: string, jobDetails: { title: 
 export async function getCareerSuggestions(skills: string[], cgpa: number, interests: string[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `
         Based on these parameters:
         Skills: ${skills.join(', ')}
@@ -237,8 +234,8 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
         Output strictly valid JSON:
       `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
     } catch (error: any) {
@@ -257,15 +254,14 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
 export async function generateCoverLetter(studentName: string, skills: string[], jobTitle: string, company: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `
         Write a professional, impressive cover letter for ${studentName} applying for the ${jobTitle} role at ${company}.
         Candidate Skills: ${skills.join(', ')}.
         Keep it concise, under 300 words. Format it in plain text.
       `;
 
-      const result = await model.generateContent(prompt);
-      return result.response.text().trim();
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      return response.text.trim();
     } catch (error: any) {
       logger.error(`Gemini generateCoverLetter failed: ${error?.message || error}`);
     }
@@ -291,7 +287,6 @@ ${studentName}`;
 export async function evaluateInterviewAnswer(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Interviewer' : 'Candidate'}: ${h.text}`).join('\n');
       const prompt = `
         You are an expert technical interviewer conducting a mock interview.
@@ -304,8 +299,8 @@ export async function evaluateInterviewAnswer(history: { sender: string, text: s
         Do NOT output JSON. Just reply naturally with your text as the interviewer.
       `;
 
-      const result = await model.generateContent(prompt);
-      return { text: result.response.text().trim() };
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      return { text: response.text.trim() };
     } catch (error: any) {
       logger.error(`Gemini evaluateInterviewAnswer failed: ${error?.message || error}`);
     }
@@ -323,7 +318,6 @@ export async function evaluateInterviewAnswer(history: { sender: string, text: s
 export async function generateInterviewReport(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Interviewer' : 'Candidate'}: ${h.text}`).join('\n');
       const prompt = `
         You are an expert technical interviewer evaluating a completed mock interview.
@@ -339,8 +333,8 @@ export async function generateInterviewReport(history: { sender: string, text: s
         Output strictly valid JSON:
       `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
     } catch (error: any) {
@@ -361,7 +355,6 @@ export async function generateInterviewReport(history: { sender: string, text: s
 export async function generateGeneralChatResponse(history: { sender: string, text: string }[]) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Assistant' : 'Student'}: ${h.text}`).join('\n');
       const prompt = `
         You are a helpful, encouraging, and intelligent AI Assistant embedded within the Smart Placement Portal for students.
@@ -373,8 +366,8 @@ export async function generateGeneralChatResponse(history: { sender: string, tex
         Provide your next response as the Assistant. Be conversational, concise, and helpful. Do NOT output JSON.
       `;
 
-      const result = await model.generateContent(prompt);
-      return { text: result.response.text().trim() };
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      return { text: response.text.trim() };
     } catch (error: any) {
       logger.error(`Gemini generateGeneralChatResponse failed: ${error?.message || error}`);
     }
@@ -390,7 +383,6 @@ export async function generateGeneralChatResponse(history: { sender: string, tex
 export async function generateExamQuestions(topic: string, difficulty: string, count: number) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `
         You are an expert technical assessment creator.
         Generate exactly ${count} multiple choice questions (MCQs) about the topic "${topic}" at a "${difficulty}" difficulty level.
@@ -412,8 +404,8 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
         Respond only with the JSON array. Do not include markdown blocks or any other text.
       `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
     } catch (error: any) {
@@ -438,7 +430,6 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
 export async function parseExamQuestionsFromText(pdfText: string) {
   if (genAI) {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `
         You are an expert technical assessment creator.
         Extract Multiple Choice Questions (MCQs) from the following text (which is a parsed PDF exam).
@@ -470,8 +461,8 @@ export async function parseExamQuestionsFromText(pdfText: string) {
         Output strictly valid JSON array only:
       `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
+      const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
     } catch (error: any) {
