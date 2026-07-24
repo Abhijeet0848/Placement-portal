@@ -494,18 +494,7 @@ export const Profile: React.FC = () => {
 
             </div>
 
-            <button
-              type="submit"
-              disabled={isSaving}
-              className={`mt-6 w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              {isSaving ? 'Saving...' : 'Save Academic Profile'}
-            </button>
-            {saveMessage.text && (
-              <div className={`mt-4 p-3 rounded-xl text-sm font-bold text-center shadow-md ${saveMessage.type === 'success' ? 'bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 text-emerald-700' : 'bg-gradient-to-r from-rose-50 to-red-50 border-2 border-rose-300 text-rose-700'}`}>
-                {saveMessage.text}
-              </div>
-            )}
+
           </div>
         </div>
 
