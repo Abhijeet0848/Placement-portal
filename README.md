@@ -51,7 +51,7 @@ A state-of-the-art, production-ready campus recruitment platform built with **Re
 
 - **Frontend**: React 19, TypeScript, Tailwind CSS, Recharts, Lucide Icons, Socket.io-Client, Canvas-Confetti
 - **Backend**: Node.js, Express.js, TypeScript, Socket.io, Mongoose (MongoDB Atlas), Nodemailer, Multer, PDF Parse
-- **AI Service**: Google Gemini Generative AI SDK (`@google/generative-ai`)
+- **AI Service**: Google Gemini Generative AI SDK (`@google/genai`)
 - **Security**: JWT Access + Refresh Tokens, Bcrypt password hashing, Helmet.js headers, Express Rate Limiter, Zod validation
 - **Deployment & DevOps**: Docker, Docker Compose, Vercel SPA routing (`vercel.json`), Render/Railway server build scripts
 

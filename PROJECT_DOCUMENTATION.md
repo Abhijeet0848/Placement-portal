@@ -35,7 +35,7 @@ The system is built on a robust Client-Server architecture utilizing the MERN st
 - **Environment**: Node.js runtime.
 - **Framework**: Express.js RESTful API architecture.
 - **Real-Time Engine**: Socket.io for WebSocket connections.
-- **AI Integration**: `@google/generative-ai` SDK for interacting with Gemini.
+- **AI Integration**: `@google/genai` SDK for interacting with Gemini.
 - **File Handling**: Multer for memory-storage uploads (resumes, avatars).
 
 ### 3.3 Database Layer (Data Tier)
