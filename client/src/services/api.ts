@@ -1,5 +1,4 @@
-const host = window.location.hostname;
-const BASE_URL = (import.meta.env.VITE_API_URL as string) || `http://${host}:5000/api`;
+const BASE_URL = (import.meta.env.VITE_API_URL as string) || '/api';
 
 class ApiService {
   private getTokens() {
