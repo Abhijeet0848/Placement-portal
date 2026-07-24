@@ -150,7 +150,7 @@ export const Login: React.FC = () => {
       </div>
 
       {/* Main card container */}
-      <div className="w-full max-w-[420px] z-10 bg-white/90 backdrop-blur-xl border border-white/50 rounded-[32px] p-8 shadow-2xl shadow-sky-200/50 flex flex-col relative">
+      <div className="w-full max-w-[420px] z-10 bg-white/90 backdrop-blur-xl border border-white/50 rounded-3xl sm:rounded-[32px] p-5 sm:p-8 shadow-2xl shadow-sky-200/50 flex flex-col relative overflow-hidden">
         <div className="text-center mt-8 mb-6">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">
             {isRegister ? 'Create an account' : 'Sign in with email'}
@@ -280,8 +280,8 @@ export const Login: React.FC = () => {
           <div className="flex-grow border-t border-slate-100 border-dashed"></div>
         </div>
 
-        <div className="flex flex-col gap-3 max-w-[400px] mx-auto w-full">
-          <div className="flex justify-center w-full">
+        <div className="flex flex-col gap-3 w-full">
+          <div className="flex justify-center w-full overflow-hidden rounded-xl">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => setError('Google authentication failed.')}
@@ -289,7 +289,6 @@ export const Login: React.FC = () => {
               size="large"
               text={isRegister ? "signup_with" : "signin_with"}
               shape="rectangular"
-              width="400"
             />
           </div>
         </div>
