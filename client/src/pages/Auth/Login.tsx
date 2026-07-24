@@ -140,32 +140,23 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f8fafc] px-4 relative overflow-hidden py-10">
-      {/* Background gradients */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.08),_transparent_40%),radial-gradient(circle_at_bottom_right,_rgba(56,189,248,0.08),_transparent_40%),linear-gradient(135deg,_#f8fafc_0%,_#f1f5f9_50%,_#e2e8f0_100%)]" />
-      <div className="absolute inset-0 opacity-80">
-        <div className="absolute left-[-10%] top-[-10%] h-[500px] w-[500px] rounded-full bg-indigo-200/30 blur-3xl" />
-        <div className="absolute right-[-10%] top-[10%] h-[500px] w-[500px] rounded-full bg-sky-200/25 blur-3xl" />
-        <div className="absolute bottom-[-10%] left-[20%] h-[600px] w-[600px] rounded-full bg-fuchsia-200/20 blur-3xl" />
-      </div>
-      <div className="absolute inset-0 backdrop-blur-[2px]" />
-
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 px-4 relative py-10">
+      
       {/* Main card container */}
-      <div className="w-full max-w-5xl z-10 grid md:grid-cols-[1fr_0.9fr] gap-6 bg-white/70 border border-slate-200/80 rounded-3xl p-4 md:p-6 shadow-[0_30px_100px_-24px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+      <div className="w-full max-w-5xl z-10 grid md:grid-cols-[1fr_0.9fr] gap-6 bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm">
         
         {/* Left Column: Interactive Brand & Info Banner */}
-        <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 text-white rounded-2xl p-8 relative overflow-hidden shadow-inner">
-          <div className="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl" />
-          <div className="absolute -left-16 -bottom-16 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="hidden md:flex flex-col justify-between bg-slate-900 text-white rounded-xl p-8 relative overflow-hidden">
+
 
           {/* Banner Header */}
           <div className="space-y-4 z-10">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 border border-white/20 backdrop-blur">
-              <ShieldCheck className="h-5 w-5 text-indigo-300" />
+            <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+              <ShieldCheck className="h-5 w-5 text-emerald-400" />
             </div>
             <div>
-              <h3 className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-100 to-indigo-200 bg-clip-text text-transparent">Smart Placement Portal</h3>
-              <p className="text-xs text-indigo-300 tracking-wider font-semibold uppercase mt-1">Jawaharlal University</p>
+              <h3 className="text-2xl font-extrabold tracking-tight text-white">Smart Placement Portal</h3>
+              <p className="text-xs text-emerald-400 tracking-wider font-semibold uppercase mt-1">Jawaharlal University</p>
             </div>
             <p className="text-sm text-slate-300 max-w-sm leading-relaxed">
               Step into the future of campus hiring. Powered by AI resume review, analytics, skill tracking, and mock interviews to guide you to your dream offer.
@@ -180,7 +171,7 @@ export const Login: React.FC = () => {
               { value: '92%', label: 'Placement Rate' },
               { value: '4200+', label: 'Job Offers' },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md  hover:bg-white/10">
+              <div key={stat.label} className="rounded-lg border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition-colors">
                 <div className="text-xl font-black text-white tracking-tight">{stat.value}</div>
                 <div className="text-xs font-medium text-slate-400 mt-1">{stat.label}</div>
               </div>
@@ -190,7 +181,7 @@ export const Login: React.FC = () => {
           {/* Banner Footer */}
           <div className="z-10 text-xs text-slate-400 border-t border-white/10 pt-4 flex items-center justify-between">
             <span>© 2026 Smart Placement Portal</span>
-            <span className="font-semibold text-indigo-400">AI-Powered Career Cell</span>
+            <span className="font-semibold text-emerald-400">AI-Powered Career Cell</span>
           </div>
         </div>
 
@@ -225,13 +216,13 @@ export const Login: React.FC = () => {
                     key={option.key}
                     type="button"
                     onClick={() => handleAutofill(option.key as 'Student' | 'Recruiter' | 'PlacementOfficer' | 'Admin')}
-                    className={`relative py-2 px-3 rounded-xl text-xs font-bold  text-center border ${
+                    className={`relative py-2 px-3 rounded-lg text-xs font-bold text-center border transition-all ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm'
-                        : 'border-slate-200 bg-white text-slate-600'
+                        ? 'border-emerald-600 bg-emerald-50 text-emerald-700 shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                     }`}
                   >
-                    {isSelected && <span className="mr-1 text-indigo-600">✓</span>}
+                    {isSelected && <span className="mr-1 text-emerald-600">✓</span>}
                     {option.label}
                   </button>
                 );
@@ -256,7 +247,7 @@ export const Login: React.FC = () => {
                     placeholder="Enter full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10  placeholder:text-slate-400"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                   />
                   <UserCheck className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                 </div>
@@ -272,7 +263,7 @@ export const Login: React.FC = () => {
                   placeholder="email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10  placeholder:text-slate-400"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                 />
                 <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
               </div>
@@ -291,7 +282,7 @@ export const Login: React.FC = () => {
                       setForgotMessage('');
                       setShowForgotModal(true);
                     }}
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 "
+                    className="text-xs font-semibold text-emerald-600 hover:text-emerald-700"
                   >
                     Forgot?
                   </button>
@@ -304,7 +295,7 @@ export const Login: React.FC = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10  placeholder:text-slate-400"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-400"
                 />
                 <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                 <button
@@ -323,7 +314,7 @@ export const Login: React.FC = () => {
                 <select
                   value={role}
                   onChange={(e: any) => setRole(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
+                  className="w-full px-4 py-2.5 rounded-lg text-sm font-medium bg-white border border-slate-200 text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
                 >
                   <option value="Student">Student</option>
                   <option value="Recruiter">Recruiter</option>
@@ -336,7 +327,7 @@ export const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl text-sm font-extrabold text-white bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:opacity-95 active:scale-[0.98]  shadow-md shadow-indigo-600/10 disabled:opacity-50 mt-2"
+              className="saas-button-primary w-full py-2.5 mt-2"
             >
               {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Sign In'}
             </button>
@@ -371,7 +362,7 @@ export const Login: React.FC = () => {
                 setIsRegister(!isRegister);
                 setError('');
               }}
-              className="text-xs text-indigo-600 font-bold "
+              className="text-xs text-emerald-600 font-bold hover:text-emerald-700"
             >
               {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
             </button>
@@ -392,7 +383,7 @@ export const Login: React.FC = () => {
             </button>
 
             <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-              <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl">
+              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl">
                 <KeyRound className="h-6 w-6" />
               </div>
               <div>
@@ -427,7 +418,7 @@ export const Login: React.FC = () => {
                       placeholder="student@example.com"
                       value={forgotEmail}
                       onChange={(e) => setForgotEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
                     />
                     <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                   </div>
@@ -444,7 +435,7 @@ export const Login: React.FC = () => {
                   <button
                     type="submit"
                     disabled={forgotLoading}
-                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-indigo-600 hover:bg-indigo-700  shadow-md shadow-indigo-600/20 disabled:opacity-50"
+                    className="saas-button-primary px-5 py-2.5"
                   >
                     {forgotLoading ? 'Sending...' : 'Get Reset Code'}
                   </button>
@@ -459,7 +450,7 @@ export const Login: React.FC = () => {
                       type="button" 
                       onClick={handleRequestResetCode}
                       disabled={forgotLoading}
-                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-700  disabled:opacity-50"
+                      className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 disabled:opacity-50"
                     >
                       {forgotLoading ? 'Sending...' : 'Resend Code'}
                     </button>
@@ -470,7 +461,7 @@ export const Login: React.FC = () => {
                     placeholder="e.g. 123456"
                     value={resetCodeInput}
                     onChange={(e) => setResetCodeInput(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl text-sm font-bold tracking-widest text-center border border-slate-200 bg-slate-50 text-indigo-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
+                    className="w-full px-4 py-2.5 rounded-lg text-sm font-bold tracking-widest text-center border border-slate-200 bg-slate-50 text-emerald-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
                   />
                 </div>
 
@@ -483,7 +474,7 @@ export const Login: React.FC = () => {
                       placeholder="Minimum 6 characters"
                       value={newPasswordInput}
                       onChange={(e) => setNewPasswordInput(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
+                      className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
                     />
                     <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                     <button
@@ -505,7 +496,7 @@ export const Login: React.FC = () => {
                       placeholder="Repeat new password"
                       value={confirmPasswordInput}
                       onChange={(e) => setConfirmPasswordInput(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
+                      className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
                     />
                     <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                     <button
@@ -522,14 +513,14 @@ export const Login: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setForgotStep(1)}
-                    className="text-xs font-bold text-indigo-600 hover:underline"
+                    className="text-xs font-bold text-emerald-600 hover:underline"
                   >
                     ← Change Email
                   </button>
                   <button
                     type="submit"
                     disabled={forgotLoading}
-                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95  shadow-md shadow-indigo-600/20 disabled:opacity-50"
+                    className="saas-button-primary px-5 py-2.5"
                   >
                     {forgotLoading ? 'Updating...' : 'Set New Password'}
                   </button>
