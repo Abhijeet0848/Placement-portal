@@ -53,7 +53,7 @@ export const SendNotices: React.FC = () => {
         <input 
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 transition-all" 
+          className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 " 
           placeholder="Enter notice title" 
         />
 
@@ -62,7 +62,7 @@ export const SendNotices: React.FC = () => {
           rows={5} 
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 transition-all" 
+          className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 " 
           placeholder="Enter your message here..." 
         />
 
@@ -72,7 +72,7 @@ export const SendNotices: React.FC = () => {
           className="mt-5 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
-            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full "></div>
           ) : (
             <Send className="h-4 w-4" />
           )}

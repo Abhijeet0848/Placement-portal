@@ -269,7 +269,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         fixed lg:static inset-y-0 left-0 z-50 print:hidden
         w-64 bg-white border-r border-slate-200 
         flex flex-col p-4 shadow-lg
-        transform transition-transform duration-300 ease-in-out
+        transform   ease-in-out
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Logo Header */}
@@ -286,7 +286,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
           {/* Close button for mobile */}
           <button 
             onClick={() => setIsMobileMenuOpen(false)}
-            className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 transition-all"
+            className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 "
           >
             <X className="h-5 w-5 text-slate-600" />
           </button>
@@ -316,7 +316,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
                     <Link
                       key={item.name}
                       to={item.path}
-                      className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                      className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium  ${
                         isActive 
                           ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/10' 
                           : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
@@ -345,7 +345,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
           </div>
           <button 
             onClick={logout}
-            className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 transition-all border border-transparent hover:border-rose-200"
+            className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50  border border-transparent hover:border-rose-200"
           >
             <LogOut className="h-4.5 w-4.5" />
             <span>Sign Out</span>
@@ -361,7 +361,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
             {/* Mobile menu button */}
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 transition-all"
+              className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 "
             >
               <Menu className="h-5 w-5 text-slate-600" />
             </button>
@@ -375,16 +375,16 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-all relative border border-transparent hover:border-slate-200"
+                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100  relative border border-transparent hover:border-slate-200"
               >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white animate-pulse"></span>
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white "></span>
                 )}
               </button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-3 w-72 lg:w-80 bg-white border border-slate-200 rounded-xl shadow-2xl p-4 space-y-3 z-50 animate-float">
+                <div className="absolute right-0 mt-3 w-72 lg:w-80 bg-white border border-slate-200 rounded-xl shadow-2xl p-4 space-y-3 z-50 ">
                   <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                     <h3 className="font-bold text-sm text-slate-900">Notifications ({unreadCount})</h3>
                     <button onClick={markAllRead} className="text-xs text-indigo-600 hover:text-indigo-700">
@@ -396,7 +396,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
                       <p className="text-xs text-slate-500 py-4 text-center">No notifications yet.</p>
                     ) : (
                       notifications.map(n => (
-                        <div key={n.id} className={`p-2.5 rounded-lg text-xs transition-all ${n.read ? 'bg-slate-50' : 'bg-indigo-50 border-l-2 border-indigo-500'}`}>
+                        <div key={n.id} className={`p-2.5 rounded-lg text-xs  ${n.read ? 'bg-slate-50' : 'bg-indigo-50 border-l-2 border-indigo-500'}`}>
                           <h4 className="font-semibold text-slate-800">{n.title}</h4>
                           <p className="text-slate-500 mt-1 leading-normal">{n.message}</p>
                         </div>
@@ -417,7 +417,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
         {/* Content Area */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative bg-[#f5f7ff]">
-          <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8 animate-pulse-subtle">
+          <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8 ">
             {children}
           </div>
         </main>

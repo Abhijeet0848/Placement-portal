@@ -180,7 +180,7 @@ export const Login: React.FC = () => {
               { value: '92%', label: 'Placement Rate' },
               { value: '4200+', label: 'Job Offers' },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md transition-all hover:bg-white/10">
+              <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md  hover:bg-white/10">
                 <div className="text-xl font-black text-white tracking-tight">{stat.value}</div>
                 <div className="text-xs font-medium text-slate-400 mt-1">{stat.label}</div>
               </div>
@@ -225,7 +225,7 @@ export const Login: React.FC = () => {
                     key={option.key}
                     type="button"
                     onClick={() => handleAutofill(option.key as 'Student' | 'Recruiter' | 'PlacementOfficer' | 'Admin')}
-                    className={`relative py-2 px-3 rounded-xl text-xs font-bold transition-all text-center border ${
+                    className={`relative py-2 px-3 rounded-xl text-xs font-bold  text-center border ${
                       isSelected
                         ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm'
                         : 'border-slate-200 bg-white text-slate-600'
@@ -240,7 +240,7 @@ export const Login: React.FC = () => {
           </div>
 
           {error && (
-            <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-600 font-semibold text-center animate-pulse-subtle">
+            <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-600 font-semibold text-center ">
               {error}
             </div>
           )}
@@ -256,7 +256,7 @@ export const Login: React.FC = () => {
                     placeholder="Enter full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10  placeholder:text-slate-400"
                   />
                   <UserCheck className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                 </div>
@@ -272,7 +272,7 @@ export const Login: React.FC = () => {
                   placeholder="email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10  placeholder:text-slate-400"
                 />
                 <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
               </div>
@@ -291,7 +291,7 @@ export const Login: React.FC = () => {
                       setForgotMessage('');
                       setShowForgotModal(true);
                     }}
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-all"
+                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 "
                   >
                     Forgot?
                   </button>
@@ -304,13 +304,13 @@ export const Login: React.FC = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10  placeholder:text-slate-400"
                 />
                 <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                  className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none "
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -323,7 +323,7 @@ export const Login: React.FC = () => {
                 <select
                   value={role}
                   onChange={(e: any) => setRole(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-medium bg-white border border-slate-200 text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
                 >
                   <option value="Student">Student</option>
                   <option value="Recruiter">Recruiter</option>
@@ -336,7 +336,7 @@ export const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl text-sm font-extrabold text-white bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:opacity-95 active:scale-[0.98] transition-all shadow-md shadow-indigo-600/10 disabled:opacity-50 mt-2"
+              className="w-full py-3 rounded-xl text-sm font-extrabold text-white bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:opacity-95 active:scale-[0.98]  shadow-md shadow-indigo-600/10 disabled:opacity-50 mt-2"
             >
               {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Sign In'}
             </button>
@@ -371,7 +371,7 @@ export const Login: React.FC = () => {
                 setIsRegister(!isRegister);
                 setError('');
               }}
-              className="text-xs text-indigo-600 font-bold transition-all"
+              className="text-xs text-indigo-600 font-bold "
             >
               {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
             </button>
@@ -383,10 +383,10 @@ export const Login: React.FC = () => {
       {/* Forgot / Reset Password Modal */}
       {showForgotModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-5 relative animate-in fade-in zoom-in duration-200">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 space-y-5 relative  fade-in zoom-in ">
             <button
               onClick={() => setShowForgotModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-100 transition-all"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-100 "
             >
               <X className="h-5 w-5" />
             </button>
@@ -427,7 +427,7 @@ export const Login: React.FC = () => {
                       placeholder="student@example.com"
                       value={forgotEmail}
                       onChange={(e) => setForgotEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
                     />
                     <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                   </div>
@@ -437,14 +437,14 @@ export const Login: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowForgotModal(false)}
-                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all"
+                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 "
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={forgotLoading}
-                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-md shadow-indigo-600/20 disabled:opacity-50"
+                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-indigo-600 hover:bg-indigo-700  shadow-md shadow-indigo-600/20 disabled:opacity-50"
                   >
                     {forgotLoading ? 'Sending...' : 'Get Reset Code'}
                   </button>
@@ -459,7 +459,7 @@ export const Login: React.FC = () => {
                       type="button" 
                       onClick={handleRequestResetCode}
                       disabled={forgotLoading}
-                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-all disabled:opacity-50"
+                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-700  disabled:opacity-50"
                     >
                       {forgotLoading ? 'Sending...' : 'Resend Code'}
                     </button>
@@ -470,7 +470,7 @@ export const Login: React.FC = () => {
                     placeholder="e.g. 123456"
                     value={resetCodeInput}
                     onChange={(e) => setResetCodeInput(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl text-sm font-bold tracking-widest text-center border border-slate-200 bg-slate-50 text-indigo-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                    className="w-full px-4 py-2.5 rounded-xl text-sm font-bold tracking-widest text-center border border-slate-200 bg-slate-50 text-indigo-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
                   />
                 </div>
 
@@ -483,13 +483,13 @@ export const Login: React.FC = () => {
                       placeholder="Minimum 6 characters"
                       value={newPasswordInput}
                       onChange={(e) => setNewPasswordInput(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
                     />
                     <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                     <button
                       type="button"
                       onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                      className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none "
                     >
                       {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -505,13 +505,13 @@ export const Login: React.FC = () => {
                       placeholder="Repeat new password"
                       value={confirmPasswordInput}
                       onChange={(e) => setConfirmPasswordInput(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm font-medium border border-slate-200 bg-white text-slate-800 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 "
                     />
                     <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                      className="absolute right-3 top-3 p-0.5 rounded-md text-slate-400 hover:text-slate-600 focus:outline-none "
                     >
                       {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -529,7 +529,7 @@ export const Login: React.FC = () => {
                   <button
                     type="submit"
                     disabled={forgotLoading}
-                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 transition-all shadow-md shadow-indigo-600/20 disabled:opacity-50"
+                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95  shadow-md shadow-indigo-600/20 disabled:opacity-50"
                   >
                     {forgotLoading ? 'Updating...' : 'Set New Password'}
                   </button>

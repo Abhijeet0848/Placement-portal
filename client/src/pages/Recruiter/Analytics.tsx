@@ -64,7 +64,7 @@ export const Analytics: React.FC = () => {
         {stats.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl hover:shadow-xl transition-all">
+            <div key={item.label} className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl hover:shadow-xl ">
               <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">

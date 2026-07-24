@@ -61,7 +61,7 @@ export const ResumeAnalyzer: React.FC = () => {
             </div>
           </div>
 
-          <label className="group inline-flex cursor-pointer items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl">
+          <label className="group inline-flex cursor-pointer items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-sm font-bold text-white shadow-lg   hover:shadow-xl">
             <Sparkles className="h-5 w-5" />
             {loading ? 'Analyzing...' : 'Upload Resume'}
             <input type="file" accept=".pdf" className="hidden" onChange={handleUpload} />

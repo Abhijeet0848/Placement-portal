@@ -220,8 +220,8 @@ export const ExamCreator: React.FC = () => {
           <div className="flex justify-between items-center border-b pb-2">
             <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle2 className="h-5 w-5 text-emerald-500"/> 3. Multiple Choice Questions</h3>
             <div className="flex items-center gap-2">
-              <label className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold hover:bg-emerald-100 cursor-pointer transition-colors relative">
-                {parsingPdf ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+              <label className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold hover:bg-emerald-100 cursor-pointer  relative">
+                {parsingPdf ? <Loader2 className="h-4 w-4 " /> : <Upload className="h-4 w-4" />}
                 {parsingPdf ? 'Parsing...' : 'Upload PDF'}
                 <input type="file" accept=".pdf" className="hidden" onChange={handlePDFUpload} disabled={parsingPdf} />
               </label>
@@ -300,7 +300,7 @@ export const ExamCreator: React.FC = () => {
           </div>
         </div>
 
-        <button type="submit" disabled={submitting} className="w-full px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-indigo-500/30">
+        <button type="submit" disabled={submitting} className="w-full px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 flex items-center justify-center gap-2  shadow-lg hover:shadow-indigo-500/30">
           <Save className="h-5 w-5" />
           {submitting ? 'Creating Assessment...' : 'Publish Assessment'}
         </button>

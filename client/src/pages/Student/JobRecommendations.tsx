@@ -61,7 +61,7 @@ export const JobRecommendations: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="h-10 w-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="h-10 w-10 border-4 border-indigo-600 border-t-transparent rounded-full  mx-auto"></div>
           <p className="text-sm text-slate-400 mt-3">Analyzing your profile...</p>
         </div>
       ) : jobs.length === 0 ? (
@@ -72,7 +72,7 @@ export const JobRecommendations: React.FC = () => {
       ) : (
         <div className="grid gap-4">
           {jobs.map((job) => (
-            <div key={job._id} className="glass-panel rounded-2xl border border-slate-800 p-5 hover:border-indigo-500/30 transition-all">
+            <div key={job._id} className="glass-panel rounded-2xl border border-slate-800 p-5 hover:border-indigo-500/30 ">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 <div className="flex-1 space-y-3">
                   <div>
@@ -122,4 +122,4 @@ export const JobRecommendations: React.FC = () => {
       )}
     </div>
   );
-};
+};

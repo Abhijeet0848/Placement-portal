@@ -35,7 +35,7 @@ export const AnalyticsPanel: React.FC = () => {
 
       {loading ? (
         <div className="flex justify-center py-10 text-indigo-600">
-          <Loader2 className="h-8 w-8 animate-spin" />
+          <Loader2 className="h-8 w-8 " />
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-3">

@@ -79,7 +79,7 @@ export const Verify: React.FC = () => {
   return (
     <div className="space-y-6">
       {message && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-700 font-semibold text-center animate-pulse">
+        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-700 font-semibold text-center ">
           {message}
         </div>
       )}
@@ -102,7 +102,7 @@ export const Verify: React.FC = () => {
 
       {loading ? (
         <div className="text-center py-20">
-          <div className="h-10 w-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="h-10 w-10 border-4 border-indigo-600 border-t-transparent rounded-full  mx-auto"></div>
         </div>
       ) : students.length === 0 ? (
         <p className="text-xs text-slate-500 text-center py-8">No students registered on the platform.</p>
@@ -122,7 +122,7 @@ export const Verify: React.FC = () => {
               {students.map((stud) => {
                 const certs = stud.profile?.certificates || [];
                 return (
-                  <tr key={stud.id} className="border-b border-slate-100 hover:bg-slate-50 transition-all">
+                  <tr key={stud.id} className="border-b border-slate-100 hover:bg-slate-50 ">
                     <td className="p-4 font-bold text-slate-900">{stud.name}</td>
                     <td className="p-4">{stud.profile?.branch || 'Not specified'}</td>
                     <td className="p-4 font-bold text-slate-700">{stud.profile?.cgpa || 'N/A'}</td>
@@ -153,7 +153,7 @@ export const Verify: React.FC = () => {
                         <div key={cIdx} className="flex flex-wrap items-center gap-2 mb-1">
                           <button
                             onClick={() => handleVerifyCertificate(stud.id, cIdx, !c.verified)}
-                            className={`px-3 py-1 rounded-lg text-[9px] font-bold border transition-all ${
+                            className={`px-3 py-1 rounded-lg text-[9px] font-bold border  ${
                               c.verified 
                                 ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100' 
                                 : 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700'
@@ -167,7 +167,7 @@ export const Verify: React.FC = () => {
                               setPreviewUrl(c.url);
                               setPreviewName(c.name);
                             }}
-                            className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
+                            className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 "
                             title="Preview Certificate"
                           >
                             <Eye className="h-3.5 w-3.5" />
@@ -175,7 +175,7 @@ export const Verify: React.FC = () => {
                           
                           <a
                             href={`mailto:${stud.email}?subject=Query regarding your certificate: ${c.name}`}
-                            className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
+                            className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 "
                             title="Send Query"
                           >
                             <Mail className="h-3.5 w-3.5" />
@@ -183,7 +183,7 @@ export const Verify: React.FC = () => {
 
                           <button
                             onClick={() => handleDeleteCertificate(stud.id, cIdx)}
-                            className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
+                            className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-rose-600 hover:bg-rose-50 "
                             title="Delete Certificate"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -205,7 +205,7 @@ export const Verify: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
             <div className="p-4 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-bold text-slate-900">{previewName || 'Certificate Preview'}</h3>
-              <button onClick={() => setPreviewUrl(null)} className="p-1 rounded-lg hover:bg-slate-100 transition-all">
+              <button onClick={() => setPreviewUrl(null)} className="p-1 rounded-lg hover:bg-slate-100 ">
                 <X className="h-5 w-5 text-slate-500" />
               </button>
             </div>
@@ -224,7 +224,7 @@ export const Verify: React.FC = () => {
                     <div className="text-center p-8">
                       <Award className="h-16 w-16 text-indigo-200 mx-auto mb-4" />
                       <p className="text-slate-600 mb-6">This certificate is an external link (e.g. Coursera, Udemy) and cannot be previewed directly in the window.</p>
-                      <a href={previewUrl} target="_blank" rel="noreferrer" className="inline-block px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                      <a href={previewUrl} target="_blank" rel="noreferrer" className="inline-block px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 ">
                         Open Certificate in New Tab
                       </a>
                     </div>

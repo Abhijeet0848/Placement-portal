@@ -49,7 +49,7 @@ export const SendEmails: React.FC = () => {
           <div>
             <label className="text-sm font-semibold text-slate-700">To</label>
             <input 
-              className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" 
+              className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 " 
               value={to} 
               onChange={(e) => setTo(e.target.value)}
               placeholder="student@university.edu"
@@ -58,7 +58,7 @@ export const SendEmails: React.FC = () => {
           <div>
             <label className="text-sm font-semibold text-slate-700">Subject</label>
             <input 
-              className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" 
+              className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 " 
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="e.g. Interview Invitation"
@@ -70,7 +70,7 @@ export const SendEmails: React.FC = () => {
           <label className="text-sm font-semibold text-slate-700">Message</label>
           <textarea 
             rows={6} 
-            className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" 
+            className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 " 
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message here..."

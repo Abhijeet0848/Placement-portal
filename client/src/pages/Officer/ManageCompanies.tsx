@@ -37,7 +37,7 @@ export const ManageCompanies: React.FC = () => {
       </div>
 
       {isAdding && (
-        <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm flex flex-col sm:flex-row items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-300">
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm flex flex-col sm:flex-row items-center gap-4  fade-in slide-in-from-top-4 ">
           <input 
             type="text" 
             placeholder="Enter company name..."
@@ -84,7 +84,7 @@ export const ManageCompanies: React.FC = () => {
               </div>
               <button 
                 onClick={() => handleRemoveCompany(company)}
-                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg  opacity-0 group-hover:opacity-100 focus:opacity-100"
                 title="Remove company"
               >
                 <Trash2 className="h-5 w-5" />

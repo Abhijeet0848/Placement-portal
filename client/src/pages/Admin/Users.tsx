@@ -268,7 +268,7 @@ export const Users: React.FC = () => {
   return (
     <div className="space-y-6">
       {message && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 font-bold text-center animate-pulse flex items-center justify-center gap-2 shadow-sm">
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 font-bold text-center  flex items-center justify-center gap-2 shadow-sm">
           <Check className="h-4 w-4" />
           {message}
         </div>
@@ -287,64 +287,64 @@ export const Users: React.FC = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-indigo-50 transition-colors">
-              <UsersIcon className="h-4 w-4 text-slate-600 group-hover:text-indigo-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-indigo-50 ">
+              <UsersIcon className="h-4 w-4 text-slate-600 group-hover:text-indigo-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Total Users</p>
           </div>
           <p className="text-3xl font-black text-slate-900">{stats.total}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-emerald-50 transition-colors">
-              <UserCheck className="h-4 w-4 text-slate-600 group-hover:text-emerald-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-emerald-50 ">
+              <UserCheck className="h-4 w-4 text-slate-600 group-hover:text-emerald-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Active</p>
           </div>
           <p className="text-3xl font-black text-emerald-600">{stats.active}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-rose-300 hover:shadow-lg hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-rose-300 hover:shadow-lg hover:shadow-rose-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-rose-50 transition-colors">
-              <UserX className="h-4 w-4 text-slate-600 group-hover:text-rose-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-rose-50 ">
+              <UserX className="h-4 w-4 text-slate-600 group-hover:text-rose-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Blocked</p>
           </div>
           <p className="text-3xl font-black text-rose-600">{stats.blocked}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-indigo-50 transition-colors">
-              <UserPlus className="h-4 w-4 text-slate-600 group-hover:text-indigo-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-indigo-50 ">
+              <UserPlus className="h-4 w-4 text-slate-600 group-hover:text-indigo-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Students</p>
           </div>
           <p className="text-3xl font-black text-indigo-600">{stats.students}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-purple-300 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-purple-300 hover:shadow-lg hover:shadow-purple-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-purple-50 transition-colors">
-              <UserPlus className="h-4 w-4 text-slate-600 group-hover:text-purple-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-purple-50 ">
+              <UserPlus className="h-4 w-4 text-slate-600 group-hover:text-purple-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Recruiters</p>
           </div>
           <p className="text-3xl font-black text-purple-600">{stats.recruiters}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-amber-50 transition-colors">
-              <UserPlus className="h-4 w-4 text-slate-600 group-hover:text-amber-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-amber-50 ">
+              <UserPlus className="h-4 w-4 text-slate-600 group-hover:text-amber-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Officers</p>
           </div>
           <p className="text-3xl font-black text-amber-600">{stats.officers}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-rose-300 hover:shadow-lg hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-rose-300 hover:shadow-lg hover:shadow-rose-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-rose-50 transition-colors">
-              <ShieldCheck className="h-4 w-4 text-slate-600 group-hover:text-rose-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-rose-50 ">
+              <ShieldCheck className="h-4 w-4 text-slate-600 group-hover:text-rose-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Admins</p>
           </div>
@@ -363,7 +363,7 @@ export const Users: React.FC = () => {
               placeholder="Search by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+              className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 "
             />
           </div>
 
@@ -373,7 +373,7 @@ export const Users: React.FC = () => {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="pl-10 pr-10 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer min-w-[160px]"
+              className="pl-10 pr-10 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20  appearance-none cursor-pointer min-w-[160px]"
             >
               <option value="All">All Roles</option>
               <option value="Student">Student</option>
@@ -388,7 +388,7 @@ export const Users: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer min-w-[140px]"
+              className="px-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20  appearance-none cursor-pointer min-w-[140px]"
             >
               <option value="All">All Status</option>
               <option value="Active">Active</option>
@@ -399,7 +399,7 @@ export const Users: React.FC = () => {
           {/* Export Button */}
           <button
             onClick={handleExport}
-            className="px-5 py-3 rounded-xl text-sm font-bold bg-indigo-600 border border-indigo-700 text-white hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5"
+            className="px-5 py-3 rounded-xl text-sm font-bold bg-indigo-600 border border-indigo-700 text-white hover:bg-indigo-700  flex items-center gap-2 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5"
           >
             <Download className="h-4 w-4" />
             Export
@@ -415,19 +415,19 @@ export const Users: React.FC = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => handleBulkAction('activate')}
-                className="px-4 py-2 rounded-lg text-xs font-bold bg-emerald-600 border border-emerald-700 text-white hover:bg-emerald-700 transition-all shadow-sm hover:shadow-md"
+                className="px-4 py-2 rounded-lg text-xs font-bold bg-emerald-600 border border-emerald-700 text-white hover:bg-emerald-700  shadow-sm hover:shadow-md"
               >
                 Activate Selected
               </button>
               <button
                 onClick={() => handleBulkAction('block')}
-                className="px-4 py-2 rounded-lg text-xs font-bold bg-rose-600 border border-rose-700 text-white hover:bg-rose-700 transition-all shadow-sm hover:shadow-md"
+                className="px-4 py-2 rounded-lg text-xs font-bold bg-rose-600 border border-rose-700 text-white hover:bg-rose-700  shadow-sm hover:shadow-md"
               >
                 Block Selected
               </button>
               <button
                 onClick={() => handleBulkAction('delete')}
-                className="px-4 py-2 rounded-lg text-xs font-bold bg-red-600 border border-red-700 text-white hover:bg-red-700 transition-all shadow-sm hover:shadow-md"
+                className="px-4 py-2 rounded-lg text-xs font-bold bg-red-600 border border-red-700 text-white hover:bg-red-700  shadow-sm hover:shadow-md"
               >
                 Delete Selected
               </button>
@@ -439,7 +439,7 @@ export const Users: React.FC = () => {
       {/* Users Table */}
       {loading ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
-          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mx-auto mb-4"></div>
           <p className="text-sm text-slate-500 font-medium">Loading users...</p>
         </div>
       ) : (
@@ -466,7 +466,7 @@ export const Users: React.FC = () => {
                           className="rounded border-slate-300 bg-white text-indigo-600 focus:ring-indigo-500 focus:ring-offset-0 w-4 h-4"
                         />
                       </th>
-                      <th className="p-4 cursor-pointer hover:text-slate-900 transition-colors" onClick={() => handleSort('name')}>
+                      <th className="p-4 cursor-pointer hover:text-slate-900 " onClick={() => handleSort('name')}>
                         <div className="flex items-center gap-2 text-slate-700">
                           <span className="text-xs font-bold uppercase tracking-wider">Name</span>
                           {sortField === 'name' && (
@@ -474,7 +474,7 @@ export const Users: React.FC = () => {
                           )}
                         </div>
                       </th>
-                      <th className="p-4 cursor-pointer hover:text-slate-900 transition-colors" onClick={() => handleSort('email')}>
+                      <th className="p-4 cursor-pointer hover:text-slate-900 " onClick={() => handleSort('email')}>
                         <div className="flex items-center gap-2 text-slate-700">
                           <span className="text-xs font-bold uppercase tracking-wider">Email</span>
                           {sortField === 'email' && (
@@ -485,7 +485,7 @@ export const Users: React.FC = () => {
                       <th className="p-4">
                         <span className="text-xs font-bold uppercase tracking-wider text-slate-700">Account Role</span>
                       </th>
-                      <th className="p-4 cursor-pointer hover:text-slate-900 transition-colors" onClick={() => handleSort('status')}>
+                      <th className="p-4 cursor-pointer hover:text-slate-900 " onClick={() => handleSort('status')}>
                         <div className="flex items-center gap-2 text-slate-700">
                           <span className="text-xs font-bold uppercase tracking-wider">Account Status</span>
                           {sortField === 'status' && (
@@ -500,7 +500,7 @@ export const Users: React.FC = () => {
                   </thead>
                   <tbody className="text-slate-700">
                     {paginatedUsers.map((u) => (
-                      <tr key={u.id} className="border-b border-slate-100 hover:bg-slate-50 transition-all">
+                      <tr key={u.id} className="border-b border-slate-100 hover:bg-slate-50 ">
                         <td className="p-4">
                           <input
                             type="checkbox"
@@ -540,21 +540,21 @@ export const Users: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => handleViewUser(u)}
-                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-all"
+                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 "
                               title="View Details"
                             >
                               <Eye className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleSendEmail(u.email)}
-                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-all"
+                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 "
                               title="Send Email"
                             >
                               <Mail className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleToggleBlock(u.id, u.name)}
-                              className={`px-4 py-2 rounded-lg text-[11px] font-bold border transition-all flex items-center gap-1.5 ${
+                              className={`px-4 py-2 rounded-lg text-[11px] font-bold border  flex items-center gap-1.5 ${
                                 u.status === 'Active' 
                                   ? 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100' 
                                   : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100'
@@ -590,7 +590,7 @@ export const Users: React.FC = () => {
                     <button
                       onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed "
                     >
                       Previous
                     </button>
@@ -598,7 +598,7 @@ export const Users: React.FC = () => {
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
-                        className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                        className={`px-4 py-2 rounded-lg text-xs font-bold  ${
                           currentPage === page
                             ? 'bg-indigo-600 border border-indigo-700 text-white shadow-md'
                             : 'bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300'
@@ -610,7 +610,7 @@ export const Users: React.FC = () => {
                     <button
                       onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                       disabled={currentPage === totalPages}
-                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed "
                     >
                       Next
                     </button>
@@ -630,7 +630,7 @@ export const Users: React.FC = () => {
               <h3 className="text-lg font-extrabold text-slate-900">User Details</h3>
               <button
                 onClick={() => setShowUserModal(false)}
-                className="p-1 rounded-lg hover:bg-slate-800 transition-all"
+                className="p-1 rounded-lg hover:bg-slate-800 "
               >
                 <X className="h-5 w-5 text-slate-400" />
               </button>
@@ -683,7 +683,7 @@ export const Users: React.FC = () => {
                     setShowUserModal(false);
                     handleSendEmail(selectedUser.email);
                   }}
-                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-indigo-50 border border-indigo-100 text-indigo-700 hover:bg-indigo-100 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-indigo-50 border border-indigo-100 text-indigo-700 hover:bg-indigo-100  flex items-center justify-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
                   Send Email
@@ -693,7 +693,7 @@ export const Users: React.FC = () => {
                     setShowUserModal(false);
                     handleToggleBlock(selectedUser.id, selectedUser.name);
                   }}
-                  className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-bold border  flex items-center justify-center gap-2 ${
                     selectedUser.status === 'Active'
                       ? 'bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-100'
                       : 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100'
@@ -740,13 +740,13 @@ export const Users: React.FC = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowConfirmDialog(false)}
-                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all"
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 "
               >
                 Cancel
               </button>
               <button
                 onClick={confirmActionHandler}
-                className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all ${
+                className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-bold border  ${
                   confirmAction.type === 'block'
                     ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
                     : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-100'

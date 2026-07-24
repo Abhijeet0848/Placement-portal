@@ -216,16 +216,16 @@ export const CodingLab: React.FC = () => {
       onClick={() => {
         if (status === 'available') handleSelectExam(ex._id);
       }}
-      className={`glass-card group relative overflow-hidden rounded-3xl p-6 flex flex-col h-full transition-all ${
+      className={`glass-card group relative overflow-hidden rounded-3xl p-6 flex flex-col h-full  ${
         status === 'available' ? 'cursor-pointer hover:shadow-lg' : 'opacity-75 cursor-not-allowed grayscale-[0.2]'
       }`}
     >
-      {status === 'available' && <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400/10 to-purple-400/10 rounded-full blur-2xl group-hover:bg-indigo-400/20 transition-all duration-500"></div>}
+      {status === 'available' && <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400/10 to-purple-400/10 rounded-full blur-2xl group-hover:bg-indigo-400/20  "></div>}
       
       <div className="relative z-10 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1">
-            <h4 className={`text-xl font-bold text-slate-900 leading-tight ${status === 'available' ? 'group-hover:text-indigo-600 transition-colors' : ''}`}>{ex.title}</h4>
+            <h4 className={`text-xl font-bold text-slate-900 leading-tight ${status === 'available' ? 'group-hover:text-indigo-600 ' : ''}`}>{ex.title}</h4>
           </div>
         </div>
         
@@ -256,7 +256,7 @@ export const CodingLab: React.FC = () => {
           </div>
           
           {status === 'available' ? (
-            <div className="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm group-hover:shadow-indigo-500/30">
+            <div className="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white  shadow-sm group-hover:shadow-indigo-500/30">
               <Play className="h-4 w-4 ml-0.5" />
             </div>
           ) : (
@@ -274,7 +274,7 @@ export const CodingLab: React.FC = () => {
   return (
     <div className="space-y-8 pb-10">
       {errorMsg && (
-        <div className="p-4 bg-gradient-to-r from-rose-500/10 to-red-500/10 border border-rose-500/20 rounded-2xl text-sm text-rose-700 font-bold flex items-center justify-center gap-2 animate-pulse-subtle">
+        <div className="p-4 bg-gradient-to-r from-rose-500/10 to-red-500/10 border border-rose-500/20 rounded-2xl text-sm text-rose-700 font-bold flex items-center justify-center gap-2 ">
           <XCircle className="h-5 w-5" />
           {errorMsg}
         </div>
@@ -284,21 +284,21 @@ export const CodingLab: React.FC = () => {
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
           <div className="relative h-16 w-16">
             <div className="absolute inset-0 border-4 border-slate-200 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-indigo-600 rounded-full border-t-transparent animate-spin"></div>
+            <div className="absolute inset-0 border-4 border-indigo-600 rounded-full border-t-transparent "></div>
           </div>
-          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest animate-pulse">Initializing Lab Environment...</p>
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest ">Initializing Lab Environment...</p>
         </div>
       ) : !activeExam ? (
         <>
           {/* Premium Hero Header */}
           <div className="glass-card-dark relative overflow-hidden rounded-[2rem] p-10 lg:p-12 border border-slate-700/50">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 animate-pulse-subtle"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 animate-pulse-subtle" style={{ animationDelay: '1s' }}></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 "></div>
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 " style={{ animationDelay: '1s' }}></div>
             
             <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-bold uppercase tracking-wider mb-6">
-                  <div className="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></div>
+                  <div className="w-2 h-2 rounded-full bg-indigo-400 "></div>
                   Skill Assessment Platform
                 </div>
                 <h3 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
@@ -309,7 +309,7 @@ export const CodingLab: React.FC = () => {
                 </p>
               </div>
               
-              <div className="hidden lg:flex h-32 w-32 items-center justify-center rounded-[2rem] bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 backdrop-blur-md shadow-2xl animate-float">
+              <div className="hidden lg:flex h-32 w-32 items-center justify-center rounded-[2rem] bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 backdrop-blur-md shadow-2xl ">
                 <Code2 className="h-14 w-14 text-indigo-300" />
               </div>
             </div>
@@ -326,7 +326,7 @@ export const CodingLab: React.FC = () => {
                     <Target className="h-6 w-6 text-emerald-600" />
                     Company Screening Tests
                   </h4>
-                  <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full animate-pulse-subtle">
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full ">
                     Action Required
                   </span>
                 </div>
@@ -366,7 +366,7 @@ export const CodingLab: React.FC = () => {
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs text-slate-500 font-bold">Progress:</span>
                   <div className="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${progressPercent}%` }}></div>
+                    <div className="h-full bg-indigo-500  " style={{ width: `${progressPercent}%` }}></div>
                   </div>
                   <span className="text-xs font-bold text-slate-700">{progressPercent}%</span>
                 </div>
@@ -381,7 +381,7 @@ export const CodingLab: React.FC = () => {
               )}
               
               <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 font-mono font-bold text-lg ${
-                timeLeft < 300 ? 'bg-rose-50 border-rose-500 text-rose-600 animate-pulse' : 'bg-white border-slate-200 text-slate-800'
+                timeLeft < 300 ? 'bg-rose-50 border-rose-500 text-rose-600 ' : 'bg-white border-slate-200 text-slate-800'
               }`}>
                 <Clock className="h-5 w-5" />
                 {formatTime(timeLeft)}
@@ -390,7 +390,7 @@ export const CodingLab: React.FC = () => {
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105"
+                className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg  "
               >
                 {submitting ? 'Submitting...' : 'Submit Assessment'}
               </button>
@@ -416,7 +416,7 @@ export const CodingLab: React.FC = () => {
                       <button
                         key={q._id}
                         onClick={() => setCurrentQuestionIndex(i)}
-                        className={`h-10 w-10 rounded-xl text-sm font-bold flex items-center justify-center transition-all ${
+                        className={`h-10 w-10 rounded-xl text-sm font-bold flex items-center justify-center  ${
                           isActive
                             ? 'ring-4 ring-indigo-500/30 bg-indigo-600 text-white shadow-lg'
                             : isFlagged
@@ -439,7 +439,7 @@ export const CodingLab: React.FC = () => {
                       <button
                         key={c._id}
                         onClick={() => setCurrentQuestionIndex(actualIndex)}
-                        className={`h-10 w-10 rounded-xl text-sm font-bold flex items-center justify-center transition-all ${
+                        className={`h-10 w-10 rounded-xl text-sm font-bold flex items-center justify-center  ${
                           isActive
                             ? 'ring-4 ring-purple-500/30 bg-purple-600 text-white shadow-lg'
                             : 'bg-slate-800 text-white border-2 border-slate-700 hover:bg-slate-700'
@@ -482,7 +482,7 @@ export const CodingLab: React.FC = () => {
 
                     <button
                       onClick={() => toggleFlag(currentQuestionIndex)}
-                      className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${
+                      className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold  ${
                         flaggedQuestions.has(currentQuestionIndex)
                           ? 'bg-amber-100 text-amber-700 border border-amber-200'
                           : 'bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200'
@@ -504,13 +504,13 @@ export const CodingLab: React.FC = () => {
                         <label
                           key={optIdx}
                           onClick={() => setMcqAnswers(prev => ({ ...prev, [activeExam.questions[currentQuestionIndex]._id]: optIdx }))}
-                          className={`flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all ${
+                          className={`flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer  ${
                             isChecked
                               ? 'bg-indigo-50/50 border-indigo-500 ring-2 ring-indigo-500/20 shadow-md transform scale-[1.01]'
                               : 'bg-white border-slate-200 hover:border-indigo-300 hover:bg-slate-50'
                           }`}
                         >
-                          <div className={`flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors ${
+                          <div className={`flex items-center justify-center w-6 h-6 rounded-full border-2  ${
                             isChecked ? 'border-indigo-600 bg-indigo-600' : 'border-slate-300 bg-white'
                           }`}>
                             {isChecked && <div className="w-2.5 h-2.5 rounded-full bg-white"></div>}
@@ -565,7 +565,7 @@ export const CodingLab: React.FC = () => {
                 <button
                   onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
                   disabled={currentQuestionIndex === 0}
-                  className="px-6 py-3 bg-white border-2 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 disabled:opacity-50 text-slate-700 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2"
+                  className="px-6 py-3 bg-white border-2 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 disabled:opacity-50 text-slate-700 rounded-xl font-bold  shadow-sm flex items-center gap-2"
                 >
                   <ArrowLeft className="h-5 w-5" /> Previous
                 </button>
@@ -573,7 +573,7 @@ export const CodingLab: React.FC = () => {
                 <button
                   onClick={() => setCurrentQuestionIndex(prev => Math.min(totalQuestions - 1, prev + 1))}
                   disabled={currentQuestionIndex === totalQuestions - 1}
-                  className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-md flex items-center gap-2"
+                  className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl font-bold  shadow-md flex items-center gap-2"
                 >
                   Next <ArrowRight className="h-5 w-5" />
                 </button>
@@ -584,7 +584,7 @@ export const CodingLab: React.FC = () => {
         </div>
       ) : (
         // SUBMISSION REPORT CARDS (Enterprise Analytics View)
-        <div className="max-w-6xl mx-auto space-y-8 animate-float" style={{ animationDuration: '6s' }}>
+        <div className="max-w-6xl mx-auto space-y-8 " style={{ animationDuration: '6s' }}>
           
           {/* Main Score Header */}
           <div className="glass-card-dark relative overflow-hidden rounded-[2rem] p-10 border border-slate-700/50 shadow-2xl">
@@ -732,7 +732,7 @@ export const CodingLab: React.FC = () => {
           <div className="flex justify-center pt-8 pb-10">
             <button
               onClick={() => { setActiveExam(null); setResults(null); }}
-              className="px-8 py-3 bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2"
+              className="px-8 py-3 bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl font-bold  shadow-sm flex items-center gap-2"
             >
               Back to Laboratory Dashboard
             </button>

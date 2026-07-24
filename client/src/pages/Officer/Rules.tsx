@@ -53,7 +53,7 @@ export const Rules: React.FC = () => {
   return (
     <div className="space-y-6">
       {message && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-700 font-semibold text-center animate-pulse max-w-5xl mx-auto">
+        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-700 font-semibold text-center  max-w-5xl mx-auto">
           {message}
         </div>
       )}
@@ -77,7 +77,7 @@ export const Rules: React.FC = () => {
               step="0.1"
               value={minGPA || ''}
               onChange={(e) => setMinGPA(Number(e.target.value))}
-              className="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-indigo-500 "
             />
           </div>
 
@@ -91,7 +91,7 @@ export const Rules: React.FC = () => {
                     key={branch}
                     type="button"
                     onClick={() => handleToggleBranch(branch)}
-                    className={`px-3 py-1 rounded-xl text-[10px] font-bold border transition-all ${
+                    className={`px-3 py-1 rounded-xl text-[10px] font-bold border  ${
                       active 
                         ? 'bg-indigo-600 border-indigo-500 text-white shadow-sm' 
                         : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-100'
@@ -111,7 +111,7 @@ export const Rules: React.FC = () => {
               value={backlogsLimit === 0 ? '' : backlogsLimit}
               onChange={(e) => setBacklogsLimit(Number(e.target.value))}
               placeholder="0"
-              className="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-indigo-500 "
             />
           </div>
 
@@ -119,13 +119,13 @@ export const Rules: React.FC = () => {
             <button
               type="button"
               onClick={handleRemoveRules}
-              className="w-1/3 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 rounded-xl text-xs font-bold transition-all"
+              className="w-1/3 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 rounded-xl text-xs font-bold "
             >
               Remove Rules
             </button>
             <button
               type="submit"
-              className="w-2/3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-600/10"
+              className="w-2/3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold  shadow-md shadow-indigo-600/10"
             >
               Save Rules Settings
             </button>

@@ -73,7 +73,7 @@ export const SearchSystem: React.FC = () => {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key as any)}
-                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold  ${
                     isActive
                       ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -102,7 +102,7 @@ export const SearchSystem: React.FC = () => {
       {/* Results */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
           <p className="text-sm font-semibold text-slate-700">Searching the portal...</p>
         </div>
       ) : filtered.length === 0 ? (
@@ -119,7 +119,7 @@ export const SearchSystem: React.FC = () => {
           {filtered.map((item, index) => (
             <div
               key={item._id || `item-${index}`}
-              className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 shadow-md hover:shadow-xl transition-all hover:scale-102"
+              className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 shadow-md hover:shadow-xl  "
             >
               <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
               <div className="relative z-10">

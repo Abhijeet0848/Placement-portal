@@ -195,7 +195,7 @@ export const ManageStudents: React.FC = () => {
   return (
     <div className="space-y-6">
       {message && (
-        <div className="p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-xl text-sm text-emerald-400 font-semibold text-center animate-pulse flex items-center justify-center gap-2">
+        <div className="p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-xl text-sm text-emerald-400 font-semibold text-center  flex items-center justify-center gap-2">
           <UserCheck className="h-4 w-4" />
           {message}
         </div>
@@ -208,7 +208,7 @@ export const ManageStudents: React.FC = () => {
           <p className="text-sm text-slate-400 mt-1">Track student records, placement status, and academic performance.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="p-2.5 rounded-xl border border-slate-700 bg-slate-900/50 text-slate-400 hover:text-indigo-400 hover:border-indigo-500/30 transition-all relative hover:scale-105">
+          <button className="p-2.5 rounded-xl border border-slate-700 bg-slate-900/50 text-slate-400 hover:text-indigo-400 hover:border-indigo-500/30  relative ">
             <Mail className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
@@ -220,46 +220,46 @@ export const ManageStudents: React.FC = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-indigo-50 transition-colors">
-              <Users className="h-4 w-4 text-slate-600 group-hover:text-indigo-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-indigo-50 ">
+              <Users className="h-4 w-4 text-slate-600 group-hover:text-indigo-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Total Students</p>
           </div>
           <p className="text-3xl font-black text-slate-900">{stats.total}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-emerald-50 transition-colors">
-              <UserCheck className="h-4 w-4 text-slate-600 group-hover:text-emerald-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-emerald-50 ">
+              <UserCheck className="h-4 w-4 text-slate-600 group-hover:text-emerald-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Placed</p>
           </div>
           <p className="text-3xl font-black text-emerald-600">{stats.placed}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-rose-300 hover:shadow-lg hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-rose-300 hover:shadow-lg hover:shadow-rose-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-rose-50 transition-colors">
-              <UserX className="h-4 w-4 text-slate-600 group-hover:text-rose-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-rose-50 ">
+              <UserX className="h-4 w-4 text-slate-600 group-hover:text-rose-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Not Placed</p>
           </div>
           <p className="text-3xl font-black text-rose-600">{stats.notPlaced}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-amber-50 transition-colors">
-              <Award className="h-4 w-4 text-slate-600 group-hover:text-amber-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-amber-50 ">
+              <Award className="h-4 w-4 text-slate-600 group-hover:text-amber-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">In Process</p>
           </div>
           <p className="text-3xl font-black text-amber-600">{stats.inProcess}</p>
         </div>
-        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-purple-300 hover:shadow-lg hover:shadow-purple-100/50 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative bg-white rounded-2xl p-5 border border-slate-200 hover:border-purple-300 hover:shadow-lg hover:shadow-purple-100/50   hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-purple-50 transition-colors">
-              <GraduationCap className="h-4 w-4 text-slate-600 group-hover:text-purple-600 transition-colors" />
+            <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-purple-50 ">
+              <GraduationCap className="h-4 w-4 text-slate-600 group-hover:text-purple-600 " />
             </div>
             <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Avg CGPA</p>
           </div>
@@ -278,7 +278,7 @@ export const ManageStudents: React.FC = () => {
               placeholder="Search by name, email, or branch..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+              className="w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 "
             />
           </div>
 
@@ -288,7 +288,7 @@ export const ManageStudents: React.FC = () => {
             <select
               value={branchFilter}
               onChange={(e) => setBranchFilter(e.target.value)}
-              className="pl-10 pr-10 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer min-w-[160px]"
+              className="pl-10 pr-10 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20  appearance-none cursor-pointer min-w-[160px]"
             >
               <option value="All">All Branches</option>
               <option value="Computer Science">Computer Science</option>
@@ -304,7 +304,7 @@ export const ManageStudents: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer min-w-[140px]"
+              className="px-4 py-3 rounded-xl text-sm font-medium bg-slate-50 border border-slate-200 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20  appearance-none cursor-pointer min-w-[140px]"
             >
               <option value="All">All Status</option>
               <option value="Placed">Placed</option>
@@ -316,7 +316,7 @@ export const ManageStudents: React.FC = () => {
           {/* Export Button */}
           <button
             onClick={handleExport}
-            className="px-5 py-3 rounded-xl text-sm font-bold bg-indigo-600 border border-indigo-700 text-white hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5"
+            className="px-5 py-3 rounded-xl text-sm font-bold bg-indigo-600 border border-indigo-700 text-white hover:bg-indigo-700  flex items-center gap-2 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5"
           >
             <Download className="h-4 w-4" />
             Export
@@ -327,7 +327,7 @@ export const ManageStudents: React.FC = () => {
       {/* Students Table */}
       {loading ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
-          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mx-auto mb-4"></div>
           <p className="text-sm text-slate-500 font-medium">Loading students...</p>
         </div>
       ) : (
@@ -354,7 +354,7 @@ export const ManageStudents: React.FC = () => {
                           className="rounded border-slate-300 bg-white text-indigo-600 focus:ring-indigo-500 focus:ring-offset-0 w-4 h-4"
                         />
                       </th>
-                      <th className="p-4 cursor-pointer hover:text-slate-900 transition-colors" onClick={() => handleSort('name')}>
+                      <th className="p-4 cursor-pointer hover:text-slate-900 " onClick={() => handleSort('name')}>
                         <div className="flex items-center gap-2 text-slate-700">
                           <span className="text-xs font-bold uppercase tracking-wider">Name</span>
                           {sortField === 'name' && (
@@ -362,7 +362,7 @@ export const ManageStudents: React.FC = () => {
                           )}
                         </div>
                       </th>
-                      <th className="p-4 cursor-pointer hover:text-slate-900 transition-colors" onClick={() => handleSort('branch')}>
+                      <th className="p-4 cursor-pointer hover:text-slate-900 " onClick={() => handleSort('branch')}>
                         <div className="flex items-center gap-2 text-slate-700">
                           <span className="text-xs font-bold uppercase tracking-wider">Branch</span>
                           {sortField === 'branch' && (
@@ -370,7 +370,7 @@ export const ManageStudents: React.FC = () => {
                           )}
                         </div>
                       </th>
-                      <th className="p-4 cursor-pointer hover:text-slate-900 transition-colors" onClick={() => handleSort('cgpa')}>
+                      <th className="p-4 cursor-pointer hover:text-slate-900 " onClick={() => handleSort('cgpa')}>
                         <div className="flex items-center gap-2 text-slate-700">
                           <span className="text-xs font-bold uppercase tracking-wider">CGPA</span>
                           {sortField === 'cgpa' && (
@@ -391,7 +391,7 @@ export const ManageStudents: React.FC = () => {
                   </thead>
                   <tbody className="text-slate-700">
                     {paginatedStudents.map((student) => (
-                      <tr key={student.id} className="border-b border-slate-100 hover:bg-slate-50 transition-all">
+                      <tr key={student.id} className="border-b border-slate-100 hover:bg-slate-50 ">
                         <td className="p-4">
                           <input
                             type="checkbox"
@@ -439,21 +439,21 @@ export const ManageStudents: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => handleViewDetails(student)}
-                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-all"
+                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 "
                               title="View Details"
                             >
                               <Eye className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleSendEmail(student.email)}
-                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-all"
+                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 "
                               title="Send Email"
                             >
                               <Mail className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleDeleteStudent(student.id, student.name)}
-                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-400 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 transition-all"
+                              className="p-2 rounded-lg border border-slate-200 bg-white text-slate-400 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50 "
                               title="Delete Student"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -476,7 +476,7 @@ export const ManageStudents: React.FC = () => {
                     <button
                       onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed "
                     >
                       Previous
                     </button>
@@ -484,7 +484,7 @@ export const ManageStudents: React.FC = () => {
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
-                        className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                        className={`px-4 py-2 rounded-lg text-xs font-bold  ${
                           currentPage === page
                             ? 'bg-indigo-600 border border-indigo-700 text-white shadow-md'
                             : 'bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300'
@@ -496,7 +496,7 @@ export const ManageStudents: React.FC = () => {
                     <button
                       onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                       disabled={currentPage === totalPages}
-                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      className="px-4 py-2 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed "
                     >
                       Next
                     </button>
@@ -516,7 +516,7 @@ export const ManageStudents: React.FC = () => {
               <h3 className="text-lg font-bold text-slate-900">Student Details</h3>
               <button
                 onClick={() => setShowDetailModal(false)}
-                className="p-1 rounded-lg hover:bg-slate-100 transition-all"
+                className="p-1 rounded-lg hover:bg-slate-100 "
               >
                 <Eye className="h-5 w-5 text-slate-400" />
               </button>
@@ -581,7 +581,7 @@ export const ManageStudents: React.FC = () => {
                     setShowDetailModal(false);
                     handleSendEmail(selectedStudent.email);
                   }}
-                  className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 border border-indigo-700 text-white hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 border border-indigo-700 text-white hover:bg-indigo-700  flex items-center justify-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
                   Send Email

@@ -231,7 +231,7 @@ export const MockInterview: React.FC = () => {
                   </div>
                   <button
                     onClick={() => setVoiceMode(!voiceMode)}
-                    className={`p-2.5 rounded-xl border-2 transition-all ${
+                    className={`p-2.5 rounded-xl border-2  ${
                       voiceMode 
                         ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-indigo-600 shadow-lg' 
                         : 'border-slate-300 text-slate-600 hover:border-indigo-400 hover:text-indigo-600'
@@ -243,7 +243,7 @@ export const MockInterview: React.FC = () => {
 
                 <button
                   onClick={handleStartSession}
-                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl flex items-center justify-center gap-2"
                 >
                   <Play className="h-5 w-5" />
                   <span>Start Mock Session</span>
@@ -307,7 +307,7 @@ export const MockInterview: React.FC = () => {
               </div>
               <button
                 onClick={handleEndSession}
-                className="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-xl text-xs font-bold shadow-lg transition-all hover:scale-105"
+                className="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-xl text-xs font-bold shadow-lg  "
               >
                 End Interview Session
               </button>
@@ -345,9 +345,9 @@ export const MockInterview: React.FC = () => {
               {loadingReply && (
                 <div className="flex items-center space-x-3 text-sm text-slate-600 py-3">
                   <div className="flex space-x-1.5">
-                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full animate-bounce"></span>
-                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></span>
-                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full "></span>
+                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full " style={{ animationDelay: '0.1s' }}></span>
+                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full " style={{ animationDelay: '0.2s' }}></span>
                   </div>
                   <span className="font-semibold">AI Evaluator grading answer...</span>
                 </div>
@@ -360,9 +360,9 @@ export const MockInterview: React.FC = () => {
                 <button
                   type="button"
                   onClick={startListening}
-                  className={`p-3 rounded-xl border-2 transition-all flex-shrink-0 ${
+                  className={`p-3 rounded-xl border-2  flex-shrink-0 ${
                     isListening 
-                      ? 'bg-rose-500 text-white border-rose-600 animate-pulse'
+                      ? 'bg-rose-500 text-white border-rose-600 '
                       : 'bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100'
                   }`}
                   title="Click to dictate answer"
@@ -381,7 +381,7 @@ export const MockInterview: React.FC = () => {
               <button
                 type="submit"
                 disabled={loadingReply}
-                className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl flex items-center gap-2"
+                className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl font-bold shadow-lg   hover:shadow-xl flex items-center gap-2"
               >
                 <Send className="h-5 w-5" />
                 <span>Send</span>

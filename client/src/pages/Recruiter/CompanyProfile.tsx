@@ -52,7 +52,7 @@ export const CompanyProfile: React.FC = () => {
             <button
               onClick={() => isEditing ? handleSave() : setIsEditing(true)}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 "
             >
               {isEditing ? <Save className="h-4 w-4" /> : <Edit2 className="h-4 w-4" />}
               {isEditing ? (saving ? 'Saving...' : 'Save Details') : 'Edit Profile'}

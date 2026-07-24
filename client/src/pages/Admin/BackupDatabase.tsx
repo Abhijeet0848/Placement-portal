@@ -69,7 +69,7 @@ export const BackupDatabasePanel: React.FC = () => {
             className={`mt-4 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500 ${isBackingUp ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             {isBackingUp ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 " />
             ) : (
               <DownloadCloud className="h-4 w-4" />
             )}

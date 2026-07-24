@@ -143,7 +143,7 @@ export const JobBoard: React.FC = () => {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
           <p className="text-sm font-semibold text-slate-700">Loading placement feed...</p>
         </div>
       ) : filteredJobs.length === 0 ? (
@@ -160,7 +160,7 @@ export const JobBoard: React.FC = () => {
               <div
                 key={job._id}
                 onClick={() => setSelectedJob(job)}
-                className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-md hover:shadow-xl transition-all cursor-pointer hover:scale-102"
+                className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-md hover:shadow-xl  cursor-pointer "
               >
                 <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
                 <div className="relative z-10">
@@ -212,7 +212,7 @@ export const JobBoard: React.FC = () => {
       {selectedJob && (() => {
         const { eligible, reasons } = checkEligibility(selectedJob);
         return (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 animate-fade-in">
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 ">
             <div className="w-full max-w-lg relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
               <div className="relative z-10">
@@ -298,14 +298,14 @@ export const JobBoard: React.FC = () => {
                 <div className="flex justify-end space-x-3 pt-2">
                   <button
                     onClick={() => setSelectedJob(null)}
-                    className="px-4 py-2 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 rounded-xl text-xs font-bold transition-all"
+                    className="px-4 py-2 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 rounded-xl text-xs font-bold "
                   >
                     Cancel
                   </button>
                   <button
                     onClick={() => handleApply(selectedJob)}
                     disabled={!eligible}
-                    className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-xs font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl flex items-center space-x-1.5"
+                    className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-xs font-bold shadow-lg   hover:shadow-xl flex items-center space-x-1.5"
                   >
                     <Sparkles className="h-4 w-4" />
                     <span>Submit Application</span>

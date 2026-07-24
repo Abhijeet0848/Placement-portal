@@ -106,7 +106,7 @@ export const EligibilityChecker: React.FC = () => {
               </div>
               <button
                 type="submit"
-                className="w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                className="w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl"
               >
                 <ShieldCheck className="h-5 w-5 inline mr-2" />
                 Check Eligibility

@@ -79,7 +79,7 @@ export const JobCreator: React.FC = () => {
       
       {/* Header Banner */}
       <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-300/30 bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-subtle"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 "></div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h3 className="text-3xl font-black text-white tracking-tight flex items-center gap-3">
@@ -97,7 +97,7 @@ export const JobCreator: React.FC = () => {
 
       {/* Notifications */}
       {message && (
-        <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl shadow-lg shadow-emerald-500/5 animate-float">
+        <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl shadow-lg shadow-emerald-500/5 ">
           <CheckCircle2 className="h-5 w-5 text-emerald-400 flex-shrink-0" />
           <p className="text-sm text-emerald-600 font-bold">{message}</p>
         </div>
@@ -114,8 +114,8 @@ export const JobCreator: React.FC = () => {
         
         {/* Left Column: Job Description */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-xl shadow-slate-200/50 relative overflow-hidden transition-all hover:shadow-2xl hover:shadow-indigo-100 duration-300">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110 duration-500"></div>
+          <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-xl shadow-slate-200/50 relative overflow-hidden  hover:shadow-2xl hover:shadow-indigo-100 ">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10  group- "></div>
             
             <div className="flex items-center gap-3 mb-8">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 font-bold text-sm">1</span>
@@ -126,7 +126,7 @@ export const JobCreator: React.FC = () => {
               {/* Title & Company */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2 group">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 transition-colors">Job Title</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Job Title</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -134,14 +134,14 @@ export const JobCreator: React.FC = () => {
                       placeholder="e.g. Lead QA Engineer"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10  outline-none"
                     />
-                    <Briefcase className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                    <Briefcase className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 " />
                   </div>
                 </div>
 
                 <div className="space-y-2 group">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 transition-colors">Company Name</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Company Name</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -149,9 +149,9 @@ export const JobCreator: React.FC = () => {
                       placeholder="e.g. Amazon India"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10  outline-none"
                     />
-                    <Building2 className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                    <Building2 className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 " />
                   </div>
                 </div>
               </div>
@@ -159,7 +159,7 @@ export const JobCreator: React.FC = () => {
               {/* Location & Compensation */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2 group">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 transition-colors">Location Model</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Location Model</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -167,14 +167,14 @@ export const JobCreator: React.FC = () => {
                       placeholder="e.g. Bangalore (Hybrid)"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10  outline-none"
                     />
-                    <MapPin className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                    <MapPin className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 " />
                   </div>
                 </div>
 
                 <div className="space-y-2 group">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Compensation (LPA)</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-emerald-600 ">Compensation (LPA)</label>
                   <div className="relative">
                     <input
                       type="number"
@@ -182,23 +182,23 @@ export const JobCreator: React.FC = () => {
                       placeholder="12.5"
                       value={salary}
                       onChange={(e) => setSalary(Number(e.target.value))}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none font-bold"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10  outline-none font-bold"
                     />
-                    <DollarSign className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                    <DollarSign className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 " />
                   </div>
                 </div>
               </div>
 
               {/* Description */}
               <div className="space-y-2 group pt-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 transition-colors">Description & Requirements</label>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Description & Requirements</label>
                 <textarea
                   rows={6}
                   required
                   placeholder="Outline the day-to-day responsibilities, tech stack, and what makes this role unique..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full p-4 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none resize-none leading-relaxed"
+                  className="w-full p-4 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10  outline-none resize-none leading-relaxed"
                 />
               </div>
             </div>
@@ -231,12 +231,12 @@ export const JobCreator: React.FC = () => {
                     value={minCGPA}
                     onChange={(e) => setMinCGPA(Number(e.target.value))}
                     placeholder={`e.g. 7.5`}
-                    className="w-full px-4 py-3 rounded-xl text-sm bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:bg-slate-800/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none font-bold"
+                    className="w-full px-4 py-3 rounded-xl text-sm bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:bg-slate-800/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20  outline-none font-bold"
                   />
                   <select
                     value={cgpaScale}
                     onChange={(e) => setCgpaScale(e.target.value)}
-                    className="px-4 py-3 rounded-xl text-sm font-bold bg-slate-800 border border-slate-700 text-indigo-300 focus:border-indigo-500 outline-none cursor-pointer hover:bg-slate-700 transition-colors"
+                    className="px-4 py-3 rounded-xl text-sm font-bold bg-slate-800 border border-slate-700 text-indigo-300 focus:border-indigo-500 outline-none cursor-pointer hover:bg-slate-700 "
                   >
                     <option value="10.0">10.0 Scale</option>
                     <option value="9.0">9.0 Scale</option>
@@ -257,7 +257,7 @@ export const JobCreator: React.FC = () => {
                         key={branchOption}
                         type="button"
                         onClick={() => handleBranchToggle(branchOption)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
+                        className={`px-4 py-2 rounded-xl text-xs font-bold   ${
                           active 
                             ? 'bg-indigo-600 shadow-lg shadow-indigo-600/30 text-white scale-105' 
                             : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
@@ -281,14 +281,14 @@ export const JobCreator: React.FC = () => {
                     value={newSkill}
                     onChange={(e) => setNewSkill(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSkill())}
-                    className="flex-1 px-4 py-3 rounded-xl text-sm bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:bg-slate-800/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none"
+                    className="flex-1 px-4 py-3 rounded-xl text-sm bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:bg-slate-800/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20  outline-none"
                   />
                   <button
                     type="button"
                     onClick={handleAddSkill}
-                    className="px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg transition-colors flex items-center justify-center group"
+                    className="px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg  flex items-center justify-center group"
                   >
-                    <PlusCircle className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                    <PlusCircle className="h-5 w-5 group- " />
                   </button>
                 </div>
 
@@ -298,9 +298,9 @@ export const JobCreator: React.FC = () => {
                     <span className="text-xs text-slate-500 italic py-1 px-2">No specific skills mandated yet.</span>
                   ) : (
                     skills.map(s => (
-                      <span key={s} className="px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 rounded-lg text-xs font-bold flex items-center gap-2 group animate-fade-in">
+                      <span key={s} className="px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 rounded-lg text-xs font-bold flex items-center gap-2 group ">
                         {s}
-                        <button type="button" onClick={() => handleRemoveSkill(s)} className="text-indigo-400/50 hover:text-rose-400 transition-colors">
+                        <button type="button" onClick={() => handleRemoveSkill(s)} className="text-indigo-400/50 hover:text-rose-400 ">
                           <X className="h-3 w-3" />
                         </button>
                       </span>
@@ -316,19 +316,19 @@ export const JobCreator: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full relative overflow-hidden group bg-gradient-to-r from-indigo-600 to-violet-600 disabled:opacity-70 disabled:cursor-not-allowed text-white rounded-3xl text-sm font-black tracking-wide uppercase transition-all shadow-[0_0_40px_rgba(99,102,241,0.3)] hover:shadow-[0_0_60px_rgba(99,102,241,0.5)]"
+            className="w-full relative overflow-hidden group bg-gradient-to-r from-indigo-600 to-violet-600 disabled:opacity-70 disabled:cursor-not-allowed text-white rounded-3xl text-sm font-black tracking-wide uppercase  shadow-[0_0_40px_rgba(99,102,241,0.3)] hover:shadow-[0_0_60px_rgba(99,102,241,0.5)]"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0   ease-out"></div>
             <div className="relative py-5 px-6 flex items-center justify-center gap-3">
               {loading ? (
                 <>
-                  <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full "></div>
                   <span>Publishing Campaign...</span>
                 </>
               ) : (
                 <>
                   <span>Deploy Job Campaign</span>
-                  <Award className="h-5 w-5 group-hover:rotate-12 transition-transform" />
+                  <Award className="h-5 w-5 group-hover:rotate-12 " />
                 </>
               )}
             </div>

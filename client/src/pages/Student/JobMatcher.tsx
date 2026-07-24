@@ -92,10 +92,10 @@ export const JobMatcher: React.FC = () => {
                   <button
                     key={job._id}
                     onClick={() => handleMatch(job)}
-                    className={`w-full rounded-xl border-2 p-4 text-left transition-all ${
+                    className={`w-full rounded-xl border-2 p-4 text-left  ${
                       isSelected
                         ? 'border-indigo-400 bg-gradient-to-r from-indigo-50 to-purple-50 shadow-lg scale-102'
-                        : 'border-slate-200 bg-white hover:border-indigo-300 hover:shadow-md hover:scale-102'
+                        : 'border-slate-200 bg-white hover:border-indigo-300 hover:shadow-md '
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -119,7 +119,7 @@ export const JobMatcher: React.FC = () => {
           <div className="relative z-10">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
                 <p className="text-sm font-semibold text-slate-700">Matching your profile with the selected job...</p>
               </div>
             ) : !selectedJob ? (

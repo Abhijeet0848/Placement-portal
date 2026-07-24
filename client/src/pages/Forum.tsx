@@ -170,7 +170,7 @@ export const Forum: React.FC = () => {
         <div className="lg:col-span-8 space-y-4">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
-              <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+              <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
               <p className="text-sm font-semibold text-slate-700">Loading discussions...</p>
             </div>
           ) : threads.length === 0 ? (
@@ -187,7 +187,7 @@ export const Forum: React.FC = () => {
                 <div 
                   key={t._id}
                   onClick={() => handleSelectThread(t)}
-                  className={`relative overflow-hidden rounded-2xl border-2 p-5 shadow-md hover:shadow-xl transition-all cursor-pointer ${
+                  className={`relative overflow-hidden rounded-2xl border-2 p-5 shadow-md hover:shadow-xl  cursor-pointer ${
                     selectedThread?._id === t._id 
                       ? 'border-indigo-400 bg-gradient-to-r from-indigo-50 to-purple-50' 
                       : 'border-slate-200 bg-white hover:border-indigo-300'
@@ -206,15 +206,15 @@ export const Forum: React.FC = () => {
                     </div>
 
                     <div className="flex justify-between items-start mt-2">
-                      <h4 className="font-bold text-slate-900 text-sm hover:text-indigo-600 transition-all leading-snug pr-4">
+                      <h4 className="font-bold text-slate-900 text-sm hover:text-indigo-600  leading-snug pr-4">
                         {t.title}
                       </h4>
                       {(t.authorId === user?.id || user?.role === 'Admin' || user?.role === 'PlacementOfficer' || t.authorName === user?.name) && (
                         <div className="flex gap-2">
-                          <button onClick={(e) => { e.stopPropagation(); handleStartEdit(t); }} className="text-slate-400 hover:text-indigo-600 transition-colors p-1">
+                          <button onClick={(e) => { e.stopPropagation(); handleStartEdit(t); }} className="text-slate-400 hover:text-indigo-600  p-1">
                             <Edit2 className="h-4 w-4" />
                           </button>
-                          <button onClick={(e) => { e.stopPropagation(); handleDeleteThread(t._id); }} className="text-slate-400 hover:text-rose-600 transition-colors p-1">
+                          <button onClick={(e) => { e.stopPropagation(); handleDeleteThread(t._id); }} className="text-slate-400 hover:text-rose-600  p-1">
                             <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
@@ -284,12 +284,12 @@ export const Forum: React.FC = () => {
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
                     disabled={submittingReply}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-50 border-2 border-slate-200 text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-50 border-2 border-slate-200 text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 "
                   />
                   <button
                     type="submit"
                     disabled={submittingReply}
-                    className="px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl font-bold shadow-lg transition-all hover:scale-105 flex items-center gap-1.5"
+                    className="px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl font-bold shadow-lg   flex items-center gap-1.5"
                   >
                     <Send className="h-4 w-4" />
                   </button>
@@ -354,7 +354,7 @@ export const Forum: React.FC = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                    className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl"
                   >
                     {isEditing ? 'Save Changes' : 'Post Discussion Thread'}
                   </button>

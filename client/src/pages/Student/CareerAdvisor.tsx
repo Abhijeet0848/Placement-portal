@@ -146,9 +146,9 @@ export const CareerAdvisor: React.FC = () => {
               <button
                 type="submit"
                 disabled={generatingLetter}
-                className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2"
+                className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl flex items-center justify-center gap-2"
               >
-                <Sparkles className="h-5 w-5 animate-pulse" />
+                <Sparkles className="h-5 w-5 " />
                 <span>{generatingLetter ? 'Generating Letter...' : 'Generate Cover Letter'}</span>
               </button>
             </form>
@@ -162,7 +162,7 @@ export const CareerAdvisor: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-200 transition-all flex items-center gap-1.5 border-2 border-slate-200"
+                  className="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-200  flex items-center gap-1.5 border-2 border-slate-200"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   <span className="text-xs font-semibold">{copiedLetter ? 'Copied!' : 'Copy'}</span>
@@ -203,7 +203,7 @@ export const CareerAdvisor: React.FC = () => {
               <button
                 type="submit"
                 disabled={generatingRoadmap}
-                className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2"
+                className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl flex items-center justify-center gap-2"
               >
                 <Sparkles className="h-5 w-5" />
                 <span>{generatingRoadmap ? 'Generating Recommendations...' : 'Generate Roadmap'}</span>

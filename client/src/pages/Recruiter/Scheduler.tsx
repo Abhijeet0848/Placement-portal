@@ -168,7 +168,7 @@ export const Scheduler: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2"
+                className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl flex items-center justify-center gap-2"
               >
                 <Calendar className="h-5 w-5" />
                 <span>{submitting ? 'Scheduling...' : 'Schedule Round'}</span>
@@ -182,13 +182,13 @@ export const Scheduler: React.FC = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
           <div className="relative z-10 space-y-4">
             <div className="flex items-center gap-2 text-indigo-600">
-              <Video className="h-5 w-5 animate-pulse" />
+              <Video className="h-5 w-5 " />
               <h4 className="text-sm font-bold uppercase tracking-wider">Active Rounds Registry</h4>
             </div>
 
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20">
-                <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
                 <p className="text-sm font-semibold text-slate-700">Loading interview schedule...</p>
               </div>
             ) : interviews.length === 0 ? (
@@ -199,7 +199,7 @@ export const Scheduler: React.FC = () => {
             ) : (
               <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
                 {interviews.map((i) => (
-                  <div key={i._id} className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-5 shadow-md hover:shadow-xl transition-all">
+                  <div key={i._id} className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-5 shadow-md hover:shadow-xl ">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
                     <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="space-y-1.5">

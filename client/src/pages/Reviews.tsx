@@ -116,7 +116,7 @@ export const Reviews: React.FC = () => {
       <div className="flex justify-end">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl flex items-center gap-2"
+          className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl flex items-center gap-2"
         >
           <Plus className="h-5 w-5" />
           <span>Write Review</span>
@@ -125,7 +125,7 @@ export const Reviews: React.FC = () => {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
           <p className="text-sm font-semibold text-slate-700">Loading company reviews...</p>
         </div>
       ) : reviews.length === 0 ? (
@@ -139,7 +139,7 @@ export const Reviews: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {reviews.map((r) => (
-            <div key={r._id} className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl hover:shadow-xl transition-all">
+            <div key={r._id} className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl hover:shadow-xl ">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
               <div className="relative z-10 space-y-4">
                 <div className="flex justify-between items-start">
@@ -202,7 +202,7 @@ export const Reviews: React.FC = () => {
 
       {/* Review Modal Form */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 animate-fade-in">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 ">
           <div className="w-full max-w-xl relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
             <div className="relative z-10 space-y-4">
@@ -318,13 +318,13 @@ export const Reviews: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className="px-5 py-2.5 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 rounded-xl text-sm font-bold transition-all"
+                    className="px-5 py-2.5 border-2 border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 rounded-xl text-sm font-bold "
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                    className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl"
                   >
                     Submit Review
                   </button>

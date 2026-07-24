@@ -323,7 +323,7 @@ export const ResumeBuilder: React.FC = () => {
 
             <button
               type="submit"
-              className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+              className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl"
             >
               <Wand2 className="h-5 w-5 inline mr-2" />
               Generate Resume
@@ -341,7 +341,7 @@ export const ResumeBuilder: React.FC = () => {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="inline-flex items-center gap-2 rounded-lg border-2 border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all"
+                  className="inline-flex items-center gap-2 rounded-lg border-2 border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 "
                 >
                   <Printer className="h-4 w-4" />
                   Print/PDF
@@ -349,7 +349,7 @@ export const ResumeBuilder: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="inline-flex items-center gap-2 rounded-lg border-2 border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all"
+                  className="inline-flex items-center gap-2 rounded-lg border-2 border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 "
                 >
                   <Download className="h-4 w-4" />
                   Download

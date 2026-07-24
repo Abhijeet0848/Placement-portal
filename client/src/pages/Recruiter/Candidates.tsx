@@ -81,7 +81,7 @@ export const Candidates: React.FC = () => {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
           <p className="text-sm font-semibold text-slate-700">Loading candidate applications...</p>
         </div>
       ) : applications.length === 0 ? (
@@ -109,7 +109,7 @@ export const Candidates: React.FC = () => {
                 <div 
                   key={app._id}
                   onClick={() => setSelectedApp(app)}
-                  className={`relative overflow-hidden rounded-2xl border-2 p-5 shadow-md hover:shadow-xl transition-all cursor-pointer ${
+                  className={`relative overflow-hidden rounded-2xl border-2 p-5 shadow-md hover:shadow-xl  cursor-pointer ${
                     selectedApp?._id === app._id 
                       ? 'border-indigo-400 bg-gradient-to-r from-indigo-50 to-purple-50' 
                       : 'border-slate-200 bg-white hover:border-indigo-300'
@@ -215,21 +215,21 @@ export const Candidates: React.FC = () => {
                   <div className="border-t border-slate-200 pt-4 flex space-x-2">
                     <button
                       onClick={() => handleUpdateStatus(selectedApp._id, 'Rejected')}
-                      className="flex-1 py-2.5 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-xl text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2.5 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-xl text-xs font-bold  shadow-lg flex items-center justify-center gap-1.5"
                     >
                       <XCircle className="h-4 w-4" />
                       <span>Reject</span>
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(selectedApp._id, 'Shortlisted')}
-                      className="flex-1 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-bold  shadow-lg flex items-center justify-center gap-1.5"
                     >
                       <Award className="h-4 w-4" />
                       <span>Shortlist</span>
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(selectedApp._id, 'Selected')}
-                      className="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white rounded-xl text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white rounded-xl text-xs font-bold  shadow-lg flex items-center justify-center gap-1.5"
                     >
                       <CheckCircle2 className="h-4 w-4" />
                       <span>Hire</span>

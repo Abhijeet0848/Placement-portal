@@ -61,7 +61,7 @@ export const HireReject: React.FC = () => {
             const assessmentScore = candidate.assessmentScore;
 
             return (
-              <div key={candidate._id} className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm hover:shadow-md transition-shadow">
+              <div key={candidate._id} className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm hover:shadow-md ">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div className="flex-1">
                     <p className="text-lg font-bold text-slate-900">{student.name}</p>
@@ -86,7 +86,7 @@ export const HireReject: React.FC = () => {
                     <button 
                       onClick={() => handleDecision(candidate._id, 'Selected')}
                       disabled={assessmentScore === undefined || assessmentScore === null}
-                      className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-600 transition-colors shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-600  shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <CheckCircle2 className="h-4 w-4" />
                       Hire
@@ -94,7 +94,7 @@ export const HireReject: React.FC = () => {
                     <button 
                       onClick={() => handleDecision(candidate._id, 'Rejected')}
                       disabled={assessmentScore === undefined || assessmentScore === null}
-                      className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100  disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <XCircle className="h-4 w-4" />
                       Reject

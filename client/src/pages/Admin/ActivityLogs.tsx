@@ -38,7 +38,7 @@ export const ActivityLogsPanel: React.FC = () => {
         <div className="space-y-3">
           {loading ? (
             <div className="flex justify-center py-10 text-indigo-600">
-              <Loader2 className="h-8 w-8 animate-spin" />
+              <Loader2 className="h-8 w-8 " />
             </div>
           ) : logs.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center">

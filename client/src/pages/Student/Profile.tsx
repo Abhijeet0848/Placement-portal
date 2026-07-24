@@ -212,7 +212,7 @@ export const Profile: React.FC = () => {
 
           {/* Upload Button */}
           <div className="flex items-center space-x-4">
-            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg transition-all">
+            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-bold text-white shadow-lg">
               <Upload className="h-5 w-5" />
               <span>{uploading ? 'Parsing PDF...' : 'Upload Resume PDF'}</span>
               <input
@@ -287,7 +287,7 @@ export const Profile: React.FC = () => {
             <button
               type="button"
               onClick={() => handleViewDocument(user.profile.resumeUrl!, 'Resume.pdf')}
-              className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-md hover:bg-indigo-700 transition-all"
+              className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl shadow-md hover:bg-indigo-700"
             >
               <Eye className="h-4 w-4" />
               <span>Preview Resume</span>
@@ -298,7 +298,7 @@ export const Profile: React.FC = () => {
                 await updateUser({ resumeUrl: '' });
                 setMessage('Resume deleted successfully.');
               }}
-              className="flex items-center space-x-2 px-4 py-2 bg-rose-100 text-rose-700 text-sm font-bold rounded-xl shadow-md hover:bg-rose-200 transition-all border border-rose-200"
+              className="flex items-center space-x-2 px-4 py-2 bg-rose-100 text-rose-700 text-sm font-bold rounded-xl shadow-md hover:bg-rose-200 border border-rose-200"
             >
               <Trash2 className="h-4 w-4" />
               <span>Delete</span>
@@ -318,7 +318,7 @@ export const Profile: React.FC = () => {
               </h4>
               <p className="text-base text-slate-600 mt-2">Upload academic, course, and internship certificates to strengthen your placement profile.</p>
             </div>
-            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl">
+            <label className="group flex cursor-pointer items-center space-x-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg hover:shadow-xl">
               <Upload className="h-4 w-4" />
               <span>{uploadingCertificates ? 'Uploading...' : 'Upload Certificate'}</span>
               <input type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={handleCertificateUpload} disabled={uploadingCertificates} className="hidden" />
@@ -345,7 +345,7 @@ export const Profile: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleViewDocument(certificate.url, certificate.name)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all flex items-center gap-1"
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 flex items-center gap-1"
                       >
                         <Eye className="h-3.5 w-3.5" />
                         Preview
@@ -362,7 +362,7 @@ export const Profile: React.FC = () => {
                         await updateUser({ certificates: nextCerts });
                         setMessage('Certificate removed.');
                       }}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 transition-all"
+                      className="p-1.5 text-slate-400 hover:text-rose-600"
                       title="Remove certificate"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -532,7 +532,7 @@ export const Profile: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleAddSkill}
-                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl"
                 >
                   <Plus className="h-5 w-5" />
                 </button>
@@ -567,7 +567,7 @@ export const Profile: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleAddExp}
-                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl"
                 >
                   <Plus className="h-5 w-5" />
                 </button>
@@ -580,7 +580,7 @@ export const Profile: React.FC = () => {
           <button
             type="submit"
             disabled={isSaving}
-            className={`w-full lg:w-1/2 px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-lg font-black shadow-xl transition-all hover:scale-105 hover:shadow-2xl flex items-center justify-center space-x-2 ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full lg:w-1/2 px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-lg font-black shadow-xl hover:shadow-2xl flex items-center justify-center space-x-2 ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             <span>{isSaving ? 'Saving...' : 'Save Entire Profile'}</span>
           </button>
@@ -595,7 +595,7 @@ export const Profile: React.FC = () => {
       {/* Document Preview Modal */}
       {previewDoc && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden">
             <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <h3 className="font-extrabold text-slate-800 text-lg flex items-center gap-2">
                 <FileText className="h-5 w-5 text-indigo-500" />
@@ -603,7 +603,7 @@ export const Profile: React.FC = () => {
               </h3>
               <button 
                 onClick={() => setPreviewDoc(null)}
-                className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors"
+                className="p-2 hover:bg-slate-200 rounded-full text-slate-500 "
               >
                 <X className="h-5 w-5" />
               </button>
@@ -618,7 +618,7 @@ export const Profile: React.FC = () => {
             <div className="px-5 py-4 border-t border-slate-100 flex justify-end bg-slate-50 gap-3">
               <button
                 onClick={() => setPreviewDoc(null)}
-                className="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-bold rounded-xl transition-colors"
+                className="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-bold rounded-xl "
               >
                 Close
               </button>
@@ -629,7 +629,7 @@ export const Profile: React.FC = () => {
                   link.download = previewDoc.name;
                   link.click();
                 }}
-                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-colors flex items-center gap-2 shadow-md shadow-indigo-600/20"
+                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl  flex items-center gap-2 shadow-md shadow-indigo-600/20"
               >
                 <Download className="h-4 w-4" />
                 Download PDF

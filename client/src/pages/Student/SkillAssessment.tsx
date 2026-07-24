@@ -161,7 +161,7 @@ export const SkillAssessment: React.FC = () => {
             </p>
             <button
               onClick={startTest}
-              className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-black rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+              className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-black rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] "
             >
               Start Assessment Now
             </button>
@@ -180,7 +180,7 @@ export const SkillAssessment: React.FC = () => {
                   {question.options.map((option, optionIndex) => (
                     <label
                       key={option}
-                      className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-sm font-semibold cursor-pointer transition-all ${
+                      className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-sm font-semibold cursor-pointer  ${
                         answers[index] === optionIndex
                           ? 'border-indigo-400 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700'
                           : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300'
@@ -219,13 +219,13 @@ export const SkillAssessment: React.FC = () => {
                 <div className="flex gap-2 print:hidden">
                   <button
                     onClick={() => window.print()}
-                    className="px-4 py-2 text-sm font-bold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500 transition-all shadow-sm flex items-center gap-2"
+                    className="px-4 py-2 text-sm font-bold bg-indigo-600 text-white rounded-xl hover:bg-indigo-500  shadow-sm flex items-center gap-2"
                   >
                     <FileText className="h-4 w-4" /> Download PDF
                   </button>
                   <button
                     onClick={handleRetake}
-                    className="px-4 py-2 text-sm font-bold bg-white border-2 border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm"
+                    className="px-4 py-2 text-sm font-bold bg-white border-2 border-slate-200 rounded-xl hover:bg-slate-50  shadow-sm"
                   >
                     Retake Assessment
                   </button>

@@ -81,7 +81,7 @@ export const ApplicationsTracker: React.FC = () => {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="h-12 w-12 border-4 border-indigo-600 border-t-transparent rounded-full  mb-4"></div>
           <p className="text-sm font-semibold text-slate-700">Loading your data...</p>
         </div>
       ) : (
@@ -111,7 +111,7 @@ export const ApplicationsTracker: React.FC = () => {
                         <span className="font-semibold">{interview.date} at {interview.time}</span>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <a href={interview.meetLink || 'https://meet.jit.si/PlacementPortal-fallback'} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500 transition-colors text-xs">
+                        <a href={interview.meetLink || 'https://meet.jit.si/PlacementPortal-fallback'} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500  text-xs">
                           Join Meeting
                         </a>
                       </div>
@@ -146,7 +146,7 @@ export const ApplicationsTracker: React.FC = () => {
             return (
               <div
                 key={application._id}
-                className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl hover:shadow-xl transition-all"
+                className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-2xl hover:shadow-xl "
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
                 <div className="relative z-10">

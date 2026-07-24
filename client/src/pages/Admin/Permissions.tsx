@@ -134,7 +134,7 @@ export const PermissionsPanel: React.FC = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 space-y-3">
-        <div className="h-10 w-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="h-10 w-10 border-4 border-indigo-600 border-t-transparent rounded-full "></div>
         <p className="text-sm text-slate-400 font-semibold">Loading permissions data...</p>
       </div>
     );
@@ -143,7 +143,7 @@ export const PermissionsPanel: React.FC = () => {
   return (
     <div className="space-y-6">
       {message && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 font-bold text-center animate-pulse flex items-center justify-center gap-2 shadow-sm">
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 font-bold text-center  flex items-center justify-center gap-2 shadow-sm">
           <Check className="h-4 w-4" />
           {message}
         </div>
@@ -185,7 +185,7 @@ export const PermissionsPanel: React.FC = () => {
                 <button
                   onClick={() => handleSave(roleObj.role)}
                   disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl shadow-sm hover:shadow-md transition-all font-bold text-sm hover:scale-105 active:scale-95 disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl shadow-sm hover:shadow-md  font-bold text-sm  active:scale-95 disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   Save
@@ -194,7 +194,7 @@ export const PermissionsPanel: React.FC = () => {
 
               <div className="relative z-10 space-y-3 bg-white/60 p-4 rounded-2xl border border-white/50">
                 {roleObj.flags.map((flag) => (
-                  <label key={flag.id} className="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100 cursor-pointer hover:border-indigo-300 transition-colors">
+                  <label key={flag.id} className="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100 cursor-pointer hover:border-indigo-300 ">
                     <span className="text-sm font-bold text-slate-700">{flag.label}</span>
                     <div className="relative">
                       <input 
@@ -203,8 +203,8 @@ export const PermissionsPanel: React.FC = () => {
                         checked={flag.enabled}
                         onChange={() => handleToggle(roleObj.role, flag.id)}
                       />
-                      <div className={`block w-10 h-6 rounded-full transition-colors ${flag.enabled ? 'bg-indigo-500' : 'bg-slate-300'}`}></div>
-                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${flag.enabled ? 'transform translate-x-4' : ''}`}></div>
+                      <div className={`block w-10 h-6 rounded-full  ${flag.enabled ? 'bg-indigo-500' : 'bg-slate-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full  ${flag.enabled ? 'transform translate-x-4' : ''}`}></div>
                     </div>
                   </label>
                 ))}
