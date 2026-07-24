@@ -356,7 +356,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
       {/* Main Container */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="h-16 bg-white border-b border-slate-200 px-4 lg:px-8 flex items-center justify-between z-10 print:hidden">
+        <header className="relative h-16 bg-white border-b border-slate-200 px-4 lg:px-8 flex items-center justify-between z-50 print:hidden">
           <div className="flex items-center space-x-4">
             {/* Mobile menu button */}
             <button 
