@@ -81,7 +81,7 @@ export async function getStudentDashboardStats(req: AuthenticatedRequest, res: R
 
   } catch (error: any) {
     logger.error(`Get student dashboard stats failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: error?.message || 'Internal server error' });
   }
 }
 
@@ -134,7 +134,7 @@ export async function getRecruiterDashboardStats(req: AuthenticatedRequest, res:
     });
   } catch (error: any) {
     logger.error(`Get recruiter dashboard stats failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: error?.message || 'Internal server error' });
   }
 }
 
@@ -187,7 +187,7 @@ export async function sendEmail(req: AuthenticatedRequest, res: Response) {
     }
     return res.json({ message: 'Email sent successfully.' });
   } else {
-    return res.status(500).json({ message: 'Failed to send email.' });
+    return res.status(500).json({ message: error?.message || 'Failed to send email.' });
   }
 }
 
@@ -206,7 +206,7 @@ export async function getAdminDashboardStats(req: AuthenticatedRequest, res: Res
     });
   } catch (error: any) {
     logger.error(`Get admin dashboard stats failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: error?.message || 'Internal server error' });
   }
 }
 

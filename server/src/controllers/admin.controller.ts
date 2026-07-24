@@ -38,7 +38,7 @@ export async function getActivityLogs(req: AuthenticatedRequest, res: Response) 
     return res.json({ logs });
   } catch (error) {
     logger.error(`Failed to fetch activity logs: ${error}`);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: error?.message || 'Internal server error' });
   }
 }
 
@@ -52,7 +52,7 @@ export async function getPermissions(req: AuthenticatedRequest, res: Response) {
     return res.json({ permissions });
   } catch (error: any) {
     logger.error(`Get permissions failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error fetching permissions' });
+    return res.status(500).json({ message: error?.message || 'Internal server error fetching permissions' });
   }
 }
 
@@ -92,7 +92,7 @@ export async function updatePermissions(req: AuthenticatedRequest, res: Response
     return res.json({ message: 'Permissions updated successfully', permissions: permDoc });
   } catch (error: any) {
     logger.error(`Update permissions failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error updating permissions' });
+    return res.status(500).json({ message: error?.message || 'Internal server error updating permissions' });
   }
 }
 
@@ -123,7 +123,7 @@ export async function createBackup(req: AuthenticatedRequest, res: Response) {
     });
   } catch (error: any) {
     logger.error(`Backup creation failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error creating backup' });
+    return res.status(500).json({ message: error?.message || 'Internal server error creating backup' });
   }
 }
 
@@ -171,7 +171,7 @@ export async function restoreBackup(req: AuthenticatedRequest, res: Response) {
     return res.json({ message: 'Database successfully restored from backup' });
   } catch (error: any) {
     logger.error(`Backup restoration failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error restoring backup' });
+    return res.status(500).json({ message: error?.message || 'Internal server error restoring backup' });
   }
 }
 
@@ -210,6 +210,6 @@ export async function updateUserStatus(req: AuthenticatedRequest, res: Response)
     return res.json({ message: `User status successfully updated to ${status}` });
   } catch (error: any) {
     logger.error(`Update user status failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Internal server error updating user status' });
+    return res.status(500).json({ message: error?.message || 'Internal server error updating user status' });
   }
 }

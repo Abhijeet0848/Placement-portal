@@ -79,6 +79,6 @@ export async function getRecommendedJobs(req: AuthenticatedRequest, res: Respons
     return res.json({ jobs: scoredJobs });
   } catch (error: any) {
     logger.error(`Get recommended jobs failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server recommendation error' });
+    return res.status(500).json({ message: error?.message || 'Server recommendation error' });
   }
 }

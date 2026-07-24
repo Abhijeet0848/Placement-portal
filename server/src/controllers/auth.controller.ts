@@ -166,16 +166,16 @@ export async function register(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Register failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server registration error' });
+    return res.status(500).json({ message: error?.message || 'Server registration error' });
   }
 }
 
 // 2. Login
 export async function login(req: AuthenticatedRequest, res: Response) {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
+  if (!email || !password || !role) {
+    return res.status(400).json({ message: 'Email, password, and role are required.' });
   }
 
   try {
@@ -183,6 +183,10 @@ export async function login(req: AuthenticatedRequest, res: Response) {
       const user = mockDb.users.find(u => u.email === email);
       if (!user) {
         return res.status(400).json({ message: 'Invalid credentials.' });
+      }
+
+      if (user.role !== role) {
+        return res.status(400).json({ message: `This email is registered as a ${user.role}. Please select the correct role to log in.` });
       }
 
       if (user.status === 'Blocked') {
@@ -217,6 +221,10 @@ export async function login(req: AuthenticatedRequest, res: Response) {
         return res.status(400).json({ message: 'Invalid credentials.' });
       }
 
+      if (user.role !== role) {
+        return res.status(400).json({ message: `This email is registered as a ${user.role}. Please select the correct role to log in.` });
+      }
+
       if (user.status === 'Blocked') {
         return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
       }
@@ -246,7 +254,7 @@ export async function login(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Login failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server login error' });
+    return res.status(500).json({ message: error?.message || 'Server login error' });
   }
 }
 
@@ -315,6 +323,10 @@ export async function googleLogin(req: AuthenticatedRequest, res: Response) {
       }
     }
     
+    if (role && user.role !== role) {
+      return res.status(400).json({ message: `This email is registered as a ${user.role}. Please select the correct role to log in.` });
+    }
+    
     if (user.status === 'Blocked') {
       return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
     }
@@ -340,7 +352,7 @@ export async function googleLogin(req: AuthenticatedRequest, res: Response) {
     });
   } catch (error: any) {
     logger.error(`Google login failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Google authentication failed' });
+    return res.status(500).json({ message: error?.message || 'Google authentication failed' });
   }
 }
 
@@ -411,6 +423,10 @@ export async function microsoftLogin(req: AuthenticatedRequest, res: Response) {
       }
     }
     
+    if (role && user.role !== role) {
+      return res.status(400).json({ message: `This email is registered as a ${user.role}. Please select the correct role to log in.` });
+    }
+    
     if (user.status === 'Blocked') {
       return res.status(403).json({ message: 'Your account has been suspended by an administrator.' });
     }
@@ -436,7 +452,7 @@ export async function microsoftLogin(req: AuthenticatedRequest, res: Response) {
     });
   } catch (error: any) {
     logger.error(`Microsoft login failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Microsoft authentication failed' });
+    return res.status(500).json({ message: error?.message || 'Microsoft authentication failed' });
   }
 }
 
@@ -478,7 +494,7 @@ export async function refreshToken(req: AuthenticatedRequest, res: Response) {
     });
   } catch (error: any) {
     logger.error(`Refresh token failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server refresh token error' });
+    return res.status(500).json({ message: error?.message || 'Server refresh token error' });
   }
 }
 
@@ -503,7 +519,7 @@ export async function logout(req: AuthenticatedRequest, res: Response) {
     return res.json({ message: 'Logged out successfully' });
   } catch (error: any) {
     logger.error(`Logout failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server logout error' });
+    return res.status(500).json({ message: error?.message || 'Server logout error' });
   }
 }
 
@@ -548,7 +564,7 @@ export async function getProfile(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Get profile failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server profile fetch error' });
+    return res.status(500).json({ message: error?.message || 'Server profile fetch error' });
   }
 }
 
@@ -646,7 +662,7 @@ export async function updateProfile(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Update profile failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server profile update error' });
+    return res.status(500).json({ message: error?.message || 'Server profile update error' });
   }
 }
 
@@ -674,7 +690,7 @@ export async function getAllStudents(req: AuthenticatedRequest, res: Response) {
       return res.json({ students });
     }
   } catch (error: any) {
-    return res.status(500).json({ message: 'Server fetch students error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch students error' });
   }
 }
 
@@ -702,7 +718,7 @@ export async function getAllUsers(req: AuthenticatedRequest, res: Response) {
       return res.json({ users });
     }
   } catch (error: any) {
-    return res.status(500).json({ message: 'Server fetch users error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch users error' });
   }
 }
 
@@ -768,7 +784,7 @@ export async function forgotPassword(req: AuthenticatedRequest, res: Response) {
     });
   } catch (error: any) {
     logger.error(`Forgot password error: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Failed to process forgot password request.' });
+    return res.status(500).json({ message: error?.message || 'Failed to process forgot password request.' });
   }
 }
 
@@ -825,7 +841,7 @@ export async function resetPassword(req: AuthenticatedRequest, res: Response) {
     return res.json({ message: 'Password reset successful! You can now log in with your new password.' });
   } catch (error: any) {
     logger.error(`Reset password error: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Failed to reset password.' });
+    return res.status(500).json({ message: error?.message || 'Failed to reset password.' });
   }
 }
 
@@ -849,7 +865,7 @@ export async function deleteStudent(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Delete student failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server delete student error' });
+    return res.status(500).json({ message: error?.message || 'Server delete student error' });
   }
 }
 
@@ -887,7 +903,7 @@ export async function updateStudentProfile(req: AuthenticatedRequest, res: Respo
     }
   } catch (error: any) {
     logger.error(`Update student profile failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server student profile update error' });
+    return res.status(500).json({ message: error?.message || 'Server student profile update error' });
   }
 }
 
@@ -926,7 +942,7 @@ export async function verifyEmail(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Verify email failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server verification error' });
+    return res.status(500).json({ message: error?.message || 'Server verification error' });
   }
 }
 
@@ -957,6 +973,6 @@ export async function uploadProfilePicture(req: AuthenticatedRequest, res: Respo
     return res.json({ message: 'Profile picture uploaded successfully', avatarUrl });
   } catch (error: any) {
     logger.error(`Upload profile picture failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server upload error' });
+    return res.status(500).json({ message: error?.message || 'Server upload error' });
   }
 }

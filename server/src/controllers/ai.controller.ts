@@ -52,7 +52,7 @@ export async function analyzeResumeUpload(req: AuthenticatedRequest, res: Respon
     });
   } catch (error: any) {
     logger.error(`Resume analysis upload failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server resume parsing error' });
+    return res.status(500).json({ message: error?.message || 'Server resume parsing error' });
   }
 }
 
@@ -69,7 +69,7 @@ export async function evaluateInterview(req: AuthenticatedRequest, res: Response
     return res.json({ feedback });
   } catch (error: any) {
     logger.error(`Evaluate interview failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server interview evaluation error' });
+    return res.status(500).json({ message: error?.message || 'Server interview evaluation error' });
   }
 }
 
@@ -86,7 +86,7 @@ export async function getCareerRoadmap(req: AuthenticatedRequest, res: Response)
     return res.json({ recommendations });
   } catch (error: any) {
     logger.error(`Career roadmap failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server career recommendations error' });
+    return res.status(500).json({ message: error?.message || 'Server career recommendations error' });
   }
 }
 
@@ -104,7 +104,7 @@ export async function createCoverLetter(req: AuthenticatedRequest, res: Response
     return res.json({ coverLetter });
   } catch (error: any) {
     logger.error(`Cover letter failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server cover letter generation error' });
+    return res.status(500).json({ message: error?.message || 'Server cover letter generation error' });
   }
 }
 
@@ -121,7 +121,7 @@ export async function matchJob(req: AuthenticatedRequest, res: Response) {
     return res.json(result);
   } catch (error: any) {
     logger.error(`Job matching failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server job matching error' });
+    return res.status(500).json({ message: error?.message || 'Server job matching error' });
   }
 }
 
@@ -147,6 +147,6 @@ export async function parseExamUpload(req: AuthenticatedRequest, res: Response) 
     });
   } catch (error: any) {
     logger.error(`Exam parsing upload failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server exam parsing error' });
+    return res.status(500).json({ message: error?.message || 'Server exam parsing error' });
   }
 }

@@ -64,7 +64,7 @@ export async function getExams(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Get exams failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch exams error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch exams error' });
   }
 }
 
@@ -107,7 +107,7 @@ export async function createExam(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Create exam failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server create exam error' });
+    return res.status(500).json({ message: error?.message || 'Server create exam error' });
   }
 }
 
@@ -184,7 +184,7 @@ export async function getExamById(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Get exam failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch exam error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch exam error' });
   }
 }
 
@@ -423,6 +423,6 @@ export async function submitExam(req: AuthenticatedRequest, res: Response) {
     });
   } catch (error: any) {
     logger.error(`Submit exam failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server exam submission error' });
+    return res.status(500).json({ message: error?.message || 'Server exam submission error' });
   }
 }

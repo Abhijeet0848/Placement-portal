@@ -55,7 +55,7 @@ export async function createThread(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Create thread failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server discussion thread creation error' });
+    return res.status(500).json({ message: error?.message || 'Server discussion thread creation error' });
   }
 }
 
@@ -100,7 +100,7 @@ export async function editThread(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Edit thread failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server discussion thread edit error' });
+    return res.status(500).json({ message: error?.message || 'Server discussion thread edit error' });
   }
 }
 
@@ -134,7 +134,7 @@ export async function deleteThread(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Delete thread failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server discussion thread deletion error' });
+    return res.status(500).json({ message: error?.message || 'Server discussion thread deletion error' });
   }
 }
 
@@ -148,7 +148,7 @@ export async function getAllThreads(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Fetch threads failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch discussions error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch discussions error' });
   }
 }
 
@@ -195,7 +195,7 @@ export async function addReply(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Add reply failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server discussion reply error' });
+    return res.status(500).json({ message: error?.message || 'Server discussion reply error' });
   }
 }
 
@@ -246,7 +246,7 @@ export async function createReview(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Create review failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server review submission error' });
+    return res.status(500).json({ message: error?.message || 'Server review submission error' });
   }
 }
 
@@ -260,7 +260,7 @@ export async function getAllReviews(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Fetch reviews failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch reviews error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch reviews error' });
   }
 }
 
@@ -366,7 +366,7 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
     });
   } catch (error: any) {
     logger.error(`Schedule interview failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server schedule interview error' });
+    return res.status(500).json({ message: error?.message || 'Server schedule interview error' });
   }
 }
 
@@ -432,6 +432,6 @@ export async function getInterviews(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Get interviews failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch interviews error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch interviews error' });
   }
 }

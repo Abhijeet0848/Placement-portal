@@ -49,7 +49,7 @@ export const broadcastNotice = async (req: AuthenticatedRequest, res: Response) 
     }
   } catch (error: any) {
     logger.error(`Broadcast notice failed: ${error.message}`);
-    return res.status(500).json({ message: 'Failed to broadcast notice.' });
+    return res.status(500).json({ message: error?.message || 'Failed to broadcast notice.' });
   }
 };
 
@@ -70,7 +70,7 @@ export async function getNotifications(req: AuthenticatedRequest, res: Response)
     return res.json({ notifications });
   } catch (error: any) {
     logger.error(`Error fetching notifications: ${error.message}`);
-    return res.status(500).json({ message: 'Error fetching notifications' });
+    return res.status(500).json({ message: error?.message || 'Error fetching notifications' });
   }
 }
 
@@ -90,7 +90,7 @@ export async function markNotificationRead(req: AuthenticatedRequest, res: Respo
     return res.json({ message: 'Notification marked as read' });
   } catch (error: any) {
     logger.error(`Error marking notification read: ${error.message}`);
-    return res.status(500).json({ message: 'Error marking notification read' });
+    return res.status(500).json({ message: error?.message || 'Error marking notification read' });
   }
 }
 
@@ -112,6 +112,6 @@ export async function markAllNotificationsRead(req: AuthenticatedRequest, res: R
     return res.json({ message: 'All notifications marked as read' });
   } catch (error: any) {
     logger.error(`Error marking all notifications read: ${error.message}`);
-    return res.status(500).json({ message: 'Error marking all notifications read' });
+    return res.status(500).json({ message: error?.message || 'Error marking all notifications read' });
   }
 }

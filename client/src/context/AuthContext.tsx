@@ -13,7 +13,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, role: string) => Promise<void>;
   register: (name: string, email: string, password: string, role: string) => Promise<void>;
   ssoLogin: (provider: 'google' | 'microsoft', token: string, role?: string) => Promise<void>;
   logout: () => void;
@@ -55,8 +55,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const data = await api.post('/auth/login', { email, password });
+  const login = async (email: string, password: string, role: string) => {
+    const data = await api.post('/auth/login', { email, password, role });
     localStorage.setItem('tokens', JSON.stringify(data.tokens));
     setUser(data.user);
   };

@@ -85,7 +85,7 @@ export async function createJob(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Create job failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server job creation error' });
+    return res.status(500).json({ message: error?.message || 'Server job creation error' });
   }
 }
 
@@ -100,7 +100,7 @@ export async function getAllJobs(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Get jobs failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch jobs error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch jobs error' });
   }
 }
 
@@ -234,7 +234,7 @@ export async function applyJob(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Apply job failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server job application error' });
+    return res.status(500).json({ message: error?.message || 'Server job application error' });
   }
 }
 
@@ -269,7 +269,7 @@ export async function getRecruiterApplications(req: AuthenticatedRequest, res: R
     }
   } catch (error: any) {
     logger.error(`Get recruiter applications failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch applications error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch applications error' });
   }
 }
 
@@ -312,7 +312,7 @@ export async function updateApplicationStatus(req: AuthenticatedRequest, res: Re
     }
   } catch (error: any) {
     logger.error(`Update status failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server status update error' });
+    return res.status(500).json({ message: error?.message || 'Server status update error' });
   }
 }
 
@@ -338,6 +338,6 @@ export async function getStudentApplications(req: AuthenticatedRequest, res: Res
     }
   } catch (error: any) {
     logger.error(`Get student applications failed: ${error?.message || error}`);
-    return res.status(500).json({ message: 'Server fetch student applications error' });
+    return res.status(500).json({ message: error?.message || 'Server fetch student applications error' });
   }
 }
