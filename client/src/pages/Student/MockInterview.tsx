@@ -319,17 +319,9 @@ export const MockInterview: React.FC = () => {
                 const isAi = chat.sender === 'AI';
                 return (
                   <div key={idx} className={`flex flex-col ${isAi ? 'items-start' : 'items-end'} space-y-2`}>
-                    <div className={`p-4 rounded-2xl text-sm max-w-2xl leading-relaxed font-medium ${
-                      isAi 
-                        ? 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-900 border-2 border-slate-300' 
-                        : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
-                    }`}>
-                      {chat.text}
-                    </div>
-
-                    {/* Rating widget on AI Response */}
+                    {/* Rating widget on AI Response (Feedback for previous answer) */}
                     {isAi && chat.scores && (
-                      <div className="p-4 bg-gradient-to-br from-slate-50 to-slate-100 border-2 border-slate-200 rounded-xl space-y-3 max-w-2xl">
+                      <div className="p-4 bg-gradient-to-br from-slate-50 to-slate-100 border-2 border-slate-200 rounded-xl space-y-3 max-w-2xl mb-2">
                         <div className="flex space-x-6 justify-between text-xs font-bold text-slate-700">
                           <span>Confidence: <strong className="text-indigo-600">{chat.scores.confidence}/10</strong></span>
                           <span>Comm: <strong className="text-purple-600">{chat.scores.communication}/10</strong></span>
@@ -338,6 +330,15 @@ export const MockInterview: React.FC = () => {
                         <p className="text-xs text-slate-600 italic leading-relaxed border-t border-slate-200 pt-2">{chat.scores.feedback}</p>
                       </div>
                     )}
+
+                    {/* Next Question / Chat Text */}
+                    <div className={`p-4 rounded-2xl text-sm max-w-2xl leading-relaxed font-medium ${
+                      isAi 
+                        ? 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-900 border-2 border-slate-300' 
+                        : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
+                    }`}>
+                      {chat.text}
+                    </div>
                   </div>
                 );
               })}
