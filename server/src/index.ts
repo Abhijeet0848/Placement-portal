@@ -35,12 +35,24 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet({
-  crossOriginResourcePolicy: false // Allows loading local uploads if needed
+  crossOriginResourcePolicy: false, // Allows loading local uploads if needed
+  crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+  crossOriginEmbedderPolicy: false
 }));
+
+// CORS configuration with COOP/COEP support
 app.use(cors({
-  origin: true,
-  credentials: true
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
+
+// Add COOP and COEP headers explicitly for Google OAuth compatibility
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+  next();
+});
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
