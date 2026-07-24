@@ -9,6 +9,7 @@ import User from '../models/User';
 import Job from '../models/Job';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { sendEmail } from '../services/email.service';
+import { createGoogleMeetEvent } from '../services/calendar.service';
 import logger from '../utils/logger';
 
 // ==========================================
@@ -276,9 +277,6 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
   }
 
   try {
-    const roomCode = Math.random().toString(36).substring(2, 10);
-    const meetLink = `https://meet.jit.si/PlacementPortal-${roomCode}`;
-
     let studentEmail = '';
     let studentName = '';
     let jobTitle = '';
@@ -295,7 +293,22 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
         jobTitle = job.title;
         companyName = job.company;
       }
+    } else {
+      const student = await User.findById(studentId);
+      const job = await Job.findById(jobId);
+      if (student) {
+        studentEmail = student.email;
+        studentName = student.name;
+      }
+      if (job) {
+        jobTitle = job.title;
+        companyName = job.company;
+      }
+    }
 
+    const meetLink = await createGoogleMeetEvent(jobTitle, companyName, studentName, studentEmail, date, time);
+
+    if (isMockDb) {
       const newInterview = {
         _id: `int_${Date.now()}`,
         jobId,
@@ -308,17 +321,6 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
       };
       mockDb.interviews.push(newInterview);
     } else {
-      const student = await User.findById(studentId);
-      const job = await Job.findById(jobId);
-      if (student) {
-        studentEmail = student.email;
-        studentName = student.name;
-      }
-      if (job) {
-        jobTitle = job.title;
-        companyName = job.company;
-      }
-
       const interview = new Interview({
         jobId: new mongoose.Types.ObjectId(jobId),
         studentId: new mongoose.Types.ObjectId(studentId),
@@ -336,12 +338,12 @@ export async function scheduleInterview(req: AuthenticatedRequest, res: Response
       await sendEmail({
         to: studentEmail,
         subject: `Interview Scheduled for ${jobTitle} at ${companyName}`,
-        text: `Hello ${studentName},\n\nYour interview for ${jobTitle} at ${companyName} has been scheduled.\n\nDate: ${date}\nTime: ${time}\nGoogle Meet Link: ${meetLink}\n\nGood luck!\nBest regards,\nPlacement Cell`,
+        text: `Hello ${studentName},\n\nYour interview for ${jobTitle} at ${companyName} has been scheduled.\n\nDate: ${date}\nTime: ${time}\nInterview Link: ${meetLink}\n\nGood luck!\nBest regards,\nPlacement Cell`,
         html: `<p>Hello <strong>${studentName}</strong>,</p>
                <p>Your interview for <strong>${jobTitle}</strong> at <strong>${companyName}</strong> has been scheduled.</p>
                <p>📅 <strong>Date:</strong> ${date}<br>
                   ⏰ <strong>Time:</strong> ${time}<br>
-                  🔗 <strong>Meet Link:</strong> <a href="${meetLink}">${meetLink}</a></p>
+                  🔗 <strong>Interview Link:</strong> <a href="${meetLink}">${meetLink}</a></p>
                <p>Good luck!</p>
                <p>Best regards,<br>Placement Cell</p>`
       });
