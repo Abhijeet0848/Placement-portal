@@ -1,18 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRight, Briefcase, GraduationCap, Sparkles, ChevronRight, ChevronLeft, ChevronDown, CheckCircle, Search, Clock } from 'lucide-react';
+import { ArrowRight, Briefcase, GraduationCap, Sparkles, ChevronRight, ChevronLeft, ChevronDown, CheckCircle, Search, Clock, FileText, Brain, TrendingUp, Users, Target } from 'lucide-react';
+
+const features = [
+  {
+    title: 'AI Resume Analysis',
+    description: 'Upload resumes and receive ATS-style feedback, score predictions, and skill suggestions.',
+    icon: FileText,
+  },
+  {
+    title: 'Skill Assessments',
+    description: 'Practice coding labs and MCQs that align with modern placement drives.',
+    icon: GraduationCap,
+  },
+  {
+    title: 'Mock Interviews',
+    description: 'Run AI-guided interview simulations and improve communication and technical accuracy.',
+    icon: Brain,
+  },
+  {
+    title: 'Placement Tracking',
+    description: 'Track job applications, recruiter updates, and your placement readiness in one view.',
+    icon: Target,
+  },
+];
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="relative min-h-screen w-full bg-[#fffdfa] overflow-hidden font-sans text-slate-900 flex flex-col">
-      {/* The Split Background Panel */}
-      {/* On mobile, it just stacks. On desktop, it is the huge diagonal dark curve. */}
-      <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[58%] bg-[#111315] lg:rounded-bl-[200px] z-0 transition-all duration-700 pointer-events-none hidden lg:block shadow-2xl" />
-      {/* Mobile dark background fallback */}
-      <div className="absolute left-0 right-0 bottom-0 top-[50%] bg-[#111315] z-0 lg:hidden pointer-events-none" />
+    <div className="relative min-h-screen w-full bg-[#fffdfa] font-sans text-slate-900 flex flex-col">
+      {/* The Split Background Panel (Fixed to top viewport) */}
+      <div className="absolute right-0 top-0 h-[110vh] w-full lg:w-[58%] bg-[#111315] lg:rounded-bl-[200px] z-0 transition-all duration-700 pointer-events-none hidden lg:block shadow-2xl" />
+      <div className="absolute left-0 right-0 bottom-0 top-[40vh] h-[60vh] bg-[#111315] z-0 lg:hidden pointer-events-none" />
 
       {/* Header */}
       <header className="relative z-50 flex items-center justify-between px-6 lg:px-12 py-6">
@@ -201,6 +222,67 @@ export const HomePage: React.FC = () => {
         </div>
 
       </main>
+
+      {/* Stats Section */}
+      <section className="relative z-10 bg-[#111315] py-20 lg:py-24 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center divide-x divide-white/10">
+            {[
+              { label: 'Placement Rate', value: '95%', icon: TrendingUp },
+              { label: 'Active Recruiters', value: '500+', icon: Users },
+              { label: 'Students Placed', value: '10k+', icon: GraduationCap },
+              { label: 'Average CTC', value: '14 LPA', icon: Briefcase },
+            ].map((stat, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-white/5 flex items-center justify-center text-[#F5C061] mb-4">
+                  <stat.icon className="h-6 w-6" />
+                </div>
+                <div className="text-4xl lg:text-5xl font-black text-white tracking-tighter mb-2">{stat.value}</div>
+                <div className="text-sm font-semibold text-white/50 uppercase tracking-widest">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="relative z-10 bg-[#fffdfa] py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-[#F5C061] font-bold tracking-widest uppercase text-sm mb-4">Core Capabilities</h2>
+            <h3 className="text-4xl lg:text-6xl font-black text-[#111315] leading-tight">Everything you need to <span className="text-[#F5C061]">succeed.</span></h3>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {features.map((feature, idx) => (
+              <div key={idx} className="group p-8 lg:p-10 rounded-[2rem] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)] transition-all duration-300">
+                <div className="h-16 w-16 rounded-2xl bg-[#111315] text-[#F5C061] flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300">
+                  <feature.icon className="h-8 w-8" />
+                </div>
+                <h4 className="text-2xl font-bold text-slate-900 mb-4">{feature.title}</h4>
+                <p className="text-slate-500 leading-relaxed text-lg">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action Footer */}
+      <footer className="relative z-10 bg-[#111315] py-24 overflow-hidden">
+        {/* Abstract background graphics */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#F5C061]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#F5C061]/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+          <h2 className="text-4xl lg:text-6xl font-black text-white mb-8 leading-tight">
+            Ready to accelerate your <br/> placement journey?
+          </h2>
+          <Link to={user ? "/dashboard" : "/login"} className="inline-flex items-center gap-4 bg-[#F5C061] hover:bg-[#e3af53] text-[#111315] px-10 py-5 rounded-full font-black text-lg shadow-xl shadow-[#F5C061]/20 transition-all hover:scale-105">
+            {user ? 'Go to Dashboard' : 'Get Started Now'}
+            <ArrowRight className="h-6 w-6" />
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 };
