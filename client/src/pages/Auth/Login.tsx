@@ -158,7 +158,7 @@ export const Login: React.FC = () => {
           <p className="text-sm text-slate-500 mt-2 font-medium">
             {isRegister 
               ? 'Join the platform to kickstart your placement journey.' 
-              : 'Make a new doc to bring your words, data, and teams together. For free'}
+              : 'Welcome back. Sign in to continue your placement journey.'}
           </p>
         </div>
 
