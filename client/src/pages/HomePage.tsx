@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { ArrowRight, Briefcase, GraduationCap, Sparkles, ChevronRight, ChevronLeft, ChevronDown, CheckCircle, Search, Clock, FileText, Brain, TrendingUp, Users, Target } from 'lucide-react';
 
@@ -28,6 +29,18 @@ const features = [
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
+  const [stats, setStats] = useState<any>({
+    totalStudents: 0,
+    totalRecruiters: 0,
+    totalJobs: 0,
+    latestJob: null
+  });
+
+  useEffect(() => {
+    api.get('/public/home-stats')
+      .then(res => setStats(res.data))
+      .catch(err => console.error('Failed to fetch home stats', err));
+  }, []);
 
   return (
     <div className="relative min-h-screen w-full bg-[#fffdfa] font-sans text-slate-900 flex flex-col">
@@ -37,11 +50,11 @@ export const HomePage: React.FC = () => {
       {/* Header */}
       <header className="relative z-50 flex items-center justify-between px-6 lg:px-12 py-6">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F5C061] font-bold text-[#111315]">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 font-bold text-[#111315]">
             S
           </div>
           <span className="text-xl font-black tracking-tight text-slate-900 lg:text-slate-900">
-            SmartPortal<span className="text-[#F5C061]">.</span>
+            SmartPortal<span className="text-sky-500">.</span>
           </span>
         </div>
 
@@ -52,7 +65,7 @@ export const HomePage: React.FC = () => {
             <input 
               type="text" 
               placeholder="Search roles..." 
-              className="pl-9 pr-4 py-1.5 bg-white/50 border border-slate-200 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-[#F5C061] w-48 text-slate-900"
+              className="pl-9 pr-4 py-1.5 bg-white/50 border border-slate-200 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 w-48 text-slate-900"
             />
           </div>
           <Link to="#" className="text-slate-400 hover:text-slate-900 transition-colors">Why Us?</Link>
@@ -68,15 +81,15 @@ export const HomePage: React.FC = () => {
         {/* Auth Buttons */}
         <div className="flex items-center gap-3">
           {user ? (
-            <Link to="/dashboard" className="px-6 py-2.5 rounded-full bg-[#F5C061] text-[#111315] text-sm font-bold shadow-lg shadow-[#F5C061]/20 hover:scale-105 transition-transform">
+            <Link to="/dashboard" className="px-6 py-2.5 rounded-full bg-sky-500 text-[#111315] text-sm font-bold shadow-lg shadow-sky-500/20 hover:scale-105 transition-transform">
               Dashboard
             </Link>
           ) : (
             <>
               <Link to="/login" className="px-6 py-2.5 rounded-full border border-slate-700 lg:border-white/20 text-slate-900 lg:text-white text-sm font-bold hover:bg-slate-100 lg:hover:bg-white/10 transition-colors">
-                Sign In
+                Sign Up
               </Link>
-              <Link to="/login" className="px-6 py-2.5 rounded-full bg-[#F5C061] text-[#111315] text-sm font-bold shadow-lg shadow-[#F5C061]/20 hover:scale-105 transition-transform">
+              <Link to="/login" className="px-6 py-2.5 rounded-full bg-sky-500 text-[#111315] text-sm font-bold shadow-lg shadow-sky-500/20 hover:scale-105 transition-transform">
                 Login
               </Link>
             </>
@@ -114,7 +127,7 @@ export const HomePage: React.FC = () => {
                 <span className="text-3xl font-black text-slate-900">Portal</span>
               </div>
               <Link to={user ? "/dashboard" : "/login"} className="group flex items-center gap-4 bg-[#111315] hover:bg-black text-white px-6 py-3.5 rounded-full font-bold shadow-xl transition-all hover:pr-4">
-                <div className="bg-[#F5C061] text-[#111315] p-1.5 rounded-full">
+                <div className="bg-sky-500 text-[#111315] p-1.5 rounded-full">
                   <ArrowRight className="h-4 w-4" />
                 </div>
                 <span>Start your journey</span>
@@ -128,14 +141,14 @@ export const HomePage: React.FC = () => {
               <div className="absolute -inset-2 rounded-full border border-dashed border-slate-300 animate-[spin_10s_linear_infinite]" />
               <div className="h-14 w-14 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-md relative z-10 flex items-center justify-center">
                 {/* Fallback avatar icon instead of image */}
-                <div className="bg-[#F5C061] h-full w-full flex items-center justify-center text-[#111315] font-black text-xl">
+                <div className="bg-sky-500 h-full w-full flex items-center justify-center text-[#111315] font-black text-xl">
                   R
                 </div>
               </div>
             </div>
             <div>
               <p className="text-xs font-semibold text-slate-400">Recruiter's Recommendation</p>
-              <p className="text-sm font-bold text-slate-900 flex items-center gap-1 cursor-pointer hover:text-[#F5C061] transition-colors">
+              <p className="text-sm font-bold text-slate-900 flex items-center gap-1 cursor-pointer hover:text-sky-500 transition-colors">
                 View top interview tips <ArrowRight className="h-3 w-3" />
               </p>
             </div>
@@ -150,11 +163,11 @@ export const HomePage: React.FC = () => {
             
             {/* The main abstract graphic or floating elements */}
             <div className="absolute inset-0 flex items-center justify-center animate-[bounce_10s_ease-in-out_infinite]">
-              <div className="h-64 w-64 rounded-full bg-gradient-to-tr from-[#F5C061]/20 to-[#F5C061]/5 blur-3xl absolute" />
-              <div className="h-48 w-48 rounded-full border border-[#F5C061]/20 absolute animate-[spin_20s_linear_infinite]" />
+              <div className="h-64 w-64 rounded-full bg-gradient-to-tr from-sky-500/20 to-sky-500/5 blur-3xl absolute" />
+              <div className="h-48 w-48 rounded-full border border-sky-500/20 absolute animate-[spin_20s_linear_infinite]" />
               <div className="h-72 w-72 rounded-full border border-dashed border-white/10 absolute animate-[spin_30s_linear_infinite_reverse]" />
               
-              <Briefcase className="h-32 w-32 text-[#F5C061] drop-shadow-[0_0_30px_rgba(245,192,97,0.3)] relative z-10" strokeWidth={1} />
+              <Briefcase className="h-32 w-32 text-sky-500 drop-shadow-[0_0_30px_rgba(245,192,97,0.3)] relative z-10" strokeWidth={1} />
             </div>
 
             {/* Floating Orbs & Icons */}
@@ -166,58 +179,70 @@ export const HomePage: React.FC = () => {
             <div className="absolute bottom-1/4 left-0 text-white/50 animate-[bounce_6s_ease-in-out_infinite]">
               <GraduationCap className="h-10 w-10" />
             </div>
-            <div className="absolute top-1/2 left-1/4 h-2 w-2 rounded-full bg-[#F5C061]" />
+            <div className="absolute top-1/2 left-1/4 h-2 w-2 rounded-full bg-sky-500" />
           </div>
 
           {/* Bottom Right Widget (Discount Coupon style) */}
-          <div className="w-full max-w-sm mt-12 lg:absolute lg:bottom-0 lg:right-0">
-            <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 backdrop-blur-md p-5 text-white shadow-2xl relative overflow-hidden group hover:border-white/40 transition-colors">
-              
-              {/* Header */}
-              <div className="flex items-center justify-between mb-4 relative z-10">
-                <span className="text-xs text-white/60">Featured Opportunity</span>
-                <div className="flex items-center gap-2 text-[10px] text-white/60 uppercase">
-                  <span>Prev</span>
-                  <button className="h-4 w-4 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 transition-colors">
-                    <ChevronRight className="h-3 w-3 text-white" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="flex items-center justify-between relative z-10">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-[#111315] flex items-center justify-center border border-white/10 shadow-inner">
-                    <span className="font-black text-[#F5C061] text-lg">G</span>
+          {stats.latestJob && (
+            <div className="w-full max-w-sm mt-12 lg:absolute lg:bottom-0 lg:right-0">
+              <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 backdrop-blur-md p-5 text-white shadow-2xl relative overflow-hidden group hover:border-white/40 transition-colors">
+                
+                {/* Header */}
+                <div className="flex items-center justify-between mb-4 relative z-10">
+                  <span className="text-xs text-white/60">Featured Opportunity</span>
+                  <div className="flex items-center gap-2 text-[10px] text-white/60 uppercase">
+                    <span>New</span>
+                    <button className="h-4 w-4 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 transition-colors">
+                      <ChevronRight className="h-3 w-3 text-white" />
+                    </button>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-white tracking-wide">Google SWE</h4>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <Sparkles className="h-3 w-3 text-rose-500" />
-                      <span className="text-[10px] text-white/60 font-semibold uppercase">Top Rated</span>
+                </div>
+
+                {/* Content */}
+                <div className="flex items-center justify-between relative z-10">
+                  <div className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded-full bg-[#111315] flex items-center justify-center border border-white/10 shadow-inner">
+                      <span className="font-black text-sky-500 text-lg">
+                        {stats.latestJob.postedBy?.profile?.companyName?.charAt(0) || 'C'}
+                      </span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white tracking-wide truncate max-w-[120px]">
+                        {stats.latestJob.title}
+                      </h4>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <Sparkles className="h-3 w-3 text-rose-500" />
+                        <span className="text-[10px] text-white/60 font-semibold uppercase truncate max-w-[80px]">
+                          {stats.latestJob.postedBy?.profile?.companyName || 'Top Tech'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-right">
+                    <div className="text-[10px] text-white/40 line-through">
+                      {stats.latestJob.salary ? `${Math.max(1, (parseInt(stats.latestJob.salary) || 12) - 4)} LPA` : ''}
+                    </div>
+                    <div className="text-xl font-black text-white tracking-tighter">
+                      {stats.latestJob.salary || 'Competitive'}
                     </div>
                   </div>
                 </div>
-                
-                <div className="text-right">
-                  <div className="text-[10px] text-white/40 line-through">12 LPA</div>
-                  <div className="text-xl font-black text-white tracking-tighter">18 LPA</div>
-                </div>
-              </div>
 
-              {/* Apply Pill */}
-              <div className="absolute bottom-5 right-5 z-10">
-                <div className="bg-[#F5C061] text-[#111315] px-3 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-lg shadow-[#F5C061]/20 cursor-pointer hover:scale-105 transition-transform">
-                  <Clock className="h-3 w-3" />
-                  12 Days Left
+                {/* Apply Pill */}
+                <div className="absolute bottom-5 right-5 z-10">
+                  <div className="bg-sky-500 text-[#111315] px-3 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-lg shadow-sky-500/20 cursor-pointer hover:scale-105 transition-transform">
+                    <Clock className="h-3 w-3" />
+                    Apply Now
+                  </div>
                 </div>
-              </div>
 
-              {/* Decorative swooshes matching the design */}
-              <div className="absolute -left-16 -top-16 w-32 h-32 rounded-full border-[0.5px] border-white/10" />
-              <div className="absolute right-0 top-1/2 w-48 h-48 rounded-full border-[0.5px] border-white/5 -translate-y-1/2 translate-x-1/4" />
+                {/* Decorative swooshes matching the design */}
+                <div className="absolute -left-16 -top-16 w-32 h-32 rounded-full border-[0.5px] border-white/10" />
+                <div className="absolute right-0 top-1/2 w-48 h-48 rounded-full border-[0.5px] border-white/5 -translate-y-1/2 translate-x-1/4" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
       </main>
@@ -227,13 +252,13 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center divide-x divide-white/10">
             {[
-              { label: 'Placement Rate', value: '95%', icon: TrendingUp },
-              { label: 'Active Recruiters', value: '500+', icon: Users },
-              { label: 'Students Placed', value: '10k+', icon: GraduationCap },
-              { label: 'Average CTC', value: '14 LPA', icon: Briefcase },
+              { label: 'Registered Students', value: stats.totalStudents, icon: GraduationCap },
+              { label: 'Active Recruiters', value: stats.totalRecruiters, icon: Users },
+              { label: 'Opportunities', value: stats.totalJobs, icon: Briefcase },
+              { label: 'Success Rate', value: '95%', icon: TrendingUp },
             ].map((stat, idx) => (
               <div key={idx} className="flex flex-col items-center justify-center">
-                <div className="h-12 w-12 rounded-full bg-white/5 flex items-center justify-center text-[#F5C061] mb-4">
+                <div className="h-12 w-12 rounded-full bg-white/5 flex items-center justify-center text-sky-500 mb-4">
                   <stat.icon className="h-6 w-6" />
                 </div>
                 <div className="text-4xl lg:text-5xl font-black text-white tracking-tighter mb-2">{stat.value}</div>
@@ -248,14 +273,14 @@ export const HomePage: React.FC = () => {
       <section className="relative z-10 bg-[#fffdfa] py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-[#F5C061] font-bold tracking-widest uppercase text-sm mb-4">Core Capabilities</h2>
-            <h3 className="text-4xl lg:text-6xl font-black text-[#111315] leading-tight">Everything you need to <span className="text-[#F5C061]">succeed.</span></h3>
+            <h2 className="text-sky-500 font-bold tracking-widest uppercase text-sm mb-4">Core Capabilities</h2>
+            <h3 className="text-4xl lg:text-6xl font-black text-[#111315] leading-tight">Everything you need to <span className="text-sky-500">succeed.</span></h3>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {features.map((feature, idx) => (
               <div key={idx} className="group p-8 lg:p-10 rounded-[2rem] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)] transition-all duration-300">
-                <div className="h-16 w-16 rounded-2xl bg-[#111315] text-[#F5C061] flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300">
+                <div className="h-16 w-16 rounded-2xl bg-[#111315] text-sky-500 flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300">
                   <feature.icon className="h-8 w-8" />
                 </div>
                 <h4 className="text-2xl font-bold text-slate-900 mb-4">{feature.title}</h4>
@@ -266,17 +291,63 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Interview Tips Section */}
+      <section className="relative z-10 bg-slate-50 py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+              <h2 className="text-sky-500 font-bold tracking-widest uppercase text-sm mb-4">Expert Advice</h2>
+              <h3 className="text-4xl lg:text-5xl font-black text-[#111315] leading-tight">Top Interview <span className="text-sky-500">Tips.</span></h3>
+            </div>
+            <p className="text-slate-500 max-w-md">
+              Stand out to recruiters with these actionable strategies curated from top tech hiring managers.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+            {[
+              {
+                title: "Master the STAR Method",
+                desc: "Structure your answers using Situation, Task, Action, and Result to give clear, impactful responses during behavioral rounds.",
+                highlight: "Behavioral",
+              },
+              {
+                title: "Think Out Loud",
+                desc: "In coding interviews, your thought process matters more than the final code. Always explain your approach before writing a single line.",
+                highlight: "Technical",
+              },
+              {
+                title: "Ask Insightful Questions",
+                desc: "Always have 2-3 thoughtful questions ready for the interviewer about the company culture or tech stack. It shows genuine interest.",
+                highlight: "General",
+              }
+            ].map((tip, idx) => (
+              <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-500/30 transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <CheckCircle className="h-24 w-24 text-sky-500" />
+                </div>
+                <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-sky-50 text-sky-600 text-xs font-bold uppercase tracking-wider mb-6">
+                  {tip.highlight}
+                </div>
+                <h4 className="text-xl font-bold text-slate-900 mb-3">{tip.title}</h4>
+                <p className="text-slate-500 leading-relaxed text-sm">{tip.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action Footer */}
       <footer className="relative z-10 bg-[#111315] py-24 overflow-hidden">
         {/* Abstract background graphics */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#F5C061]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#F5C061]/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
         
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <h2 className="text-4xl lg:text-6xl font-black text-white mb-8 leading-tight">
             Ready to accelerate your <br/> placement journey?
           </h2>
-          <Link to={user ? "/dashboard" : "/login"} className="inline-flex items-center gap-4 bg-[#F5C061] hover:bg-[#e3af53] text-[#111315] px-10 py-5 rounded-full font-black text-lg shadow-xl shadow-[#F5C061]/20 transition-all hover:scale-105">
+          <Link to={user ? "/dashboard" : "/login"} className="inline-flex items-center gap-4 bg-sky-500 hover:bg-sky-600 text-[#111315] px-10 py-5 rounded-full font-black text-lg shadow-xl shadow-sky-500/20 transition-all hover:scale-105">
             {user ? 'Go to Dashboard' : 'Get Started Now'}
             <ArrowRight className="h-6 w-6" />
           </Link>

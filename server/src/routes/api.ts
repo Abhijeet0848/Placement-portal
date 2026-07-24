@@ -6,7 +6,7 @@ import { analyzeResumeUpload, evaluateInterview, getCareerRoadmap, createCoverLe
 import { getExams, getExamById, submitExam, createExam } from '../controllers/exam.controller';
 import { createThread, getAllThreads, editThread, deleteThread, addReply, createReview, getAllReviews, scheduleInterview, getInterviews } from '../controllers/discussion.controller';
 import { getRecommendedJobs } from '../controllers/recommendation.controller';
-import { getStudentDashboardStats, getRecruiterDashboardStats, getAdminDashboardStats, sendEmail } from '../controllers/dashboard.controller';
+import { getStudentDashboardStats, getRecruiterDashboardStats, getAdminDashboardStats, sendEmail, getPublicStats } from '../controllers/dashboard.controller';
 import { getPermissions, updatePermissions, createBackup, restoreBackup, getActivityLogs, updateUserStatus } from '../controllers/admin.controller';
 // Removed extra import
 import { authenticateJWT, requireRole } from '../middleware/auth';
@@ -140,5 +140,8 @@ router.post('/interviews', authenticateJWT, requireRole(['Recruiter', 'Placement
 
 // Job Recommendation Engine
 router.get('/jobs/recommended', authenticateJWT, getRecommendedJobs);
+
+// Public Stats
+router.get('/public/home-stats', getPublicStats);
 
 export default router;

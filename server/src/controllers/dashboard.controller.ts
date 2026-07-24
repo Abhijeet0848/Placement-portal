@@ -210,3 +210,29 @@ export async function getAdminDashboardStats(req: AuthenticatedRequest, res: Res
   }
 }
 
+export async function getPublicStats(req: any, res: Response) {
+  try {
+    const JobModel = (await import('../models/Job')).default;
+    
+    // Count specific roles
+    const totalStudents = await User.countDocuments({ role: 'Student' });
+    const totalRecruiters = await User.countDocuments({ role: { $in: ['Recruiter', 'PlacementOfficer', 'Admin'] } });
+    
+    const totalJobs = await JobModel.countDocuments();
+    
+    // Get the most recent active job
+    const latestJob = await JobModel.findOne()
+      .sort({ createdAt: -1 })
+      .populate('postedBy', 'name email profile');
+
+    return res.json({
+      totalStudents,
+      totalRecruiters,
+      totalJobs,
+      latestJob
+    });
+  } catch (error: any) {
+    logger.error(`Get public stats failed: ${error?.message || error}`);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
