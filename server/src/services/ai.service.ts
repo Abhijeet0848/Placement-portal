@@ -407,6 +407,16 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
       return JSON.parse(cleanJson);
     } catch (error: any) {
       logger.error(`Gemini generateExamQuestions failed: ${error?.message || error}`);
+      return Array(count).fill(0).map((_, i) => ({
+        questionText: `DEBUG ERROR: ${error?.message || error} - Fallback ${i + 1} about ${topic}`,
+        category: topic,
+        difficulty,
+        marks: 2,
+        negativeMarks: 0.5,
+        options: ["A", "B", "C", "D"],
+        correctAnswerIndex: 0,
+        explanation: "Simulated fallback explanation."
+      }));
     }
   }
 
