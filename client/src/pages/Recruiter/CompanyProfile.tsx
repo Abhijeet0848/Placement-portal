@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Mail, MapPin, Phone, Sparkles, Edit2, Save } from 'lucide-react';
+import { Building2, Mail, MapPin, Phone, Sparkles, Edit2, Save, Globe, Briefcase, Image as ImageIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 
@@ -9,6 +9,9 @@ export const CompanyProfile: React.FC = () => {
   const [overview, setOverview] = useState(user?.profile?.experience?.[0] || '');
   const [location, setLocation] = useState(user?.profile?.branch || 'Location not set');
   const [phone, setPhone] = useState(user?.profile?.phone || 'Phone not set');
+  const [industry, setIndustry] = useState(user?.profile?.skills?.[0] || 'Industry not set');
+  const [website, setWebsite] = useState(user?.profile?.github || 'Website not set');
+  const [logoUrl, setLogoUrl] = useState(user?.profile?.avatar || '');
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
@@ -19,7 +22,10 @@ export const CompanyProfile: React.FC = () => {
           ...user?.profile,
           experience: [overview],
           branch: location,
-          phone: phone
+          phone: phone,
+          skills: [industry],
+          github: website,
+          avatar: logoUrl
         }
       });
       setIsEditing(false);
@@ -36,13 +42,24 @@ export const CompanyProfile: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-indigo-600">Company Profile</p>
-            <h2 className="mt-2 text-2xl font-bold text-slate-900">{user.name}</h2>
-            <p className="mt-2 text-sm text-slate-600">
-              {overview || "No company overview provided."}
-            </p>
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div className="flex gap-6 items-start">
+            {/* Logo display */}
+            <div className="w-24 h-24 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+              {logoUrl ? (
+                <img src={logoUrl} alt="Company Logo" className="w-full h-full object-cover" />
+              ) : (
+                <Building2 className="w-10 h-10 text-indigo-300" />
+              )}
+            </div>
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-indigo-600">Company Profile</p>
+              <h2 className="mt-1 text-3xl font-bold text-slate-900">{user.name}</h2>
+              <div className="flex flex-wrap gap-3 mt-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg"><Briefcase className="w-3.5 h-3.5"/> {industry}</span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg"><Globe className="w-3.5 h-3.5"/> {website !== 'Website not set' ? website : 'No Website'}</span>
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-700">
@@ -127,6 +144,51 @@ export const CompanyProfile: React.FC = () => {
                 />
               ) : (
                 <span>{user.profile?.branch || location}</span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Briefcase className="h-4 w-4 text-indigo-600" />
+              {isEditing ? (
+                <input 
+                  type="text" 
+                  className="p-1 border rounded w-full"
+                  value={industry}
+                  onChange={(e) => setIndustry(e.target.value)}
+                  placeholder="e.g. Information Technology"
+                />
+              ) : (
+                <span>{industry}</span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Globe className="h-4 w-4 text-indigo-600" />
+              {isEditing ? (
+                <input 
+                  type="text" 
+                  className="p-1 border rounded w-full"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  placeholder="e.g. https://www.company.com"
+                />
+              ) : (
+                <span>{website}</span>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <ImageIcon className="h-4 w-4 text-indigo-600" />
+              {isEditing ? (
+                <input 
+                  type="text" 
+                  className="p-1 border rounded w-full"
+                  value={logoUrl}
+                  onChange={(e) => setLogoUrl(e.target.value)}
+                  placeholder="Logo Image URL"
+                />
+              ) : (
+                <span className="text-xs truncate" title={logoUrl}>{logoUrl || 'No logo URL provided'}</span>
               )}
             </div>
           </div>

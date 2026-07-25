@@ -9,6 +9,9 @@ export const JobCreator: React.FC = () => {
   const [description, setDescription] = useState('');
   const [salary, setSalary] = useState<number | ''>('');
   const [currency, setCurrency] = useState('INR');
+  const [jobType, setJobType] = useState('Full-time');
+  const [experience, setExperience] = useState('Fresher (0 years)');
+  const [deadline, setDeadline] = useState('');
   const [minCGPA, setMinCGPA] = useState<number | ''>('');
   const [cgpaScale, setCgpaScale] = useState('10.0');
   const [branches, setBranches] = useState<string[]>(['MCA', 'B.Tech CSE']);
@@ -54,6 +57,9 @@ export const JobCreator: React.FC = () => {
         location,
         description,
         salary: Number(salary),
+        jobType,
+        experience,
+        deadline,
         minCGPA: Number(minCGPA),
         branches,
         skills
@@ -65,6 +71,7 @@ export const JobCreator: React.FC = () => {
       setLocation('');
       setDescription('');
       setSalary('');
+      setDeadline('');
       setMinCGPA('');
       setSkills([]);
       
@@ -199,6 +206,50 @@ export const JobCreator: React.FC = () => {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Job Type & Experience */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2 group">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Job Type</label>
+                  <select
+                    value={jobType}
+                    onChange={(e) => setJobType(e.target.value)}
+                    className="w-full px-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none cursor-pointer"
+                  >
+                    <option value="Full-time">Full-time</option>
+                    <option value="Internship">Internship</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2 group">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Required Experience</label>
+                  <select
+                    value={experience}
+                    onChange={(e) => setExperience(e.target.value)}
+                    className="w-full px-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none cursor-pointer"
+                  >
+                    <option value="Fresher (0 years)">Fresher (0 years)</option>
+                    <option value="0-1 Years">0-1 Years</option>
+                    <option value="1-3 Years">1-3 Years</option>
+                    <option value="3-5 Years">3-5 Years</option>
+                    <option value="5+ Years">5+ Years</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Deadline */}
+              <div className="space-y-2 group">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-rose-600 ">Application Deadline</label>
+                <input
+                  type="date"
+                  required
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  className="w-full px-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 focus:bg-white focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 outline-none"
+                />
               </div>
 
               {/* Description */}
