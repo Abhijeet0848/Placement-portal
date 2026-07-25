@@ -288,7 +288,7 @@ export const CodingLab: React.FC = () => {
             <div className="absolute inset-0 border-4 border-slate-200 rounded-full"></div>
             <div className="absolute inset-0 border-4 border-indigo-600 rounded-full border-t-transparent "></div>
           </div>
-          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest ">Initializing Lab Environment...</p>
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest ">Initializing Test Environment...</p>
         </div>
       ) : !activeExam ? (
         <>
@@ -304,7 +304,7 @@ export const CodingLab: React.FC = () => {
                   Skill Assessment Platform
                 </div>
                 <h3 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
-                  Placement <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300">Coding Lab</span>
+                  Screening <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300">Test</span>
                 </h3>
                 <p className="text-lg text-slate-300 leading-relaxed font-medium">
                   Execute mock coding challenges and aptitude MCQs in an isolated sandbox. Your performance metrics automatically sync with recruiter dashboards for fast-track shortlisting.
@@ -736,7 +736,7 @@ export const CodingLab: React.FC = () => {
               onClick={() => { setActiveExam(null); setResults(null); }}
               className="px-8 py-3 bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl font-bold  shadow-sm flex items-center gap-2"
             >
-              Back to Laboratory Dashboard
+              Back to Dashboard
             </button>
           </div>
         </div>
