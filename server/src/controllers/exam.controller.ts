@@ -314,12 +314,22 @@ export async function submitExam(req: AuthenticatedRequest, res: Response) {
       }
     }
 
-    const codingScore = exam.codingChallenges.length > 0
-      ? Math.round((passedCodingChallengesCount / exam.codingChallenges.length) * 100)
-      : 100;
+    let codingScore = 0;
+    if (exam.codingChallenges.length > 0) {
+      codingScore = Math.round((passedCodingChallengesCount / exam.codingChallenges.length) * 100);
+    }
 
     // 3. Analytics & AI Feedback
-    const totalScore = Math.round((mcqScore + codingScore) / 2);
+    let totalScore = 0;
+    if (exam.codingChallenges.length > 0 && totalPossibleMcqMarks > 0) {
+      totalScore = Math.round((mcqScore + codingScore) / 2);
+    } else if (exam.codingChallenges.length > 0) {
+      totalScore = codingScore;
+    } else if (totalPossibleMcqMarks > 0) {
+      totalScore = mcqScore;
+    } else {
+      totalScore = 0; // Empty exam
+    }
     
     // Simulate AI Topic Analysis
     const skillAnalysis: Record<string, number> = {};

@@ -156,10 +156,16 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         ]
       },
       {
+        title: 'EXAM',
+        emoji: '📝',
+        items: [
+          { name: 'Screening Test', path: '/coding-lab', icon: CheckSquare },
+        ]
+      },
+      {
         title: 'PRACTICE',
         emoji: '💻',
         items: [
-          { name: 'Skill Assessments', path: '/coding-lab', icon: CheckSquare },
           { name: 'Community', path: '/forum', icon: MessageSquare },
         ]
       },
