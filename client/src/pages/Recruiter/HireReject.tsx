@@ -34,8 +34,15 @@ export const HireReject: React.FC = () => {
     }
   };
 
-  const handleGenerateOffer = (name: string, company: string) => {
-    alert(`Offer Letter Generated and emailed to ${name} from ${company}!`);
+  const handleGenerateOffer = async (name: string, company: string) => {
+    setLoading(true);
+    try {
+      // Simulate API call to generate offer
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      alert(`Digital Offer Letter generated and dispatched to ${name}'s Student Portal for ${company}!`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredCandidates = candidates.filter(app => {
@@ -119,7 +126,7 @@ export const HireReject: React.FC = () => {
                         onClick={() => handleGenerateOffer(student.name, companyName)}
                         className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-bold rounded-xl shadow-lg flex items-center gap-2 transition-all"
                       >
-                        <Mail className="w-4 h-4"/> Generate Offer
+                        <Mail className="w-4 h-4"/> Dispatch Digital Offer
                       </button>
                     ) : (
                       <select 

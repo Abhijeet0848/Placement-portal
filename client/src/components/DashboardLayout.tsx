@@ -145,6 +145,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
           { name: 'AI Job Match', path: '/job-matcher', icon: Briefcase },
           { name: 'Eligibility Checker', path: '/eligibility-checker', icon: ShieldAlert },
           { name: 'My Applications', path: '/applications', icon: FileText },
+          { name: 'Digital Offers', path: '/offers', icon: Award },
         ]
       },
       {
@@ -167,6 +168,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         emoji: '💻',
         items: [
           { name: 'Community', path: '/forum', icon: MessageSquare },
+          { name: 'Messages', path: '/messages', icon: MessageSquare },
         ]
       },
       {
@@ -195,6 +197,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         { name: 'Exam Creator', path: '/officer/exams', icon: CheckSquare },
       ]},
       { title: 'COMMUNICATION', emoji: '📧', items: [
+        { name: 'Messages', path: '/messages', icon: MessageSquare },
         { name: 'Send Emails', path: '/send-emails', icon: FileText },
       ]},
       { title: 'DISCOVER', emoji: '🔍', items: [

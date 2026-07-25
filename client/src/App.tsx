@@ -23,6 +23,8 @@ import { Scheduler } from './pages/Recruiter/Scheduler';
 import { CompanyProfile } from './pages/Recruiter/CompanyProfile';
 import { ResumeRanking } from './pages/Recruiter/ResumeRanking';
 import { SendEmails } from './pages/Recruiter/SendEmails';
+import { Messages } from './pages/Messages';
+import { StudentOffers } from './pages/Student/StudentOffers';
 import { Analytics as RecruiterAnalytics } from './pages/Recruiter/Analytics';
 import { HireReject } from './pages/Recruiter/HireReject';
 import { Reports } from './pages/Officer/Reports';
@@ -94,10 +96,12 @@ function App() {
         <Route path="/skill-assessment" element={<AnimatedRoute><SkillAssessment /></AnimatedRoute>} />
         <Route path="/jobs" element={<AnimatedRoute><JobBoard /></AnimatedRoute>} />
         <Route path="/applications" element={<AnimatedRoute><ApplicationsTracker /></AnimatedRoute>} />
+        <Route path="/offers" element={<AnimatedRoute><StudentOffers /></AnimatedRoute>} />
         <Route path="/career-roadmap" element={<AnimatedRoute><CareerAdvisor /></AnimatedRoute>} />
         <Route path="/coding-lab" element={<AnimatedRoute><CodingLab /></AnimatedRoute>} />
         <Route path="/mock-interview" element={<AnimatedRoute><MockInterview /></AnimatedRoute>} />
         <Route path="/forum" element={<AnimatedRoute><Forum /></AnimatedRoute>} />
+        <Route path="/messages" element={<AnimatedRoute><Messages /></AnimatedRoute>} />
         <Route path="/reviews" element={<AnimatedRoute><Reviews /></AnimatedRoute>} />
         <Route path="/candidates" element={<AnimatedRoute><Candidates /></AnimatedRoute>} />
         <Route path="/company-profile" element={<AnimatedRoute><CompanyProfile /></AnimatedRoute>} />

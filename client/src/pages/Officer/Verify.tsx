@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
-import { Users, Award, Eye, Trash2, Mail, X, Building2, CheckCircle2, XCircle } from 'lucide-react';
+import { Users, Award, Eye, Trash2, Mail, X, Building2, CheckCircle2, XCircle, QrCode } from 'lucide-react';
 
 export const Verify: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Companies' | 'Students'>('Companies');
@@ -241,6 +241,15 @@ export const Verify: React.FC = () => {
                               {c.verified ? 'Revoke Approval' : 'Approve Certificate'}
                             </button>
                             
+                            {c.verified && (
+                              <button
+                                className="p-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+                                title="View Verification QR Code"
+                              >
+                                <QrCode className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+
                             <button
                               onClick={() => {
                                 setPreviewUrl(c.url);

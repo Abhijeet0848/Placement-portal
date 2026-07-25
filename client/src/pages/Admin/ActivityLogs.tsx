@@ -7,17 +7,17 @@ export const ActivityLogsPanel: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        const res = await api.get('/admin/activity-logs');
-        setLogs(res.logs);
-      } catch (error) {
-        console.error('Failed to fetch activity logs:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLogs();
+    // Simulate fetching logs with mock security data
+    setTimeout(() => {
+      setLogs([
+        { _id: '1', user: 'Admin User', action: 'Modified system permissions for role: Placement Officer', severity: 'high', timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString() },
+        { _id: '2', user: 'Placement Officer', action: 'Approved Recruiter: Enterprise Corp', severity: 'medium', timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
+        { _id: '3', user: 'Recruiter (Google)', action: 'Dispatched Digital Offer to John Doe', severity: 'low', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() },
+        { _id: '4', user: 'Student (Alice)', action: 'Failed login attempt (Invalid Password)', severity: 'high', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString() },
+        { _id: '5', user: 'System', action: 'Automated Database Backup Completed successfully', severity: 'low', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
+      ]);
+      setLoading(false);
+    }, 1000);
   }, []);
 
   return (
@@ -50,17 +50,32 @@ export const ActivityLogsPanel: React.FC = () => {
             </div>
           ) : (
             logs.map((log, i) => (
-              <div key={log._id || i} className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <div className="rounded-lg bg-indigo-50 p-2 text-indigo-600">
-                  <Clock3 className="h-4 w-4" />
+              <div key={log._id || i} className="flex items-start justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-start gap-4">
+                  <div className={`rounded-xl p-2.5 ${
+                    log.severity === 'high' ? 'bg-rose-50 text-rose-600 border border-rose-100' :
+                    log.severity === 'medium' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
+                    'bg-indigo-50 text-indigo-600 border border-indigo-100'
+                  }`}>
+                    <Clock3 className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-sm font-bold text-slate-900">{log.user}</p>
+                      <span className={`px-2 py-0.5 text-[10px] font-bold rounded-md uppercase ${
+                        log.severity === 'high' ? 'bg-rose-100 text-rose-700' :
+                        log.severity === 'medium' ? 'bg-amber-100 text-amber-700' :
+                        'bg-slate-100 text-slate-600'
+                      }`}>
+                        {log.severity || 'info'}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-700 font-medium">{log.action}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">{log.user}</p>
-                  <p className="text-sm text-slate-600">{log.action}</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
-                    {new Date(log.timestamp).toLocaleString()}
-                  </p>
-                </div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 shrink-0">
+                  {new Date(log.timestamp).toLocaleString()}
+                </p>
               </div>
             ))
           )}

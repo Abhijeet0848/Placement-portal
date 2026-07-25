@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import {
   FileText, Upload, Plus, Trash2, ExternalLink, Award,
-  Phone, GraduationCap, Code2, Sparkles, User, X, Download, Eye
+  Phone, GraduationCap, Code2, Sparkles, User, X, Download, Eye, QrCode
 } from 'lucide-react';
 
 export const Profile: React.FC = () => {
@@ -353,6 +353,11 @@ export const Profile: React.FC = () => {
                     <span className={`rounded-full px-3 py-1.5 text-xs font-bold border ${certificate.verified ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
                       {certificate.verified ? 'Verified' : 'Pending'}
                     </span>
+                    {certificate.verified && (
+                      <button className="p-1.5 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-200" title="View Verification QR Code">
+                        <QrCode className="h-4 w-4" />
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={async () => {

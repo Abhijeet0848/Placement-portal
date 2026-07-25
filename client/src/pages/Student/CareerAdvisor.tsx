@@ -15,6 +15,7 @@ export const CareerAdvisor: React.FC = () => {
 
   // Roadmap states
   const [interests, setInterests] = useState('');
+  const [targetCompany, setTargetCompany] = useState('');
   const [roadmap, setRoadmap] = useState<any>(null);
   const [generatingRoadmap, setGeneratingRoadmap] = useState(false);
 
@@ -65,11 +66,16 @@ export const CareerAdvisor: React.FC = () => {
 
     try {
       const interestArr = interests.split(',').map(i => i.trim());
-      const data = await api.post('/ai/career-roadmap', {
+      const payload = {
         skills: user.profile.skills || [],
         cgpa: user.profile.cgpa || 8.0,
-        interests: interestArr
-      });
+        interests: interestArr,
+      };
+      if (targetCompany) {
+        (payload as any).targetCompany = targetCompany;
+      }
+      
+      const data = await api.post('/ai/career-roadmap', payload);
       setRoadmap(data.recommendations);
     } catch (err: any) {
       setErrorMsg('Failed to generate roadmap suggestions.');
@@ -196,6 +202,16 @@ export const CareerAdvisor: React.FC = () => {
                   placeholder="e.g. Distributed Systems, Machine Learning, Web Performance"
                   value={interests}
                   onChange={(e) => setInterests(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Company (Optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Google, Amazon, Microsoft"
+                  value={targetCompany}
+                  onChange={(e) => setTargetCompany(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 />
               </div>
