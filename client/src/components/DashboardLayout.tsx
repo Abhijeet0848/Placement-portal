@@ -207,9 +207,10 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
       ]},
       { title: 'MANAGEMENT', emoji: '⚙️', items: [
+        { name: 'Drive Management', path: '/officer/drives', icon: CheckSquare },
         { name: 'Manage Companies', path: '/officer/companies', icon: Briefcase },
+        { name: 'Approve Recruiters', path: '/officer/verify', icon: Shield },
         { name: 'Manage Students', path: '/officer/students', icon: Users },
-        { name: 'Verify Documents', path: '/officer/verify', icon: Shield },
         { name: 'Send Notices', path: '/officer/notices', icon: Bell },
         { name: 'Exam Creator', path: '/officer/exams', icon: CheckSquare },
       ]},

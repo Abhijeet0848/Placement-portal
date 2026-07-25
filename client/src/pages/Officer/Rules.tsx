@@ -5,7 +5,8 @@ export const Rules: React.FC = () => {
   const [minGPA, setMinGPA] = useState(7.0);
   const [allowedBranches, setAllowedBranches] = useState<string[]>(['MCA', 'B.Tech CSE']);
   const [backlogsLimit, setBacklogsLimit] = useState(0);
-  const [activeRules, setActiveRules] = useState<{ minGPA: number, branches: string[], backlogs: number } | null>(null);
+  const [targetSemester, setTargetSemester] = useState(8);
+  const [activeRules, setActiveRules] = useState<{ minGPA: number, branches: string[], backlogs: number, semester: number } | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -17,6 +18,7 @@ export const Rules: React.FC = () => {
         setMinGPA(parsed.minGPA);
         setAllowedBranches(parsed.branches);
         setBacklogsLimit(parsed.backlogs);
+        setTargetSemester(parsed.semester || 8);
       } catch (e) {
         console.error("Failed to parse saved rules");
       }
@@ -33,7 +35,7 @@ export const Rules: React.FC = () => {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    const rules = { minGPA, branches: allowedBranches, backlogs: backlogsLimit };
+    const rules = { minGPA, branches: allowedBranches, backlogs: backlogsLimit, semester: targetSemester };
     setActiveRules(rules);
     localStorage.setItem('activeRules', JSON.stringify(rules));
     setMessage('Campus-wide eligibility rules configuration updated successfully!');
@@ -44,6 +46,7 @@ export const Rules: React.FC = () => {
     setMinGPA(0);
     setAllowedBranches([]);
     setBacklogsLimit(0);
+    setTargetSemester(8);
     setActiveRules(null);
     localStorage.removeItem('activeRules');
     setMessage('All eligibility rules have been removed.');
@@ -115,6 +118,18 @@ export const Rules: React.FC = () => {
             />
           </div>
 
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Target Semester</label>
+            <input
+              type="number"
+              value={targetSemester}
+              onChange={(e) => setTargetSemester(Number(e.target.value))}
+              min="1"
+              max="10"
+              className="w-full px-3 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-indigo-500 "
+            />
+          </div>
+
           <div className="flex gap-3 pt-2">
             <button
               type="button"
@@ -149,6 +164,10 @@ export const Rules: React.FC = () => {
                 <div className="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100">
                   <span className="font-medium text-slate-500">Maximum Backlogs</span>
                   <span className="font-bold text-slate-900 text-lg">{activeRules.backlogs}</span>
+                </div>
+                <div className="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100">
+                  <span className="font-medium text-slate-500">Target Semester</span>
+                  <span className="font-bold text-slate-900 text-lg">Sem {activeRules.semester}</span>
                 </div>
                 <div className="flex flex-col bg-white p-3 rounded-xl border border-slate-100 space-y-3">
                   <span className="font-medium text-slate-500">Allowed Academic Branches</span>

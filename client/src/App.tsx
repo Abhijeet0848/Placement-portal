@@ -33,6 +33,7 @@ import { ManageStudents } from './pages/Officer/ManageStudents';
 import { SendNotices } from './pages/Officer/SendNotices';
 import { PlacementAnalytics } from './pages/Officer/PlacementAnalytics';
 import { ExamCreator } from './pages/Officer/ExamCreator';
+import { DriveManagement } from './pages/Officer/DriveManagement';
 import { Users } from './pages/Admin/Users';
 import { Permissions } from './pages/Admin/Permissions';
 import { ActivityLogs } from './pages/Admin/ActivityLogs';
@@ -110,6 +111,7 @@ function App() {
         <Route path="/officer/rules" element={<AnimatedRoute><Rules /></AnimatedRoute>} />
         <Route path="/officer/reports" element={<AnimatedRoute><Reports /></AnimatedRoute>} />
         <Route path="/officer/companies" element={<AnimatedRoute><ManageCompanies /></AnimatedRoute>} />
+        <Route path="/officer/drives" element={<AnimatedRoute><DriveManagement /></AnimatedRoute>} />
         <Route path="/officer/students" element={<AnimatedRoute><ManageStudents /></AnimatedRoute>} />
         <Route path="/officer/notices" element={<AnimatedRoute><SendNotices /></AnimatedRoute>} />
         <Route path="/officer/analytics" element={<AnimatedRoute><PlacementAnalytics /></AnimatedRoute>} />
