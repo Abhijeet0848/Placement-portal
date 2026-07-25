@@ -1,6 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
 import logger from '../utils/logger';
-import { model as geminiModel } from '../config/gemini';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -46,7 +45,7 @@ export async function analyzeResume(resumeText: string) {
         Output strictly valid JSON only:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
       const text = response.text.trim();
 
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -182,7 +181,7 @@ export async function matchResumeToJob(resumeText: string, jobDetails: { title: 
         Output strictly valid JSON:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
@@ -234,8 +233,12 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
       Output strictly valid JSON:
     `;
 
-    const result = await geminiModel.generateContent(prompt);
-    const text = result.response.text();
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+
+    const text = response.text;
     const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
     return JSON.parse(cleanJson);
   } catch (error: any) {
@@ -253,11 +256,15 @@ export async function generateCoverLetter(studentName: string, skills: string[],
       Keep it concise, under 300 words. Format it in plain text.
     `;
 
-    const result = await geminiModel.generateContent(prompt);
-    return result.response.text().trim();
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+
+    const text = response.text;
   } catch (error: any) {
     logger.error(`Gemini generateCoverLetter failed: ${error?.message || error}`);
-    
+
     // Fallback
     const relevantSkills = skills.slice(0, 5);
     const skillsStr = relevantSkills.length > 0 ? relevantSkills.join(', ') : 'modern software engineering principles';
@@ -291,7 +298,7 @@ export async function evaluateInterviewAnswer(history: { sender: string, text: s
         Do NOT output JSON. Just reply naturally with your text as the interviewer.
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
       return { text: response.text.trim() };
     } catch (error: any) {
       logger.error(`Gemini evaluateInterviewAnswer failed: ${error?.message || error}`);
@@ -325,7 +332,7 @@ export async function generateInterviewReport(history: { sender: string, text: s
         Output strictly valid JSON:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
@@ -358,7 +365,7 @@ export async function generateGeneralChatResponse(history: { sender: string, tex
         Provide your next response as the Assistant. Be conversational, concise, and helpful. Do NOT output JSON.
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
       return { text: response.text.trim() };
     } catch (error: any) {
       logger.error(`Gemini generateGeneralChatResponse failed: ${error?.message || error}`);
@@ -396,7 +403,7 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
         Respond only with the JSON array. Do not include markdown blocks or any other text.
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
@@ -453,7 +460,7 @@ export async function parseExamQuestionsFromText(pdfText: string) {
         Output strictly valid JSON array only:
       `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
+      const response = await genAI.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
       const text = response.text.trim();
       const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);

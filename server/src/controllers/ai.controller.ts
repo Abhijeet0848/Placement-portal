@@ -1,6 +1,5 @@
 import { Response } from 'express';
 import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport, generateGeneralChatResponse, generateExamQuestions } from '../services/ai.service';
-import { model as geminiModel } from '../config/gemini';
 import { parseResumePDF } from '../services/parser.service';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { isMockDb } from '../config/dbConnect';
@@ -17,7 +16,7 @@ export async function analyzeResumeUpload(req: AuthenticatedRequest, res: Respon
   try {
     logger.info(`Parsing PDF buffer of size ${req.file.size} bytes...`);
     const parsed = await parseResumePDF(req.file.buffer);
-    
+
     // Analyze full extracted text using Gemini / Local Multi-factor NLP Engine
     const resumeText = (parsed.fullText && parsed.fullText.trim().length > 20)
       ? parsed.fullText
@@ -186,9 +185,9 @@ export async function parseExamUpload(req: AuthenticatedRequest, res: Response) 
   try {
     logger.info(`Parsing Exam PDF buffer of size ${req.file.size} bytes...`);
     const parsed = await parseResumePDF(req.file.buffer);
-    
+
     if (!parsed.fullText || parsed.fullText.trim().length < 20) {
-       return res.status(400).json({ message: 'Could not extract enough text from the PDF. Please ensure it is a text-based PDF.' });
+      return res.status(400).json({ message: 'Could not extract enough text from the PDF. Please ensure it is a text-based PDF.' });
     }
 
     const questions = await parseExamQuestionsFromText(parsed.fullText);
@@ -205,28 +204,33 @@ export async function parseExamUpload(req: AuthenticatedRequest, res: Response) 
 
 export async function careerGuidanceChat(req: AuthenticatedRequest, res: Response) {
   try {
-      const { message } = req.body;
-      if (!message) {
-          return res.status(400).json({
-              success: false,
-              message: "Message is required",
-          });
-      }
+    const { message } = req.body;
 
-      // Generate content from Gemini
-      const result = await geminiModel.generateContent(message);
-      const response = result.response.text();
+    if (!message) {
+      return res.status(400).json({
+        success: false,
+        message: "Message is required",
+      });
+    }
 
-      // Send back the response
-      res.json({
-          success: true,
-          reply: response,
-      });
-  } catch (err: any) {
-      logger.error(err);
-      res.status(500).json({
-          success: false,
-          message: err.message,
-      });
+    const response = await generateGeneralChatResponse([
+      {
+        sender: "Student",
+        text: message,
+      },
+    ]);
+
+    return res.json({
+      success: true,
+      reply: response.text,
+    });
+
+  } catch (error: any) {
+    logger.error(`Career Guidance Chat failed: ${error?.message || error}`);
+
+    return res.status(500).json({
+      success: false,
+      message: error?.message || "Server error",
+    });
   }
 }
