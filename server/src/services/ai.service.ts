@@ -402,7 +402,8 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
 
       const response = await model.generateContent(prompt);
       const text = response.response.text().trim();
-      const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const matchJson = text.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
+      const cleanJson = matchJson ? matchJson[0] : text.replace(/```json/gi, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
     } catch (error: any) {
       logger.error(`Gemini generateExamQuestions failed: ${error?.message || error}`);

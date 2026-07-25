@@ -250,8 +250,14 @@ export async function getRecruiterApplications(req: AuthenticatedRequest, res: R
       const enrichedApps = apps.map(app => {
         const student = mockDb.users.find(u => u._id === app.studentId);
         const job = mockDb.jobs.find(j => j._id === app.jobId);
+        let score = (app as any).assessmentScore;
+        if (score === null || score === undefined) {
+          const latestResult = mockDb.assessmentResults.filter(r => r.user === app.studentId).sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())[0];
+          if (latestResult) score = latestResult.score;
+        }
         return {
           ...app,
+          assessmentScore: score,
           student: student ? { id: student._id, name: student.name, email: student.email, profile: student.profile } : null,
           job: job ? { id: job._id, title: job.title, company: job.company } : null
         };
@@ -263,7 +269,19 @@ export async function getRecruiterApplications(req: AuthenticatedRequest, res: R
       const jobIds = jobs.map(j => j._id);
       const apps = await Application.find({ jobId: { $in: jobIds } })
         .populate('studentId', 'name email profile')
-        .populate('jobId', 'title company');
+        .populate('jobId', 'title company')
+        .lean();
+
+      const AssessmentResult = (await import('../models/AssessmentResult')).default;
+      for (const app of apps) {
+        if (app.assessmentScore === null || app.assessmentScore === undefined) {
+          const studentId = typeof app.studentId === 'object' && '_id' in app.studentId ? (app.studentId as any)._id : app.studentId;
+          const latestResult = await AssessmentResult.findOne({ user: studentId }).sort({ submittedAt: -1 });
+          if (latestResult) {
+            app.assessmentScore = latestResult.score;
+          }
+        }
+      }
 
       return res.json({ applications: apps });
     }
