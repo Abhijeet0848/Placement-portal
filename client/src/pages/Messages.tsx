@@ -5,30 +5,13 @@ import { Search, Send, User, CheckCircle2, Clock, MessageSquare } from 'lucide-r
 export const Messages: React.FC = () => {
   const { user } = useAuth();
   
-  // Mock contacts based on role
-  const initialContacts = user?.role === 'Student' ? [
-    { id: 'c1', name: 'Alice (Recruiter at Google)', role: 'Recruiter', online: true, lastMsg: 'Your interview is scheduled for tomorrow.', unread: 1 },
-    { id: 'c2', name: 'Bob (HR at Amazon)', role: 'Recruiter', online: false, lastMsg: 'We received your application.', unread: 0 },
-  ] : [
-    { id: 's1', name: 'John Doe', role: 'Student', online: true, lastMsg: 'Thank you for the opportunity!', unread: 2 },
-    { id: 's2', name: 'Jane Smith', role: 'Student', online: false, lastMsg: 'Can we reschedule?', unread: 0 },
-  ];
-
-  const [contacts, setContacts] = useState(initialContacts);
-  const [activeContactId, setActiveContactId] = useState(initialContacts[0]?.id || null);
+  // In a real app, this would be fetched from the backend.
+  // We initialize as empty for now to remove dummy data.
+  const [contacts, setContacts] = useState<any[]>([]);
+  const [activeContactId, setActiveContactId] = useState<string | null>(null);
   const [currentMessage, setCurrentMessage] = useState('');
   
-  const [chats, setChats] = useState<Record<string, {sender: string, text: string, time: string}[]>>({
-    'c1': [
-      { sender: 'them', text: 'Hi, we reviewed your profile and were very impressed.', time: '10:00 AM' },
-      { sender: 'me', text: 'Thank you! Im very interested in the role.', time: '10:05 AM' },
-      { sender: 'them', text: 'Your interview is scheduled for tomorrow.', time: '10:10 AM' }
-    ],
-    's1': [
-      { sender: 'me', text: 'Hi John, congratulations on clearing the first round.', time: '09:00 AM' },
-      { sender: 'them', text: 'Thank you for the opportunity!', time: '09:15 AM' }
-    ]
-  });
+  const [chats, setChats] = useState<Record<string, {sender: string, text: string, time: string}[]>>({});
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -82,41 +65,48 @@ export const Messages: React.FC = () => {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          {contacts.map(contact => (
-            <div 
-              key={contact.id}
-              onClick={() => {
-                setActiveContactId(contact.id);
-                // Clear unread
-                setContacts(contacts.map(c => c.id === contact.id ? { ...c, unread: 0 } : c));
-              }}
-              className={`p-4 border-b border-slate-100 flex items-start gap-3 cursor-pointer transition-colors ${
-                activeContactId === contact.id ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-100 border-l-4 border-l-transparent'
-              }`}
-            >
-              <div className="relative">
-                <div className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center text-slate-600 font-bold">
-                  {contact.name.charAt(0)}
-                </div>
-                {contact.online && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center mb-1">
-                  <h4 className="text-sm font-bold text-slate-900 truncate">{contact.name}</h4>
-                  {contact.unread > 0 && (
-                    <span className="bg-indigo-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                      {contact.unread}
-                    </span>
+          {contacts.length === 0 ? (
+            <div className="p-8 text-center text-slate-400">
+              <User className="w-12 h-12 mx-auto mb-3 opacity-20" />
+              <p className="text-sm font-medium">No contacts found.</p>
+            </div>
+          ) : (
+            contacts.map(contact => (
+              <div 
+                key={contact.id}
+                onClick={() => {
+                  setActiveContactId(contact.id);
+                  // Clear unread
+                  setContacts(contacts.map(c => c.id === contact.id ? { ...c, unread: 0 } : c));
+                }}
+                className={`p-4 border-b border-slate-100 flex items-start gap-3 cursor-pointer transition-colors ${
+                  activeContactId === contact.id ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-100 border-l-4 border-l-transparent'
+                }`}
+              >
+                <div className="relative">
+                  <div className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center text-slate-600 font-bold">
+                    {contact.name.charAt(0)}
+                  </div>
+                  {contact.online && (
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
                   )}
                 </div>
-                <p className={`text-xs truncate ${contact.unread > 0 ? 'text-slate-800 font-semibold' : 'text-slate-500'}`}>
-                  {contact.lastMsg}
-                </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="text-sm font-bold text-slate-900 truncate">{contact.name}</h4>
+                    {contact.unread > 0 && (
+                      <span className="bg-indigo-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                        {contact.unread}
+                      </span>
+                    )}
+                  </div>
+                  <p className={`text-xs truncate ${contact.unread > 0 ? 'text-slate-800 font-semibold' : 'text-slate-500'}`}>
+                    {contact.lastMsg}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
