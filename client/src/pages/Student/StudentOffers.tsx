@@ -2,19 +2,9 @@ import React, { useState } from 'react';
 import { FileText, CheckCircle, Download, Briefcase, Building } from 'lucide-react';
 
 export const StudentOffers: React.FC = () => {
-  const [offers, setOffers] = useState([
-    {
-      id: '1',
-      company: 'Google',
-      role: 'Frontend Engineer',
-      package: '25 LPA',
-      status: 'Pending',
-      date: '2023-11-20',
-      letterText: 'Dear Student,\n\nWe are thrilled to offer you the position of Frontend Engineer at Google. Your skills and interview performance were outstanding.\n\nPackage: 25 LPA\nJoining Date: July 2024\n\nPlease accept this offer digitally to confirm your placement.\n\nBest regards,\nGoogle Recruitment Team'
-    }
-  ]);
+  const [offers, setOffers] = useState<any[]>([]);
 
-  const [selectedOffer, setSelectedOffer] = useState(offers[0]);
+  const [selectedOffer, setSelectedOffer] = useState<any>(null);
   const [isAccepting, setIsAccepting] = useState(false);
 
   const handleAccept = () => {
@@ -46,32 +36,38 @@ export const StudentOffers: React.FC = () => {
         
         {/* Offer List */}
         <div className="col-span-1 space-y-4">
-          {offers.map(offer => (
-            <div 
-              key={offer.id} 
-              onClick={() => setSelectedOffer(offer)}
-              className={`p-5 rounded-2xl border cursor-pointer transition-all ${
-                selectedOffer.id === offer.id 
-                  ? 'border-indigo-600 bg-indigo-50 shadow-md' 
-                  : 'border-slate-200 bg-white hover:border-indigo-300'
-              }`}
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-bold text-slate-900 text-lg">{offer.company}</h3>
-                {offer.status === 'Accepted' ? (
-                  <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3" /> ACCEPTED
-                  </span>
-                ) : (
-                  <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-md">
-                    PENDING ACTION
-                  </span>
-                )}
-              </div>
-              <p className="text-sm font-semibold text-slate-600 flex items-center gap-1.5 mb-1"><Briefcase className="w-3.5 h-3.5" /> {offer.role}</p>
-              <p className="text-xs text-slate-500 flex items-center gap-1.5"><Building className="w-3.5 h-3.5" /> {offer.package}</p>
+          {offers.length === 0 ? (
+            <div className="p-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-center text-slate-500 text-sm font-medium">
+              No offers received yet.
             </div>
-          ))}
+          ) : (
+            offers.map(offer => (
+              <div 
+                key={offer.id} 
+                onClick={() => setSelectedOffer(offer)}
+                className={`p-5 rounded-2xl border cursor-pointer transition-all ${
+                  selectedOffer?.id === offer.id 
+                    ? 'border-indigo-600 bg-indigo-50 shadow-md' 
+                    : 'border-slate-200 bg-white hover:border-indigo-300'
+                }`}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-slate-900 text-lg">{offer.company}</h3>
+                  {offer.status === 'Accepted' ? (
+                    <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" /> ACCEPTED
+                    </span>
+                  ) : (
+                    <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-md">
+                      PENDING ACTION
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm font-semibold text-slate-600 flex items-center gap-1.5 mb-1"><Briefcase className="w-3.5 h-3.5" /> {offer.role}</p>
+                <p className="text-xs text-slate-500 flex items-center gap-1.5"><Building className="w-3.5 h-3.5" /> {offer.package}</p>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Offer Details */}
@@ -114,8 +110,8 @@ export const StudentOffers: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center text-slate-400 bg-white rounded-2xl border border-slate-200">
-              Select an offer to view details.
+            <div className="h-full min-h-[300px] flex items-center justify-center text-slate-400 bg-white rounded-2xl border border-slate-200">
+              Select an offer to view details, or check back later if you don't have any offers yet.
             </div>
           )}
         </div>
