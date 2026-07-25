@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport, generateGeneralChatResponse, generateExamQuestions } from '../services/ai.service';
+import { model as geminiModel } from '../config/gemini';
 import { parseResumePDF } from '../services/parser.service';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { isMockDb } from '../config/dbConnect';
@@ -199,5 +200,33 @@ export async function parseExamUpload(req: AuthenticatedRequest, res: Response) 
   } catch (error: any) {
     logger.error(`Exam parsing upload failed: ${error?.message || error}`);
     return res.status(500).json({ message: error?.message || 'Server exam parsing error' });
+  }
+}
+
+export async function careerGuidanceChat(req: AuthenticatedRequest, res: Response) {
+  try {
+      const { message } = req.body;
+      if (!message) {
+          return res.status(400).json({
+              success: false,
+              message: "Message is required",
+          });
+      }
+
+      // Generate content from Gemini
+      const result = await geminiModel.generateContent(message);
+      const response = result.response.text();
+
+      // Send back the response
+      res.json({
+          success: true,
+          reply: response,
+      });
+  } catch (err: any) {
+      logger.error(err);
+      res.status(500).json({
+          success: false,
+          message: err.message,
+      });
   }
 }

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { requestOtp, verifyOtp, googleLogin, microsoftLogin, refreshToken, getProfile, updateProfile, getAllStudents, getAllUsers, deleteStudent, updateStudentProfile, logout, uploadProfilePicture } from '../controllers/auth.controller';
 import { createJob, getAllJobs, applyJob, getRecruiterApplications, updateApplicationStatus, getStudentApplications } from '../controllers/jobs.controller';
-import { analyzeResumeUpload, evaluateInterview, endInterview, getCareerRoadmap, createCoverLetter, matchJob, parseExamUpload, handleGeneralChat, generateExamQuestionsHandler } from '../controllers/ai.controller';
+import { analyzeResumeUpload, evaluateInterview, endInterview, getCareerRoadmap, createCoverLetter, matchJob, parseExamUpload, handleGeneralChat, generateExamQuestionsHandler, careerGuidanceChat } from '../controllers/ai.controller';
 import { getExams, getExamById, submitExam, createExam } from '../controllers/exam.controller';
 import { createThread, getAllThreads, editThread, deleteThread, addReply, createReview, getAllReviews, scheduleInterview, getInterviews } from '../controllers/discussion.controller';
 import { getRecommendedJobs } from '../controllers/recommendation.controller';
@@ -108,6 +108,7 @@ router.post('/ai/career-roadmap', authenticateJWT, getCareerRoadmap);
 router.post('/ai/cover-letter', authenticateJWT, createCoverLetter);
 router.post('/ai/match-job', authenticateJWT, matchJob);
 router.post('/ai/parse-exam', authenticateJWT, requireRole(['Recruiter', 'PlacementOfficer', 'Admin']), upload.single('exam'), parseExamUpload);
+router.post('/ai/career-guidance-chat', authenticateJWT, careerGuidanceChat);
 
 // Exam & Assessment System
 router.get('/exams', authenticateJWT, getExams);
