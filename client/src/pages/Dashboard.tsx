@@ -7,7 +7,8 @@ import {
 } from 'recharts';
 import {
   TrendingUp, Award, Users, CheckCircle,
-  Briefcase, ShieldCheck, Database, PlusCircle, Sparkles
+  Briefcase, ShieldCheck, Database, PlusCircle, Sparkles,
+  Calendar, Bell, FileBadge, Code, Target, BookOpen, Clock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AiChatWidget } from '../components/AiChatWidget';
@@ -100,7 +101,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-slate-300 transition-all group">
             <div className="flex items-center justify-between">
               <div>
@@ -109,6 +110,18 @@ export const Dashboard: React.FC = () => {
               </div>
               <div className="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Award className="h-5 w-5 text-indigo-500" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-slate-300 transition-all group">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Job Match Score</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-1">{dStats.avgMatchScore || 85}%</h4>
+              </div>
+              <div className="h-10 w-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Target className="h-5 w-5 text-purple-500" />
               </div>
             </div>
           </div>
@@ -147,6 +160,96 @@ export const Dashboard: React.FC = () => {
                 <TrendingUp className="h-5 w-5 text-amber-500" />
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* New 3-column Grid for Schedule, Certificates, Tests */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Upcoming Tests */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col h-full">
+            <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Code className="h-4 w-4 text-indigo-500" /> Upcoming Tests
+            </h4>
+            <div className="space-y-4 flex-1">
+              <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl transition-all hover:bg-slate-100/50">
+                <div className="flex justify-between items-start mb-2">
+                  <h5 className="font-bold text-slate-800 text-sm">Google - SDE I Coding Round</h5>
+                  <span className="px-2 py-0.5 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Due Today</span>
+                </div>
+                <div className="flex items-center gap-4 text-xs text-slate-500 font-semibold">
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 90 Mins</span>
+                  <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> 2 Coding, 10 MCQs</span>
+                </div>
+              </div>
+              <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl transition-all hover:bg-slate-100/50">
+                <div className="flex justify-between items-start mb-2">
+                  <h5 className="font-bold text-slate-800 text-sm">TCS NQT Prep Assessment</h5>
+                  <span className="px-2 py-0.5 bg-slate-200 text-slate-700 rounded text-[10px] font-bold">Practice</span>
+                </div>
+                <div className="flex items-center gap-4 text-xs text-slate-500 font-semibold">
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 180 Mins</span>
+                </div>
+              </div>
+            </div>
+            <Link to="/coding-lab" className="mt-4 text-xs font-bold text-indigo-600 hover:text-indigo-700 text-center block">View Test Sandbox →</Link>
+          </div>
+
+          {/* Interview Schedule */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col h-full">
+            <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-blue-500" /> Interview Schedule
+            </h4>
+            <div className="space-y-4 flex-1">
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex flex-col items-center justify-center font-bold">
+                  <span className="text-xs uppercase">Oct</span>
+                  <span className="text-lg leading-none">12</span>
+                </div>
+                <div>
+                  <h5 className="font-bold text-slate-800 text-sm">Technical Round - Microsoft</h5>
+                  <p className="text-xs text-slate-500 font-semibold mt-1">10:00 AM • MS Teams</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-slate-100 text-slate-600 rounded-xl flex flex-col items-center justify-center font-bold">
+                  <span className="text-xs uppercase">Oct</span>
+                  <span className="text-lg leading-none">15</span>
+                </div>
+                <div>
+                  <h5 className="font-bold text-slate-800 text-sm">HR Mock Interview (AI)</h5>
+                  <p className="text-xs text-slate-500 font-semibold mt-1">Self-paced • AI Simulator</p>
+                </div>
+              </div>
+            </div>
+            <Link to="/mock-interview" className="mt-4 text-xs font-bold text-blue-600 hover:text-blue-700 text-center block">Practice Mock Interview →</Link>
+          </div>
+
+          {/* Certificates */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col h-full">
+            <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <FileBadge className="h-4 w-4 text-amber-500" /> Verified Certificates
+            </h4>
+            <div className="space-y-3 flex-1">
+              <div className="flex items-center gap-3 p-3 border border-slate-100 rounded-xl bg-slate-50 hover:bg-white transition-colors cursor-pointer shadow-sm">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0">
+                  <Award className="w-5 h-5" />
+                </div>
+                <div>
+                  <h5 className="font-bold text-slate-800 text-sm leading-tight">AWS Solutions Architect</h5>
+                  <p className="text-[10px] font-bold text-emerald-600 mt-0.5">VERIFIED • EXP 2029</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 border border-slate-100 rounded-xl bg-slate-50 hover:bg-white transition-colors cursor-pointer shadow-sm">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0">
+                  <Award className="w-5 h-5" />
+                </div>
+                <div>
+                  <h5 className="font-bold text-slate-800 text-sm leading-tight">Meta Frontend Developer</h5>
+                  <p className="text-[10px] font-bold text-emerald-600 mt-0.5">VERIFIED • PERMANENT</p>
+                </div>
+              </div>
+            </div>
+            <Link to="/profile" className="mt-4 text-xs font-bold text-amber-600 hover:text-amber-700 text-center block">Manage Certificates →</Link>
           </div>
         </div>
 
@@ -278,9 +381,10 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Application List */}
-        <div className="saas-card p-6">
-          <div className="relative z-10 space-y-4">
+        {/* Application List & Notifications */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="saas-card p-6 h-full flex flex-col">
+            <div className="relative z-10 space-y-4 flex-1">
             <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Job Applications Timeline</h4>
             {apps.length === 0 ? (
               <div className="text-center py-6">
@@ -330,6 +434,33 @@ export const Dashboard: React.FC = () => {
                 })}
               </div>
             )}
+          </div>
+          
+          {/* Notifications Panel */}
+          <div className="saas-card p-6 h-full flex flex-col">
+            <div className="relative z-10 space-y-4 flex-1">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                  <Bell className="h-4 w-4 text-rose-500" /> Notifications
+                </h4>
+                <span className="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">3 NEW</span>
+              </div>
+              <div className="space-y-3 mt-2">
+                <div className="p-4 bg-slate-50 border-l-4 border-indigo-500 rounded-r-xl shadow-sm transition-all hover:translate-x-1 cursor-pointer">
+                  <p className="text-xs text-slate-500 font-bold mb-1">Just Now</p>
+                  <p className="text-sm font-semibold text-slate-800">Your <span className="font-black text-indigo-600">Resume Score</span> was updated. You are now highly eligible for Google and TCS.</p>
+                </div>
+                <div className="p-4 bg-slate-50 border-l-4 border-emerald-500 rounded-r-xl shadow-sm transition-all hover:translate-x-1 cursor-pointer">
+                  <p className="text-xs text-slate-500 font-bold mb-1">2 Hours Ago</p>
+                  <p className="text-sm font-semibold text-slate-800">Your application for <span className="font-black text-emerald-600">Frontend Engineer at Meta</span> was Shortlisted!</p>
+                </div>
+                <div className="p-4 bg-slate-50 border-l-4 border-amber-500 rounded-r-xl shadow-sm transition-all hover:translate-x-1 cursor-pointer">
+                  <p className="text-xs text-slate-500 font-bold mb-1">Yesterday</p>
+                  <p className="text-sm font-semibold text-slate-800">Reminder: You have an upcoming coding assessment for Amazon.</p>
+                </div>
+              </div>
+            </div>
+            <button className="mt-4 text-xs font-bold text-slate-500 hover:text-slate-800 text-center block w-full py-2 border-t border-slate-100">View All Activity →</button>
           </div>
         </div>
       </div>
