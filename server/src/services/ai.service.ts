@@ -237,7 +237,7 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
 
     const response = await model.generateContent(prompt);
 
-    const text = response.response.text;
+    const text = response.response.text();
     const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
     return JSON.parse(cleanJson);
   } catch (error: any) {
@@ -257,7 +257,7 @@ export async function generateCoverLetter(studentName: string, skills: string[],
 
     const response = await model.generateContent(prompt);
 
-    const text = response.response.text;
+    const text = response.response.text();
   } catch (error: any) {
     logger.error(`Gemini generateCoverLetter failed: ${error?.message || error}`);
 
