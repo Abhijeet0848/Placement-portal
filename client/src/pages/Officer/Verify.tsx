@@ -305,7 +305,14 @@ export const Verify: React.FC = () => {
                 const isImage = url.match(/\.(jpeg|jpg|gif|png|webp)$/) || url.startsWith('data:image/');
 
                 if (isPdf) {
-                  return <iframe src={previewUrl} className="w-full h-[70vh] rounded border border-slate-200" title={previewName} />;
+                  return (
+                    <object data={previewUrl} type="application/pdf" className="w-full h-[70vh] rounded border border-slate-200" title={previewName}>
+                      <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                        <p className="text-slate-500 mb-4">Your browser (e.g. Brave) may block inline PDF previews.</p>
+                        <a href={previewUrl} target="_blank" rel="noreferrer" className="inline-block px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700">Open Document</a>
+                      </div>
+                    </object>
+                  );
                 } else if (isImage) {
                   return <img src={previewUrl} alt={previewName} className="max-w-full max-h-[70vh] object-contain rounded border border-slate-200 shadow-sm" />;
                 } else {

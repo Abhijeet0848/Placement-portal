@@ -610,11 +610,17 @@ export const Profile: React.FC = () => {
               </button>
             </div>
             <div className="flex-1 w-full bg-slate-200 p-2">
-              <iframe 
-                src={previewDoc.url} 
+              <object 
+                data={previewDoc.url} 
+                type="application/pdf"
                 className="w-full h-full border-none rounded-xl bg-white shadow-inner"
                 title="Document Preview"
-              />
+              >
+                <div className="flex flex-col items-center justify-center h-full text-center bg-white rounded-xl">
+                  <p className="text-slate-500 mb-4">Your browser (e.g. Brave) may block inline PDF previews.</p>
+                  <a href={previewDoc.url} target="_blank" rel="noreferrer" className="text-indigo-600 underline font-bold">Open Document</a>
+                </div>
+              </object>
             </div>
             <div className="px-5 py-4 border-t border-slate-100 flex justify-end bg-slate-50 gap-3">
               <button
