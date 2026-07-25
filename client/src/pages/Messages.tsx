@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Search, Send, User, CheckCircle2, Clock } from 'lucide-react';
+import { Search, Send, User, CheckCircle2, Clock, MessageSquare } from 'lucide-react';
 
 export const Messages: React.FC = () => {
   const { user } = useAuth();
