@@ -8,6 +8,7 @@ export const JobCreator: React.FC = () => {
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [salary, setSalary] = useState<number | ''>('');
+  const [currency, setCurrency] = useState('INR');
   const [minCGPA, setMinCGPA] = useState<number | ''>('');
   const [cgpaScale, setCgpaScale] = useState('10.0');
   const [branches, setBranches] = useState<string[]>(['MCA', 'B.Tech CSE']);
@@ -174,17 +175,26 @@ export const JobCreator: React.FC = () => {
                 </div>
 
                 <div className="space-y-2 group">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-emerald-600 ">Compensation (LPA)</label>
-                  <div className="relative">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-emerald-600 ">Compensation</label>
+                  <div className="flex rounded-2xl bg-slate-50 border-2 border-slate-100 group-focus-within:bg-white group-focus-within:border-emerald-500 group-focus-within:ring-4 group-focus-within:ring-emerald-500/10 transition-all overflow-hidden">
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="bg-slate-100 text-slate-600 font-bold px-3 border-r-2 border-slate-200 outline-none cursor-pointer"
+                    >
+                      <option value="INR">₹ (INR)</option>
+                      <option value="USD">$ (USD)</option>
+                      <option value="EUR">€ (EUR)</option>
+                      <option value="GBP">£ (GBP)</option>
+                    </select>
                     <input
                       type="number"
                       required
                       placeholder="12.5"
                       value={salary}
                       onChange={(e) => setSalary(Number(e.target.value))}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm bg-slate-50 border-2 border-slate-100 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10  outline-none font-bold"
+                      className="w-full px-4 py-3.5 bg-transparent text-sm text-slate-800 placeholder-slate-400 outline-none font-bold"
                     />
-                    <DollarSign className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 " />
                   </div>
                 </div>
               </div>
