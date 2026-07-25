@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IAssessmentResult extends Document {
+  _id: string;
   user: mongoose.Types.ObjectId;
   exam: mongoose.Types.ObjectId;
   score: number;
@@ -19,6 +20,7 @@ export interface IAssessmentResult extends Document {
 }
 
 const AssessmentResultSchema: Schema = new Schema({
+  _id: { type: String },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   exam: { type: mongoose.Schema.Types.ObjectId, ref: 'Exam', required: true },
   score: { type: Number, required: true },
