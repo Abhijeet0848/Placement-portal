@@ -76,6 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     localStorage.removeItem('tokens');
     setUser(null);
+    window.location.href = '/';
   };
 
   const updateUser = async (profileData: any) => {
