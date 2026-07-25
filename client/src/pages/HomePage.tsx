@@ -109,13 +109,8 @@ export const HomePage: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex items-center gap-10 text-sm font-medium">
-          <Link to="#" className="text-slate-400 hover:text-white transition-colors">Why Us?</Link>
-          <div className="flex flex-col items-center">
-            <Link to="#" className="text-white font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">About</Link>
-            <div className="w-1.5 h-1.5 bg-sky-500 rounded-full mt-1.5 absolute -bottom-3" />
-          </div>
-          <Link to="#" className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5">
-            Features <ChevronDown className="h-3.5 w-3.5" />
+          <Link to="#features" className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5">
+            Features
           </Link>
         </nav>
 
