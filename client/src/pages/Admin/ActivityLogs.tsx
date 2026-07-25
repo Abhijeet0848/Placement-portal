@@ -7,17 +7,18 @@ export const ActivityLogsPanel: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching logs with mock security data
-    setTimeout(() => {
-      setLogs([
-        { _id: '1', user: 'Admin User', action: 'Modified system permissions for role: Placement Officer', severity: 'high', timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString() },
-        { _id: '2', user: 'Placement Officer', action: 'Approved Recruiter: Enterprise Corp', severity: 'medium', timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
-        { _id: '3', user: 'Recruiter (Google)', action: 'Dispatched Digital Offer to John Doe', severity: 'low', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() },
-        { _id: '4', user: 'Student (Alice)', action: 'Failed login attempt (Invalid Password)', severity: 'high', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString() },
-        { _id: '5', user: 'System', action: 'Automated Database Backup Completed successfully', severity: 'low', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
-      ]);
-      setLoading(false);
-    }, 1000);
+    const fetchLogs = async () => {
+      try {
+        const response = await api.get('/admin/activity-logs');
+        setLogs(response.logs || []);
+      } catch (error) {
+        console.error('Failed to fetch activity logs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLogs();
   }, []);
 
   return (
