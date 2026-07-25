@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { api } from '../../services/api';
-import { Sparkles, Award, Play, Send, Mic, MicOff, MessageSquare } from 'lucide-react';
+import { Sparkles, Award, Play, Send, Mic, MicOff, MessageSquare, Video, VideoOff } from 'lucide-react';
 
 interface ChatMessage {
   sender: 'AI' | 'Student';
@@ -26,6 +26,38 @@ export const MockInterview: React.FC = () => {
   // Voice toggle
   const [voiceMode, setVoiceMode] = useState(false);
   const [isListening, setIsListening] = useState(false);
+
+  // Video feed
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [isVideoEnabled, setIsVideoEnabled] = useState(false);
+
+  const toggleVideo = async () => {
+    if (isVideoEnabled && stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+      setIsVideoEnabled(false);
+      if (videoRef.current) videoRef.current.srcObject = null;
+    } else {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        setStream(mediaStream);
+        setIsVideoEnabled(true);
+        if (videoRef.current) videoRef.current.srcObject = mediaStream;
+      } catch (err) {
+        console.error("Error accessing webcam:", err);
+        alert("Could not access webcam. Please check permissions.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [stream]);
 
   // Speech Recognition setup
   const startListening = () => {
@@ -130,9 +162,19 @@ export const MockInterview: React.FC = () => {
       });
       setReport(response.report);
       setActiveSession(false);
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        setStream(null);
+        setIsVideoEnabled(false);
+      }
     } catch (err) {
       console.error(err);
       setActiveSession(false);
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        setStream(null);
+        setIsVideoEnabled(false);
+      }
     }
   };
 
@@ -281,84 +323,119 @@ export const MockInterview: React.FC = () => {
         // ACTIVE MOCK CHAT PANEL
         <div className="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white shadow-2xl">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-10"></div>
-          <div className="relative z-10 flex flex-col h-[600px]">
-            {/* Header */}
-            <div className="flex justify-between items-center p-6 border-b border-slate-200">
-              <div className="flex items-center gap-2 text-indigo-600">
-                <Sparkles className="h-5 w-5" />
-                <span className="text-sm font-bold uppercase tracking-wider">AI Corporate Assessor Room</span>
-              </div>
-              <button
-                onClick={handleEndSession}
-                className="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-xl text-xs font-bold shadow-lg  "
-              >
-                End Interview Session
-              </button>
-            </div>
-
-            {/* Chats Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              {chats.map((chat, idx) => {
-                const isAi = chat.sender === 'AI';
-                return (
-                  <div key={idx} className={`flex flex-col ${isAi ? 'items-start' : 'items-end'} space-y-2`}>
-                    {/* Chat Text */}
-                    <div className={`p-4 rounded-2xl text-sm max-w-2xl leading-relaxed font-medium ${
-                      isAi 
-                        ? 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-900 border-2 border-slate-300' 
-                        : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
-                    }`}>
-                      {chat.text}
-                    </div>
-                  </div>
-                );
-              })}
-
-              {loadingReply && (
-                <div className="flex items-center space-x-3 text-sm text-slate-600 py-3">
-                  <div className="flex space-x-1.5">
-                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full "></span>
-                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full " style={{ animationDelay: '0.1s' }}></span>
-                    <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full " style={{ animationDelay: '0.2s' }}></span>
-                  </div>
-                  <span className="font-semibold">AI Evaluator grading answer...</span>
+          <div className="relative z-10 flex flex-col md:flex-row h-[600px]">
+            {/* Left: Chats Area */}
+            <div className="flex-1 flex flex-col border-r border-slate-200 min-w-0">
+              {/* Header */}
+              <div className="flex justify-between items-center p-6 border-b border-slate-200 shrink-0">
+                <div className="flex items-center gap-2 text-indigo-600">
+                  <Sparkles className="h-5 w-5" />
+                  <span className="text-sm font-bold uppercase tracking-wider">AI Corporate Assessor Room</span>
                 </div>
-              )}
+                <button
+                  onClick={handleEndSession}
+                  className="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-xl text-xs font-bold shadow-lg"
+                >
+                  End Interview Session
+                </button>
+              </div>
+
+              {/* Chats Area */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                {chats.map((chat, idx) => {
+                  const isAi = chat.sender === 'AI';
+                  return (
+                    <div key={idx} className={`flex flex-col ${isAi ? 'items-start' : 'items-end'} space-y-2`}>
+                      {/* Chat Text */}
+                      <div className={`p-4 rounded-2xl text-sm max-w-2xl leading-relaxed font-medium ${
+                        isAi 
+                          ? 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-900 border-2 border-slate-300' 
+                          : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
+                      }`}>
+                        {chat.text}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {loadingReply && (
+                  <div className="flex items-center space-x-3 text-sm text-slate-600 py-3">
+                    <div className="flex space-x-1.5">
+                      <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full animate-bounce"></span>
+                      <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></span>
+                      <span className="h-2.5 w-2.5 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                    </div>
+                    <span className="font-semibold">AI Evaluator grading answer...</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Form message input */}
+              <form onSubmit={handleSendAnswer} className="flex space-x-3 p-6 border-t border-slate-200 shrink-0">
+                {voiceMode && (
+                  <button
+                    type="button"
+                    onClick={startListening}
+                    className={`p-3 rounded-xl border-2 flex-shrink-0 transition-colors ${
+                      isListening 
+                        ? 'bg-rose-500 text-white border-rose-600 shadow-inner'
+                        : 'bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100'
+                    }`}
+                    title="Click to dictate answer"
+                  >
+                    <Mic className="h-5 w-5" />
+                  </button>
+                )}
+                <input
+                  type="text"
+                  placeholder={isListening ? "Listening... Speak now" : "Type your explanation answer here..."}
+                  value={currentInput}
+                  onChange={(e) => setCurrentInput(e.target.value)}
+                  disabled={loadingReply}
+                  className="flex-1 px-4 py-3 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                />
+                <button
+                  type="submit"
+                  disabled={loadingReply}
+                  className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl font-bold shadow-lg hover:shadow-xl flex items-center gap-2"
+                >
+                  <Send className="h-5 w-5" />
+                  <span className="hidden sm:inline">Send</span>
+                </button>
+              </form>
             </div>
 
-            {/* Form message input */}
-            <form onSubmit={handleSendAnswer} className="flex space-x-3 p-6 border-t border-slate-200">
-              {voiceMode && (
-                <button
-                  type="button"
-                  onClick={startListening}
-                  className={`p-3 rounded-xl border-2  flex-shrink-0 ${
-                    isListening 
-                      ? 'bg-rose-500 text-white border-rose-600 '
-                      : 'bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100'
-                  }`}
-                  title="Click to dictate answer"
+            {/* Right: Video Feed */}
+            <div className="w-full md:w-72 bg-slate-50/50 flex flex-col p-6 shrink-0 border-t md:border-t-0 border-slate-200">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Your Camera</h4>
+                <button 
+                  onClick={toggleVideo}
+                  className={`p-2 rounded-lg transition-colors ${isVideoEnabled ? 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200' : 'bg-slate-200 text-slate-500 hover:bg-slate-300'}`}
+                  title="Toggle Camera"
                 >
-                  <Mic className="h-5 w-5" />
+                  {isVideoEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4" />}
                 </button>
-              )}
-              <input
-                type="text"
-                placeholder={isListening ? "Listening... Speak now" : "Type your explanation answer here..."}
-                value={currentInput}
-                onChange={(e) => setCurrentInput(e.target.value)}
-                disabled={loadingReply}
-                className="flex-1 px-4 py-3 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
-              />
-              <button
-                type="submit"
-                disabled={loadingReply}
-                className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-40 text-white rounded-xl font-bold shadow-lg   hover:shadow-xl flex items-center gap-2"
-              >
-                <Send className="h-5 w-5" />
-                <span>Send</span>
-              </button>
-            </form>
+              </div>
+              <div className="w-full aspect-video md:aspect-[3/4] bg-slate-900 rounded-2xl overflow-hidden relative shadow-inner border-4 border-slate-800">
+                <video 
+                  ref={videoRef} 
+                  autoPlay 
+                  muted 
+                  playsInline
+                  className={`w-full h-full object-cover transform -scale-x-100 ${isVideoEnabled ? 'opacity-100' : 'opacity-0'}`} 
+                />
+                {!isVideoEnabled && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-2">
+                    <VideoOff className="w-8 h-8 opacity-50" />
+                    <span className="text-xs font-semibold">Camera Off</span>
+                  </div>
+                )}
+              </div>
+              <div className="mt-4 text-xs text-slate-500 text-center font-medium leading-relaxed">
+                Enable your camera for a more realistic interview experience. AI currently does not analyze video.
+              </div>
+            </div>
           </div>
         </div>
       )}
