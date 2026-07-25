@@ -663,7 +663,7 @@ export const Dashboard: React.FC = () => {
 
     return (
       <div className="space-y-6">
-        <div className="saas-card p-8 bg-slate-900 text-white">
+        <div className="bg-slate-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
           <div className="relative z-10">
             <h3 className="text-2xl font-black tracking-tight">System Security Administration</h3>
             <p className="text-sm text-slate-300 mt-2">Configure role permissions, back up datasets, and inspect application logs.</p>
