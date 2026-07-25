@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IAssessmentResult extends Document {
+export interface IAssessmentResult extends Document<string> {
   _id: string;
   user: mongoose.Types.ObjectId;
   exam: mongoose.Types.ObjectId;

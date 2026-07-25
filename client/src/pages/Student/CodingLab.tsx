@@ -592,11 +592,11 @@ export const CodingLab: React.FC = () => {
             
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
               <div className="text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-200 dark:border-emerald-400/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-4">
                   <CheckCircle2 className="h-4 w-4" /> Assessment Completed successfully
                 </div>
-                <h4 className="text-4xl md:text-5xl font-black text-white tracking-tight">AI Diagnostic Report</h4>
-                <p className="text-sm text-slate-400 mt-3 max-w-xl">
+                <h4 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">AI Diagnostic Report</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 max-w-xl">
                   Your results have been processed using advanced AI evaluation. Review your company readiness and skill breakdown below.
                 </p>
               </div>
