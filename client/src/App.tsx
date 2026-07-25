@@ -11,6 +11,7 @@ import { CodingLab } from './pages/Student/CodingLab';
 import { JobBoard } from './pages/Student/JobBoard';
 import { MockInterview } from './pages/Student/MockInterview';
 import { Profile } from './pages/Student/Profile';
+import { ProfileDetail } from './pages/Student/ProfileDetail';
 import { ResumeAnalyzer } from './pages/Student/ResumeAnalyzer';
 import { JobMatcher } from './pages/Student/JobMatcher';
 import { ResumeBuilder } from './pages/Student/ResumeBuilder';
@@ -88,6 +89,7 @@ function App() {
       <Route element={<ProtectedLayout />}>
         <Route path="/dashboard" element={<AnimatedRoute><Dashboard /></AnimatedRoute>} />
         <Route path="/profile" element={<AnimatedRoute><Profile /></AnimatedRoute>} />
+        <Route path="/profile-detail" element={<AnimatedRoute><ProfileDetail /></AnimatedRoute>} />
         <Route path="/resume-analyzer" element={<AnimatedRoute><ResumeAnalyzer /></AnimatedRoute>} />
         <Route path="/job-matcher" element={<AnimatedRoute><JobMatcher /></AnimatedRoute>} />
         <Route path="/resume-builder" element={<AnimatedRoute><ResumeBuilder /></AnimatedRoute>} />

@@ -133,6 +133,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         emoji: '👤',
         items: [
           ...(isAllowed('canViewProfile') ? [{ name: 'Profile & Resume', path: '/profile', icon: User }] : []),
+          ...(isAllowed('canViewProfile') ? [{ name: 'View Profile', path: '/profile-detail', icon: User }] : []),
           { name: 'Resume Builder', path: '/resume-builder', icon: FileText },
           { name: 'Resume Analyzer', path: '/resume-analyzer', icon: FileText },
         ]
