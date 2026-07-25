@@ -467,7 +467,7 @@ export const Profile: React.FC = () => {
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">CGPA Score</label>
                   <span className="text-[11px] font-semibold text-indigo-600">Scale: {cgpaScale}</span>
                 </div>
-                <div className="grid grid-cols-[1fr_auto] gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   <input
                     type="number"
                     step="0.01"
