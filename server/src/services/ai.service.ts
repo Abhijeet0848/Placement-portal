@@ -282,18 +282,52 @@ ${studentName}`;
   }
 }
 
+// 4.5 Start Mock Interview
+export async function startMockInterview(interviewType: string, companyName?: string) {
+  const typeContext = interviewType || 'technical';
+  const companyContext = companyName ? ` for ${companyName}` : '';
+
+  if (genAI) {
+    try {
+      const prompt = `
+        You are an expert ${typeContext} interviewer conducting a mock interview${companyContext}.
+        Start the interview by welcoming the candidate, briefly introducing the format, and asking the FIRST question.
+        Do NOT output JSON. Just reply naturally with your text as the interviewer. Keep it professional.
+      `;
+      const response = await model.generateContent(prompt);
+      return { text: response.response.text().trim() };
+    } catch (error: any) {
+      logger.error(`Gemini startMockInterview failed: ${error?.message || error}`);
+    }
+  }
+
+  // Fallback Simulation
+  if (interviewType === 'HR Interview') {
+    return { text: "Hello! I'll be conducting your HR interview today. To start, can you tell me a little bit about yourself and why you're interested in this role?" };
+  } else if (interviewType === 'Behavioral') {
+    return { text: "Hi there! Today we're going to focus on behavioral questions. Can you describe a time when you had to overcome a significant challenge at work or in a project?" };
+  } else if (interviewType === 'Company Specific') {
+    return { text: `Welcome to your mock interview for ${companyName || 'the company'}. Can you tell me why you want to work for us specifically?` };
+  } else {
+    return { text: "Hello! Let's get started with your technical interview. Can you explain the difference between REST and GraphQL?" };
+  }
+}
+
 // 5. Mock Interview Chat Conversational Agent
-export async function evaluateInterviewAnswer(history: { sender: string, text: string }[]) {
+export async function evaluateInterviewAnswer(history: { sender: string, text: string }[], interviewType?: string, companyName?: string) {
+  const typeContext = interviewType || 'technical';
+  const companyContext = companyName ? ` for ${companyName}` : '';
+
   if (genAI) {
     try {
       const formattedHistory = history.map(h => `${h.sender === 'AI' ? 'Interviewer' : 'Candidate'}: ${h.text}`).join('\n');
       const prompt = `
-        You are an expert technical interviewer conducting a mock interview.
+        You are an expert ${typeContext} interviewer conducting a mock interview${companyContext}.
         Here is the conversation history so far:
         ${formattedHistory}
 
         Provide your next response as the Interviewer. 
-        If the candidate answered a question, briefly and naturally acknowledge or correct their answer, then ask the next technical question.
+        If the candidate answered a question, briefly and naturally acknowledge or correct their answer, then ask the next ${typeContext} question.
         If they say they don't know, provide a brief, polite explanation and move on to a different topic.
         Do NOT output JSON. Just reply naturally with your text as the interviewer.
       `;
@@ -327,7 +361,9 @@ export async function generateInterviewReport(history: { sender: string, text: s
         - avgConfidence (number, 0-100)
         - avgCommunication (number, 0-100)
         - avgAccuracy (number, 0-100)
+        - score (number, 0-100, the overall performance score)
         - feedbackSummary (string: 3-4 sentences summarizing their strengths and areas for improvement)
+        - improvementSuggestions (array of strings, 3-4 specific actionable tips to improve)
 
         Output strictly valid JSON:
       `;
@@ -346,7 +382,13 @@ export async function generateInterviewReport(history: { sender: string, text: s
     avgConfidence: 80,
     avgCommunication: 75,
     avgAccuracy: 70,
-    feedbackSummary: "You showed a good fundamental understanding of core concepts. Moving forward, try to provide more detailed real-world examples when explaining technical definitions. Keep practicing!"
+    score: 75,
+    feedbackSummary: "You showed a good fundamental understanding of core concepts. Moving forward, try to provide more detailed real-world examples when explaining technical definitions. Keep practicing!",
+    improvementSuggestions: [
+      "Use the STAR method (Situation, Task, Action, Result) for behavioral answers.",
+      "Provide more concrete examples when explaining technical concepts.",
+      "Speak a bit slower to improve clarity and communication score."
+    ]
   };
 }
 

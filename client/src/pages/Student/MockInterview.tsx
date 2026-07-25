@@ -14,7 +14,8 @@ interface ChatMessage {
 }
 
 export const MockInterview: React.FC = () => {
-  const [domain, setDomain] = useState<'Frontend' | 'Backend' | 'Databases'>('Frontend');
+  const [interviewType, setInterviewType] = useState('HR Interview');
+  const [companyName, setCompanyName] = useState('');
   const [activeSession, setActiveSession] = useState(false);
   
   // Chat feed
@@ -56,39 +57,24 @@ export const MockInterview: React.FC = () => {
   const [report, setReport] = useState<any>(null);
 
   // Seed domain-specific question to start session
-  const handleStartSession = () => {
+  const handleStartSession = async () => {
     setActiveSession(true);
     setReport(null);
     setChats([]);
+    setLoadingReply(true);
 
-    let startQuestion = '';
-    if (domain === 'Frontend') {
-      startQuestion = 'Can you explain the differences between the virtual DOM and the real DOM, and how React utilizes it to optimize rendering?';
-    } else if (domain === 'Backend') {
-      startQuestion = 'What are Node.js streams, and why would you use them over standard file system methods when reading large files?';
-    } else if (domain === 'Databases') {
-      startQuestion = 'What are indexes in databases, how do B-Trees optimize query runs, and when should you avoid creating them?';
-    } else if (domain === 'System Design') {
-      startQuestion = 'How would you design a scalable URL shortener service like TinyURL? Discuss the core components, load balancing, and database choices.';
-    } else if (domain === 'DevOps') {
-      startQuestion = 'Can you explain the concept of containerization using Docker, and how it differs from traditional virtual machines?';
-    } else if (domain === 'Machine Learning') {
-      startQuestion = 'What is the difference between supervised and unsupervised learning? Can you give a real-world use case for each?';
-    } else if (domain === 'Java') {
-      startQuestion = 'Can you explain the concept of Garbage Collection in Java and describe how the JVM decides when an object is eligible for garbage collection?';
-    } else if (domain === 'Python') {
-      startQuestion = 'What is the Global Interpreter Lock (GIL) in Python, and how does it affect multi-threading vs multi-processing?';
-    } else if (domain === 'C++') {
-      startQuestion = 'What are smart pointers in modern C++ (like std::unique_ptr and std::shared_ptr), and how do they solve memory leak issues?';
-    } else if (domain === 'JavaScript') {
-      startQuestion = 'Explain the concept of closures in JavaScript. How do they work, and what is a common practical use case for them?';
-    } else {
-      startQuestion = 'What are indexes in databases, how do B-Trees optimize query runs, and when should you avoid creating them?';
+    try {
+      const res = await api.post('/ai/start-interview', { interviewType, companyName });
+      setChats([
+        { sender: 'AI', text: res.startMsg.text }
+      ]);
+    } catch (error) {
+      setChats([
+        { sender: 'AI', text: "Hello! Let's begin the mock interview. Can you start by introducing yourself?" }
+      ]);
+    } finally {
+      setLoadingReply(false);
     }
-
-    setChats([
-      { sender: 'AI', text: startQuestion }
-    ]);
   };
 
   // Submit Answer & Evaluate
@@ -106,7 +92,9 @@ export const MockInterview: React.FC = () => {
 
     try {
       const response = await api.post('/ai/evaluate-interview', {
-        history: updatedChats.map(c => ({ sender: c.sender, text: c.text }))
+        history: updatedChats.map(c => ({ sender: c.sender, text: c.text })),
+        interviewType,
+        companyName
       });
 
       const feedback = response.feedback;
@@ -184,22 +172,29 @@ export const MockInterview: React.FC = () => {
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Interview Domain</label>
                   <select
-                    value={domain}
-                    onChange={(e: any) => setDomain(e.target.value)}
+                    value={interviewType}
+                    onChange={(e: any) => setInterviewType(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                   >
-                    <option value="Frontend">Frontend Engineer (React/DOM)</option>
-                    <option value="Backend">Backend Engineer (Node/Streams)</option>
-                    <option value="Databases">Database Administrator (SQL/Indexing)</option>
-                    <option value="System Design">System Architecture (Scalability/Microservices)</option>
-                    <option value="DevOps">DevOps Engineer (Docker/CI-CD)</option>
-                    <option value="Machine Learning">Data Scientist / ML (Supervised/Unsupervised)</option>
-                    <option value="Java">Java Developer (JVM/Spring)</option>
-                    <option value="Python">Python Developer (GIL/Data)</option>
-                    <option value="C++">C++ Developer (Memory/Pointers)</option>
-                    <option value="JavaScript">JavaScript Developer (Closures/Async)</option>
+                    <option value="HR Interview">HR Interview</option>
+                    <option value="Technical Interview">Technical Interview</option>
+                    <option value="Behavioral">Behavioral Interview</option>
+                    <option value="Company Specific">Company Specific Interview</option>
                   </select>
                 </div>
+
+                {interviewType === 'Company Specific' && (
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Company Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g., Google, Amazon, TCS..."
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                    />
+                  </div>
+                )}
 
                 <div className="flex justify-between items-center bg-gradient-to-br from-slate-50 to-slate-100 p-4 border-2 border-slate-200 rounded-xl">
                   <div>
@@ -242,8 +237,8 @@ export const MockInterview: React.FC = () => {
                     <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-indigo-50 to-blue-50 p-4 shadow-md">
                       <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-indigo-400 to-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
                       <div className="relative z-10 text-center">
-                        <span className="text-[10px] text-slate-600 font-bold block uppercase mb-1">Confidence</span>
-                        <span className="text-xl font-black text-indigo-600">{report.avgConfidence}%</span>
+                        <span className="text-[10px] text-slate-600 font-bold block uppercase mb-1">Overall Score</span>
+                        <span className="text-xl font-black text-indigo-600">{report.score || report.avgConfidence}%</span>
                       </div>
                     </div>
                     <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-br from-purple-50 to-pink-50 p-4 shadow-md">
@@ -266,6 +261,17 @@ export const MockInterview: React.FC = () => {
                     <p className="text-xs font-bold text-indigo-900 mb-1">AI Placement Verdict:</p>
                     <p className="text-xs text-slate-700 leading-relaxed">{report.feedbackSummary}</p>
                   </div>
+
+                  {report.improvementSuggestions && report.improvementSuggestions.length > 0 && (
+                    <div className="p-4 bg-white border-2 border-rose-100 rounded-xl shadow-sm">
+                      <p className="text-xs font-bold text-rose-600 mb-2 uppercase tracking-wider">Actionable Improvement Suggestions:</p>
+                      <ul className="list-disc pl-5 space-y-1">
+                        {report.improvementSuggestions.map((suggestion: string, idx: number) => (
+                          <li key={idx} className="text-sm text-slate-700 font-medium">{suggestion}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

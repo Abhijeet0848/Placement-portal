@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { analyzeResume, getCareerSuggestions, generateCoverLetter, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport, generateGeneralChatResponse, generateExamQuestions } from '../services/ai.service';
+import { analyzeResume, getCareerSuggestions, generateCoverLetter, startMockInterview, evaluateInterviewAnswer, matchResumeToJob, parseExamQuestionsFromText, generateInterviewReport, generateGeneralChatResponse, generateExamQuestions } from '../services/ai.service';
 import { parseResumePDF } from '../services/parser.service';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { isMockDb } from '../config/dbConnect';
@@ -58,18 +58,31 @@ export async function analyzeResumeUpload(req: AuthenticatedRequest, res: Respon
 
 // 2. Mock Interview Round evaluation
 export async function evaluateInterview(req: AuthenticatedRequest, res: Response) {
-  const { history } = req.body;
+  const { history, interviewType, companyName } = req.body;
 
   if (!history || !Array.isArray(history)) {
     return res.status(400).json({ message: 'Chat history is required.' });
   }
 
   try {
-    const feedback = await evaluateInterviewAnswer(history);
+    const feedback = await evaluateInterviewAnswer(history, interviewType, companyName);
     return res.json({ feedback });
   } catch (error: any) {
     logger.error(`Evaluate interview failed: ${error?.message || error}`);
     return res.status(500).json({ message: error?.message || 'Server interview evaluation error' });
+  }
+}
+
+// 2.1 Start Interview Session
+export async function startInterview(req: AuthenticatedRequest, res: Response) {
+  const { interviewType, companyName } = req.body;
+
+  try {
+    const startMsg = await startMockInterview(interviewType, companyName);
+    return res.json({ startMsg });
+  } catch (error: any) {
+    logger.error(`Start interview failed: ${error?.message || error}`);
+    return res.status(500).json({ message: error?.message || 'Server interview start error' });
   }
 }
 
