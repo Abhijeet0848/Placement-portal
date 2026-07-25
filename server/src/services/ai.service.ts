@@ -242,6 +242,9 @@ export async function getCareerSuggestions(skills: string[], cgpa: number, inter
     return JSON.parse(cleanJson);
   } catch (error: any) {
     logger.error(`Gemini getCareerSuggestions failed: ${error?.message || error}`);
+    if (error?.message?.includes('429') || error?.status === 429) {
+      throw new Error('You have hit the Gemini API free limit. Please try again after a minute.');
+    }
     throw new Error('Failed to generate career suggestions using Gemini AI.');
   }
 }
