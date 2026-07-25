@@ -258,6 +258,7 @@ export async function generateCoverLetter(studentName: string, skills: string[],
     const response = await model.generateContent(prompt);
 
     const text = response.response.text();
+    return text;
   } catch (error: any) {
     logger.error(`Gemini generateCoverLetter failed: ${error?.message || error}`);
 
