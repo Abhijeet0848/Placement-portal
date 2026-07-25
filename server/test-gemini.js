@@ -5,16 +5,20 @@ const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash' });
 
 async function run() {
   try {
+    const topic = 'Frontend stack';
+    const difficulty = 'Medium';
+    const count = 5;
+    
     const prompt = `
         You are an expert technical assessment creator.
-        Generate exactly 1 multiple choice questions (MCQs) about the topic "Frontend" at a "Medium" difficulty level.
+        Generate exactly ${count} multiple choice questions (MCQs) about the topic "${topic}" at a "${difficulty}" difficulty level.
         
         Output strictly valid JSON that matches the following schema:
         [
           {
-            "questionText": "Question text here",
-            "category": "Frontend",
-            "difficulty": "Medium",
+            "questionText": "Question text here. Use \\n for newlines, NEVER literal newlines.",
+            "category": "${topic}",
+            "difficulty": "${difficulty}",
             "marks": 2,
             "negativeMarks": 0.5,
             "options": ["Option A", "Option B", "Option C", "Option D"],
@@ -23,22 +27,20 @@ async function run() {
           }
         ]
         
-        Respond only with the JSON array. Do not include markdown blocks or any other text.
+        CRITICAL: Respond ONLY with the JSON array. Do not include markdown blocks, ticks, or conversational text. ALL strings inside the JSON must be properly escaped. Do not use literal newline characters inside strings.
       `;
-    const response = await model.generateContent(prompt);
-    const text = response.response.text();
-    console.log('--- raw text ---');
-    console.log(text);
-    console.log('----------------');
 
+    const response = await model.generateContent(prompt);
+    const text = response.response.text().trim();
+    
     const matchJson = text.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
     const cleanJson = matchJson ? matchJson[0] : text.replace(/```json/gi, '').replace(/```/g, '').trim();
     
-    console.log('--- parsed json ---');
-    console.log(JSON.parse(cleanJson));
+    console.log("SUCCESS:");
+    console.log(JSON.parse(cleanJson).length);
 
-  } catch(e) {
-    console.error('Error:', e);
+  } catch (error) {
+    console.error('Error details:', error);
   }
 }
 run();
