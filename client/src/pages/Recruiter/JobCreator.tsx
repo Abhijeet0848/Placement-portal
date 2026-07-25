@@ -12,6 +12,8 @@ export const JobCreator: React.FC = () => {
   const [minCGPA, setMinCGPA] = useState<number | ''>('');
   const [cgpaScale, setCgpaScale] = useState('10.0');
   const [branches, setBranches] = useState<string[]>(['MCA', 'B.Tech CSE']);
+  const [showOtherBranch, setShowOtherBranch] = useState(false);
+  const [customBranch, setCustomBranch] = useState('');
   const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState('');
 
@@ -259,15 +261,15 @@ export const JobCreator: React.FC = () => {
               {/* Branches */}
               <div className="space-y-3">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Target Departments</label>
-                <div className="flex flex-wrap gap-2">
-                  {['MCA', 'B.Tech CSE', 'ECE', 'Mechanical', 'Electrical'].map(branchOption => {
+                <div className="flex flex-wrap gap-2 items-center">
+                  {Array.from(new Set(['MCA', 'B.Tech CSE', 'ECE', 'Mechanical', 'Electrical', ...branches])).map(branchOption => {
                     const active = branches.includes(branchOption);
                     return (
                       <button
                         key={branchOption}
                         type="button"
                         onClick={() => handleBranchToggle(branchOption)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold   ${
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                           active 
                             ? 'bg-indigo-600 shadow-lg shadow-indigo-600/30 text-white scale-105' 
                             : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
@@ -277,7 +279,54 @@ export const JobCreator: React.FC = () => {
                       </button>
                     );
                   })}
+                  
+                  <button
+                    type="button"
+                    onClick={() => setShowOtherBranch(!showOtherBranch)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold border border-dashed transition-all ${
+                      showOtherBranch 
+                        ? 'bg-slate-800 text-white border-slate-600' 
+                        : 'bg-transparent text-slate-500 border-slate-700 hover:text-slate-300 hover:border-slate-500'
+                    }`}
+                  >
+                    + Other
+                  </button>
                 </div>
+
+                {showOtherBranch && (
+                  <div className="flex space-x-2 mt-2 animate-in fade-in slide-in-from-top-2">
+                    <input
+                      type="text"
+                      placeholder="e.g. B.Tech IT"
+                      value={customBranch}
+                      onChange={(e) => setCustomBranch(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          if (customBranch.trim() && !branches.includes(customBranch.trim())) {
+                            setBranches([...branches, customBranch.trim()]);
+                            setCustomBranch('');
+                            setShowOtherBranch(false);
+                          }
+                        }
+                      }}
+                      className="flex-1 px-4 py-2.5 rounded-xl text-sm bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:bg-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (customBranch.trim() && !branches.includes(customBranch.trim())) {
+                          setBranches([...branches, customBranch.trim()]);
+                          setCustomBranch('');
+                          setShowOtherBranch(false);
+                        }
+                      }}
+                      className="px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg flex items-center justify-center font-bold text-xs transition-colors"
+                    >
+                      Add
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Skills */}
