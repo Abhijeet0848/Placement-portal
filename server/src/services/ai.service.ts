@@ -1,5 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import logger from '../utils/logger';
+import { model as geminiModel } from '../config/gemini';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -218,60 +219,50 @@ export async function matchResumeToJob(resumeText: string, jobDetails: { title: 
 
 // 3. Career Recommendations
 export async function getCareerSuggestions(skills: string[], cgpa: number, interests: string[]) {
-  if (genAI) {
-    try {
-      const prompt = `
-        Based on these parameters:
-        Skills: ${skills.join(', ')}
-        CGPA: ${cgpa}
-        Interests: ${interests.join(', ')}
+  try {
+    const prompt = `
+      Based on these parameters:
+      Skills: ${skills.join(', ')}
+      CGPA: ${cgpa}
+      Interests: ${interests.join(', ')}
 
-        Provide career guidance in a JSON object with:
-        - roles (array of strings, e.g., "Full Stack Developer", "Data Scientist")
-        - roadmap (array of steps/phases to reach the target roles)
-        - learningResources (array of suggested certifications/technologies to learn)
+      Provide career guidance in a JSON object with:
+      - roles (array of strings, e.g., "Full Stack Developer", "Data Scientist")
+      - roadmap (array of steps/phases to reach the target roles)
+      - learningResources (array of suggested certifications/technologies to learn)
 
-        Output strictly valid JSON:
-      `;
+      Output strictly valid JSON:
+    `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
-      const text = response.text.trim();
-      const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-      return JSON.parse(cleanJson);
-    } catch (error: any) {
-      logger.error(`Gemini getCareerSuggestions failed: ${error?.message || error}`);
-    }
+    const result = await geminiModel.generateContent(prompt);
+    const text = result.response.text();
+    const cleanJson = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+    return JSON.parse(cleanJson);
+  } catch (error: any) {
+    logger.error(`Gemini getCareerSuggestions failed: ${error?.message || error}`);
+    throw new Error('Failed to generate career suggestions using Gemini AI.');
   }
-
-  if (!genAI) {
-    throw new Error('Gemini AI is not configured. Please set GEMINI_API_KEY.');
-  }
-
-  throw new Error('Failed to generate career suggestions using Gemini AI.');
 }
 
 // 4. Cover Letter Generator
 export async function generateCoverLetter(studentName: string, skills: string[], jobTitle: string, company: string) {
-  if (genAI) {
-    try {
-      const prompt = `
-        Write a professional, impressive cover letter for ${studentName} applying for the ${jobTitle} role at ${company}.
-        Candidate Skills: ${skills.join(', ')}.
-        Keep it concise, under 300 words. Format it in plain text.
-      `;
+  try {
+    const prompt = `
+      Write a professional, impressive cover letter for ${studentName} applying for the ${jobTitle} role at ${company}.
+      Candidate Skills: ${skills.join(', ')}.
+      Keep it concise, under 300 words. Format it in plain text.
+    `;
 
-      const response = await genAI.models.generateContent({ model: 'gemini-3.6-flash', contents: prompt });
-      return response.text.trim();
-    } catch (error: any) {
-      logger.error(`Gemini generateCoverLetter failed: ${error?.message || error}`);
-    }
-  }
+    const result = await geminiModel.generateContent(prompt);
+    return result.response.text().trim();
+  } catch (error: any) {
+    logger.error(`Gemini generateCoverLetter failed: ${error?.message || error}`);
+    
+    // Fallback
+    const relevantSkills = skills.slice(0, 5);
+    const skillsStr = relevantSkills.length > 0 ? relevantSkills.join(', ') : 'modern software engineering principles';
 
-  // Fallback
-  const relevantSkills = skills.slice(0, 5);
-  const skillsStr = relevantSkills.length > 0 ? relevantSkills.join(', ') : 'modern software engineering principles';
-
-  return `Dear Hiring Manager,
+    return `Dear Hiring Manager,
 
 I am writing to express my strong interest in the ${jobTitle} position at ${company}. As a dedicated student and aspiring engineer, I have developed a solid technical foundation, specifically utilizing technologies like ${skillsStr}.
 
@@ -281,6 +272,7 @@ I would welcome the opportunity to discuss how my background, skills, and enthus
 
 Sincerely,
 ${studentName}`;
+  }
 }
 
 // 5. Mock Interview Chat Conversational Agent
