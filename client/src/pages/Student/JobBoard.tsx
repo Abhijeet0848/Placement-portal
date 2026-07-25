@@ -15,6 +15,7 @@ export const JobBoard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedJob, setSelectedJob] = useState<any>(null);
+  const [gpaFilterOn, setGpaFilterOn] = useState(false);
 
   // Feedback
   const [message, setMessage] = useState('');
@@ -38,13 +39,6 @@ export const JobBoard: React.FC = () => {
 
   if (!user) return null;
 
-  // Filter jobs based on search term
-  const filteredJobs = jobs.filter(job =>
-    job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    job.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   // Helper: Client-side eligibility checker
   const checkEligibility = (job: any) => {
     const studentCGPA = user.profile.cgpa || 0;
@@ -66,6 +60,18 @@ export const JobBoard: React.FC = () => {
       reasons
     };
   };
+
+  // Filter jobs based on search term and eligibility
+  const filteredJobs = jobs.filter(job => {
+    const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          job.location.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    if (gpaFilterOn) {
+      return matchesSearch && checkEligibility(job).eligible;
+    }
+    return matchesSearch;
+  });
 
   // Submit Application
   const handleApply = async (job: any) => {
@@ -123,10 +129,19 @@ export const JobBoard: React.FC = () => {
           />
         </div>
 
-        <div className="flex items-center space-x-2 border-2 border-slate-200 px-4 py-2 rounded-xl bg-white shadow-sm">
-          <Filter className="h-4 w-4 text-indigo-600" />
-          <span className="text-xs font-semibold text-slate-700">GPA Eligible Filter: ON</span>
-        </div>
+        <button 
+          onClick={() => setGpaFilterOn(!gpaFilterOn)}
+          className={`flex items-center space-x-2 border-2 px-4 py-2 rounded-xl shadow-sm cursor-pointer transition-colors ${
+            gpaFilterOn 
+              ? 'border-indigo-300 bg-indigo-50' 
+              : 'border-slate-200 bg-white hover:bg-slate-50'
+          }`}
+        >
+          <Filter className={`h-4 w-4 ${gpaFilterOn ? 'text-indigo-600' : 'text-slate-400'}`} />
+          <span className={`text-xs font-semibold ${gpaFilterOn ? 'text-indigo-700' : 'text-slate-700'}`}>
+            GPA Eligible Filter: {gpaFilterOn ? 'ON' : 'OFF'}
+          </span>
+        </button>
       </div>
 
       {message && (
