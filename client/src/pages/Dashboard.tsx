@@ -95,7 +95,7 @@ export const Dashboard: React.FC = () => {
               )}
             </div>
             <Link to="/profile" className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-sm font-bold text-white shadow-sm transition-all whitespace-nowrap">
-              Complete Profile
+              View / Edit Profile
             </Link>
           </div>
         </div>
@@ -170,25 +170,10 @@ export const Dashboard: React.FC = () => {
             <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
               <Code className="h-4 w-4 text-indigo-500" /> Upcoming Tests
             </h4>
-            <div className="space-y-4 flex-1">
-              <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl transition-all hover:bg-slate-100/50">
-                <div className="flex justify-between items-start mb-2">
-                  <h5 className="font-bold text-slate-800 text-sm">Google - SDE I Coding Round</h5>
-                  <span className="px-2 py-0.5 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Due Today</span>
-                </div>
-                <div className="flex items-center gap-4 text-xs text-slate-500 font-semibold">
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 90 Mins</span>
-                  <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> 2 Coding, 10 MCQs</span>
-                </div>
-              </div>
-              <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl transition-all hover:bg-slate-100/50">
-                <div className="flex justify-between items-start mb-2">
-                  <h5 className="font-bold text-slate-800 text-sm">TCS NQT Prep Assessment</h5>
-                  <span className="px-2 py-0.5 bg-slate-200 text-slate-700 rounded text-[10px] font-bold">Practice</span>
-                </div>
-                <div className="flex items-center gap-4 text-xs text-slate-500 font-semibold">
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 180 Mins</span>
-                </div>
+            <div className="space-y-4 flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-4 border border-slate-100 rounded-xl bg-slate-50 border-dashed">
+                <Code className="h-6 w-6 mb-2 opacity-50" />
+                <p className="text-xs font-semibold">No upcoming tests scheduled</p>
               </div>
             </div>
             <Link to="/coding-lab" className="mt-4 text-xs font-bold text-indigo-600 hover:text-indigo-700 text-center block">View Test Sandbox →</Link>
@@ -199,26 +184,10 @@ export const Dashboard: React.FC = () => {
             <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
               <Calendar className="h-4 w-4 text-blue-500" /> Interview Schedule
             </h4>
-            <div className="space-y-4 flex-1">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex flex-col items-center justify-center font-bold">
-                  <span className="text-xs uppercase">Oct</span>
-                  <span className="text-lg leading-none">12</span>
-                </div>
-                <div>
-                  <h5 className="font-bold text-slate-800 text-sm">Technical Round - Microsoft</h5>
-                  <p className="text-xs text-slate-500 font-semibold mt-1">10:00 AM • MS Teams</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-12 h-12 bg-slate-100 text-slate-600 rounded-xl flex flex-col items-center justify-center font-bold">
-                  <span className="text-xs uppercase">Oct</span>
-                  <span className="text-lg leading-none">15</span>
-                </div>
-                <div>
-                  <h5 className="font-bold text-slate-800 text-sm">HR Mock Interview (AI)</h5>
-                  <p className="text-xs text-slate-500 font-semibold mt-1">Self-paced • AI Simulator</p>
-                </div>
+            <div className="space-y-4 flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-4 border border-slate-100 rounded-xl bg-slate-50 border-dashed">
+                <Calendar className="h-6 w-6 mb-2 opacity-50" />
+                <p className="text-xs font-semibold">No upcoming interviews</p>
               </div>
             </div>
             <Link to="/mock-interview" className="mt-4 text-xs font-bold text-blue-600 hover:text-blue-700 text-center block">Practice Mock Interview →</Link>
@@ -229,25 +198,25 @@ export const Dashboard: React.FC = () => {
             <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
               <FileBadge className="h-4 w-4 text-amber-500" /> Verified Certificates
             </h4>
-            <div className="space-y-3 flex-1">
-              <div className="flex items-center gap-3 p-3 border border-slate-100 rounded-xl bg-slate-50 hover:bg-white transition-colors cursor-pointer shadow-sm">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0">
-                  <Award className="w-5 h-5" />
+            <div className="space-y-3 flex-1 overflow-y-auto max-h-[160px]">
+              {user.profile.certificates && user.profile.certificates.filter((c: any) => c.verified).length > 0 ? (
+                user.profile.certificates.filter((c: any) => c.verified).slice(0, 3).map((cert: any, idx: number) => (
+                  <div key={idx} className="flex items-center gap-3 p-3 border border-slate-100 rounded-xl bg-slate-50 hover:bg-white transition-colors cursor-pointer shadow-sm">
+                    <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0">
+                      <Award className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h5 className="font-bold text-slate-800 text-sm leading-tight truncate">{cert.title || 'Certificate'}</h5>
+                      <p className="text-[10px] font-bold text-emerald-600 mt-0.5">VERIFIED</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="h-full flex flex-col items-center justify-center text-slate-400 p-4 border border-slate-100 rounded-xl bg-slate-50 border-dashed">
+                  <FileBadge className="h-6 w-6 mb-2 opacity-50" />
+                  <p className="text-xs font-semibold">No verified certificates</p>
                 </div>
-                <div>
-                  <h5 className="font-bold text-slate-800 text-sm leading-tight">AWS Solutions Architect</h5>
-                  <p className="text-[10px] font-bold text-emerald-600 mt-0.5">VERIFIED • EXP 2029</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border border-slate-100 rounded-xl bg-slate-50 hover:bg-white transition-colors cursor-pointer shadow-sm">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0">
-                  <Award className="w-5 h-5" />
-                </div>
-                <div>
-                  <h5 className="font-bold text-slate-800 text-sm leading-tight">Meta Frontend Developer</h5>
-                  <p className="text-[10px] font-bold text-emerald-600 mt-0.5">VERIFIED • PERMANENT</p>
-                </div>
-              </div>
+              )}
             </div>
             <Link to="/profile" className="mt-4 text-xs font-bold text-amber-600 hover:text-amber-700 text-center block">Manage Certificates →</Link>
           </div>
