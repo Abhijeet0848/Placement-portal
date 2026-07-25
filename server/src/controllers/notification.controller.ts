@@ -5,6 +5,7 @@ import Notification from '../models/Notification';
 import { isMockDb } from '../config/dbConnect';
 import { mockDb } from '../db/mockDb';
 import logger from '../utils/logger';
+import { sendEmail } from '../utils/email';
 
 export const broadcastNotice = async (req: AuthenticatedRequest, res: Response) => {
   const { title, message } = req.body;
@@ -18,6 +19,8 @@ export const broadcastNotice = async (req: AuthenticatedRequest, res: Response) 
       // Find all students
       const students = mockDb.users.filter(u => u.role === 'Student');
       
+      const io = req.app.get('socketio');
+      
       students.forEach(student => {
         const notif = {
           _id: 'notif_' + Math.random().toString(36).substr(2, 9),
@@ -28,6 +31,25 @@ export const broadcastNotice = async (req: AuthenticatedRequest, res: Response) 
           createdAt: new Date()
         };
         mockDb.notifications.push(notif);
+        
+        if (io) {
+          io.to(student._id.toString()).emit('notification', {
+            id: notif._id,
+            title,
+            message,
+            read: false,
+            createdAt: notif.createdAt
+          });
+        }
+        
+        if (student.email) {
+          sendEmail({
+            to: student.email,
+            subject: `New Notice: ${title}`,
+            text: message,
+            html: `<p>Hello ${student.name},</p><p>${message}</p><p>Regards,<br>Placement Cell</p>`
+          }).catch(err => logger.error(`Failed to send broadcast email to ${student.email}: ${err.message}`));
+        }
       });
 
       return res.status(200).json({ message: `Broadcast sent to ${students.length} students successfully.` });
@@ -44,6 +66,31 @@ export const broadcastNotice = async (req: AuthenticatedRequest, res: Response) 
       if (notifications.length > 0) {
         await Notification.insertMany(notifications);
       }
+      
+      const io = req.app.get('socketio');
+      
+      students.forEach(student => {
+        const studentIdStr = typeof student._id === 'object' && 'id' in (student._id as any) ? (student._id as any).id.toString() : (student._id as any).toString();
+        
+        if (io) {
+          io.to(studentIdStr).emit('notification', {
+            id: `notif_${Date.now()}`,
+            title,
+            message,
+            read: false,
+            createdAt: new Date()
+          });
+        }
+        
+        if (student.email) {
+          sendEmail({
+            to: student.email,
+            subject: `New Notice: ${title}`,
+            text: message,
+            html: `<p>Hello ${student.name},</p><p>${message}</p><p>Regards,<br>Placement Cell</p>`
+          }).catch(err => logger.error(`Failed to send broadcast email to ${student.email}: ${err.message}`));
+        }
+      });
 
       return res.status(200).json({ message: `Broadcast sent to ${students.length} students successfully.` });
     }
