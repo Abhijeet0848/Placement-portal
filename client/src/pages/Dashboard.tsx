@@ -435,8 +435,9 @@ export const Dashboard: React.FC = () => {
               </div>
             )}
           </div>
+        </div>
           
-          {/* Notifications Panel */}
+        {/* Notifications Panel */}
           <div className="saas-card p-6 h-full flex flex-col">
             <div className="relative z-10 space-y-4 flex-1">
               <div className="flex items-center justify-between">
