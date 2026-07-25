@@ -36,7 +36,11 @@ export const Verify: React.FC = () => {
       const recruiterUsers = (data.users || []).filter((u: any) => u.role === 'Recruiter');
       setRecruiters(recruiterUsers);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Failed to fetch recruiters.');
+      if (err.message === 'Forbidden: Insufficient permissions') {
+        setErrorMsg('You do not have permission to view recruiters. Ensure the backend is updated with the latest PlacementOfficer permissions.');
+      } else {
+        setErrorMsg(err.message || 'Failed to fetch recruiters.');
+      }
     } finally {
       setLoadingRecruiters(false);
     }
