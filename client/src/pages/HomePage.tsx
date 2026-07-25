@@ -1,8 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { ArrowRight, Sparkles, ChevronDown, FileText, Brain, Target, Compass } from 'lucide-react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
+
+const Hero3DScene = () => {
+  const meshRef = useRef<any>(null);
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
+    }
+  });
+
+  return (
+    <>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1.5} color="#38bdf8" />
+      <directionalLight position={[-10, -10, -5]} intensity={1} color="#818cf8" />
+      <Sphere ref={meshRef} args={[1.5, 64, 64]} scale={1.2}>
+        <MeshDistortMaterial
+          color="#0284c7"
+          attach="material"
+          distort={0.4}
+          speed={2}
+          roughness={0.2}
+          metalness={0.8}
+          wireframe={false}
+        />
+      </Sphere>
+      <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+    </>
+  );
+};
 
 const features = [
   {
@@ -54,6 +87,13 @@ export const HomePage: React.FC = () => {
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-sky-900/30 blur-[120px] animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-900/30 blur-[120px]" />
         <div className="absolute top-[40%] right-[10%] w-[30%] h-[30%] rounded-full bg-emerald-900/10 blur-[100px]" />
+        
+        {/* 3D Canvas Background */}
+        <div className="absolute inset-0 z-[1] hidden md:block opacity-60">
+          <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+            <Hero3DScene />
+          </Canvas>
+        </div>
       </div>
 
       {/* Floating Glass Header */}
