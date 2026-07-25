@@ -210,6 +210,8 @@ export const CodingLab: React.FC = () => {
       statusText = 'Expired';
     }
 
+    if (status === 'expired') return null;
+
     return (
     <div
       key={ex._id}
