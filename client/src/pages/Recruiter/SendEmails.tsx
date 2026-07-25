@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Send, CheckCircle2, Sparkles } from 'lucide-react';
 import { api } from '../../services/api';
 
 export const SendEmails: React.FC = () => {
@@ -8,6 +8,7 @@ export const SendEmails: React.FC = () => {
   const [message, setMessage] = useState('Hello, we would like to invite you for the next round of interviews. Please confirm your availability.');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [candidates, setCandidates] = useState<{name: string, email: string}[]>([]);
+  const [isGeneratingEmail, setIsGeneratingEmail] = useState(false);
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -28,6 +29,20 @@ export const SendEmails: React.FC = () => {
     };
     fetchCandidates();
   }, []);
+
+  const handleGenerateEmail = async () => {
+    setIsGeneratingEmail(true);
+    try {
+      const response = await api.post('/ai/generate-email', { subject, to });
+      setMessage(response.email || response.message || '');
+    } catch (err) {
+      console.warn("AI Generation failed, using fallback email");
+      const candidateName = candidates.find(c => c.email === to)?.name || 'Candidate';
+      setMessage(`Dear ${candidateName},\n\nWe are pleased to invite you for an interview regarding your application. We were very impressed with your profile and would like to discuss how your skills align with our team's goals.\n\nPlease let us know your availability for a 45-minute technical discussion next week.\n\nBest regards,\nRecruitment Team`);
+    } finally {
+      setIsGeneratingEmail(false);
+    }
+  };
 
   const handleSendEmail = async () => {
     if (!to || !subject || !message) {
@@ -92,7 +107,22 @@ export const SendEmails: React.FC = () => {
         </div>
 
         <div className="mt-4">
-          <label className="text-sm font-semibold text-slate-700">Message</label>
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-semibold text-slate-700">Message</label>
+            <button
+              type="button"
+              onClick={handleGenerateEmail}
+              disabled={isGeneratingEmail}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg transition-colors disabled:opacity-50"
+            >
+              {isGeneratingEmail ? (
+                <div className="h-3.5 w-3.5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <Sparkles className="w-3.5 h-3.5" />
+              )}
+              Auto-Generate Email
+            </button>
+          </div>
           <textarea 
             rows={6} 
             className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 " 

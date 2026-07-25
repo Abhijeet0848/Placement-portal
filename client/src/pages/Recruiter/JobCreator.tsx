@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { api } from '../../services/api';
-import { Briefcase, DollarSign, Award, PlusCircle, MapPin, Building2, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { Briefcase, DollarSign, Award, PlusCircle, MapPin, Building2, CheckCircle2, AlertCircle, X, Sparkles } from 'lucide-react';
 
 export const JobCreator: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -24,6 +24,7 @@ export const JobCreator: React.FC = () => {
   const [message, setMessage] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isGeneratingJD, setIsGeneratingJD] = useState(false);
 
   const handleAddSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
@@ -41,6 +42,25 @@ export const JobCreator: React.FC = () => {
       setBranches(branches.filter(b => b !== branch));
     } else {
       setBranches([...branches, branch]);
+    }
+  };
+
+  const handleGenerateJD = async () => {
+    if (!title) {
+      setErrorMsg('Please enter a Job Title first to generate a description.');
+      return;
+    }
+    setIsGeneratingJD(true);
+    setErrorMsg('');
+    try {
+      const response = await api.post('/ai/generate-jd', { role: title });
+      setDescription(response.jd || response.description || '');
+    } catch (err) {
+      console.warn("AI Generation failed, using fallback JD");
+      // Fallback JD
+      setDescription(`We are looking for a highly skilled ${title} to join our dynamic team.\n\nKey Responsibilities:\n- Design and develop scalable solutions.\n- Collaborate with cross-functional teams.\n- Ensure code quality and performance.\n\nRequirements:\n- Proven experience as a ${title}.\n- Strong problem-solving skills.\n- Excellent communication abilities.`);
+    } finally {
+      setIsGeneratingJD(false);
     }
   };
 
@@ -254,7 +274,22 @@ export const JobCreator: React.FC = () => {
 
               {/* Description */}
               <div className="space-y-2 group pt-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Description & Requirements</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider group-focus-within:text-indigo-600 ">Description & Requirements</label>
+                  <button
+                    type="button"
+                    onClick={handleGenerateJD}
+                    disabled={isGeneratingJD}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    {isGeneratingJD ? (
+                      <div className="h-3.5 w-3.5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Sparkles className="w-3.5 h-3.5" />
+                    )}
+                    Auto-Generate
+                  </button>
+                </div>
                 <textarea
                   rows={6}
                   required
