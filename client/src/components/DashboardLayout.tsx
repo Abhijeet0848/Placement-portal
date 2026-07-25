@@ -63,7 +63,9 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
     // Vercel Serverless Functions do not support WebSockets/Long Polling natively
     // Skip Socket.io initialization if hitting Vercel to prevent console 404 network errors
     if (apiOrigin.includes('vercel.app')) {
-      return;
+      // Fallback: Use HTTP Polling every 15 seconds to fetch new notifications
+      const pollInterval = setInterval(fetchNotifications, 15000);
+      return () => clearInterval(pollInterval);
     }
 
     const newSocket = io(apiOrigin, {
