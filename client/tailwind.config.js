@@ -41,6 +41,21 @@ export default {
       boxShadow: {
         'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05)',
         'elevated': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+      },
+      animation: {
+        'gradient-x': 'gradient-x 3s ease infinite',
+      },
+      keyframes: {
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
+        },
       }
     },
   },
