@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Briefcase, Users, ChevronRight, CheckCircle2, Clock } from 'lucide-react';
+import { api } from '../../services/api';
 
 export const DriveManagement: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
@@ -12,11 +13,21 @@ export const DriveManagement: React.FC = () => {
   const [role, setRole] = useState('');
   const [date, setDate] = useState('');
 
-  const handleCreateDrive = (e: React.FormEvent) => {
+  const handleCreateDrive = async (e: React.FormEvent) => {
     e.preventDefault();
     if (company && role && date) {
       setDrives([...drives, { id: Date.now().toString(), company, role, status: 'Eligible Students', date }]);
       setIsCreating(false);
+      
+      try {
+        await api.post('/notifications/broadcast', { 
+          title: '🚨 New Placement Drive', 
+          message: `${company} is now recruiting for the role of ${role}. Drive Date: ${date}. Check eligibility and apply!` 
+        });
+      } catch (err) {
+        console.error("Failed to broadcast drive notification", err);
+      }
+
       setCompany('Microsoft');
       setRole('');
       setDate('');
