@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IApplication extends Document {
   jobId: mongoose.Types.ObjectId;
   studentId: mongoose.Types.ObjectId;
-  status: 'Applied' | 'Shortlisted' | 'Rejected' | 'Selected';
+  status: 'Applied' | 'Shortlisted' | 'Assessment' | 'Interview' | 'Offer' | 'Hired' | 'Rejected';
   resumeUrl: string;
   matchScore: number;
   matchDetails: {
@@ -18,7 +18,7 @@ export interface IApplication extends Document {
 const ApplicationSchema: Schema = new Schema({
   jobId: { type: Schema.Types.ObjectId, ref: 'Job', required: true },
   studentId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  status: { type: String, enum: ['Applied', 'Shortlisted', 'Rejected', 'Selected'], default: 'Applied' },
+  status: { type: String, enum: ['Applied', 'Shortlisted', 'Assessment', 'Interview', 'Offer', 'Hired', 'Rejected'], default: 'Applied' },
   resumeUrl: { type: String, required: true },
   matchScore: { type: Number, default: 0 },
   matchDetails: {

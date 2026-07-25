@@ -11,8 +11,8 @@ export const HireReject: React.FC = () => {
       const res = await api.get('/recruiter/applications');
       const apps = res.applications || [];
       
-      // Filter out those who are already hired or rejected so we focus on pending/shortlisted
-      const pendingApps = apps.filter((app: any) => app.status === 'Applied' || app.status === 'Shortlisted');
+      // Filter out those who are already hired or rejected so we focus on active pipeline candidates
+      const pendingApps = apps.filter((app: any) => app.status !== 'Hired' && app.status !== 'Rejected');
       
       setCandidates(pendingApps);
     } catch (err) {
@@ -26,11 +26,14 @@ export const HireReject: React.FC = () => {
     fetchApps();
   }, []);
 
-  const handleDecision = async (appId: string, status: 'Selected' | 'Rejected') => {
+  const handleDecision = async (appId: string, status: string) => {
     try {
       await api.put(`/recruiter/applications/${appId}/status`, { status });
-      // Remove from list or refresh list
-      setCandidates(candidates.filter(c => c._id !== appId));
+      if (status === 'Hired' || status === 'Rejected') {
+        setCandidates(candidates.filter(c => c._id !== appId));
+      } else {
+        setCandidates(candidates.map(c => c._id === appId ? { ...c, status } : c));
+      }
     } catch (error) {
       console.error(error);
       alert('Failed to update application status.');
@@ -82,23 +85,19 @@ export const HireReject: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-slate-600 border border-slate-200">{candidate.status}</span>
-                    <button 
-                      onClick={() => handleDecision(candidate._id, 'Selected')}
-                      disabled={assessmentScore === undefined || assessmentScore === null}
-                      className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-600  shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    <select 
+                      value={candidate.status}
+                      onChange={(e) => handleDecision(candidate._id, e.target.value)}
+                      className="rounded-xl border-2 border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm outline-none focus:border-indigo-500 hover:border-indigo-300"
                     >
-                      <CheckCircle2 className="h-4 w-4" />
-                      Hire
-                    </button>
-                    <button 
-                      onClick={() => handleDecision(candidate._id, 'Rejected')}
-                      disabled={assessmentScore === undefined || assessmentScore === null}
-                      className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100  disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <XCircle className="h-4 w-4" />
-                      Reject
-                    </button>
+                      <option value="Applied">Applied</option>
+                      <option value="Shortlisted">Shortlisted</option>
+                      <option value="Assessment">Assessment</option>
+                      <option value="Interview">Interview</option>
+                      <option value="Offer">Offer</option>
+                      <option value="Hired">Hired</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
                   </div>
                 </div>
               </div>

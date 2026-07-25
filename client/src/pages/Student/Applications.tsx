@@ -39,21 +39,28 @@ export const ApplicationsTracker: React.FC = () => {
 
   if (!user) return null;
 
-  const getStatusColor = (status: string) => {
+  const getStatusStyle = (status: string) => {
     switch (status) {
-      case 'Selected': return 'from-emerald-500 to-green-500';
-      case 'Shortlisted': return 'from-indigo-500 to-blue-500';
-      case 'Rejected': return 'from-rose-500 to-red-500';
-      default: return 'from-slate-500 to-gray-500';
+      case 'Hired': return 'bg-gradient-to-r from-emerald-100 to-green-100 border-emerald-300 text-emerald-700';
+      case 'Offer': return 'bg-gradient-to-r from-teal-100 to-emerald-100 border-teal-300 text-teal-700';
+      case 'Interview': return 'bg-gradient-to-r from-purple-100 to-fuchsia-100 border-purple-300 text-purple-700';
+      case 'Assessment': return 'bg-gradient-to-r from-amber-100 to-orange-100 border-amber-300 text-amber-700';
+      case 'Shortlisted': return 'bg-gradient-to-r from-indigo-100 to-blue-100 border-indigo-300 text-indigo-700';
+      case 'Rejected': return 'bg-gradient-to-r from-rose-100 to-red-100 border-rose-300 text-rose-700';
+      default: return 'bg-gradient-to-r from-slate-100 to-gray-100 border-slate-300 text-slate-700';
     }
   };
 
-  const getStatusBg = (status: string) => {
-    switch (status) {
-      case 'Selected': return 'from-emerald-50 to-green-50';
-      case 'Shortlisted': return 'from-indigo-50 to-blue-50';
-      case 'Rejected': return 'from-rose-50 to-red-50';
-      default: return 'from-slate-50 to-gray-50';
+  const getNextStep = (status: string) => {
+    switch(status) {
+      case 'Applied': return 'Awaiting review';
+      case 'Shortlisted': return 'Assessment pending';
+      case 'Assessment': return 'Interview pending';
+      case 'Interview': return 'Offer pending';
+      case 'Offer': return 'Accept offer';
+      case 'Hired': return 'Onboarding';
+      case 'Rejected': return 'Closed';
+      default: return 'Follow-up soon';
     }
   };
 
@@ -160,12 +167,7 @@ export const ApplicationsTracker: React.FC = () => {
                       <p className="text-sm text-slate-600 mt-1">{application.job?.company} • {appliedAt}</p>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <span className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 ${
-                        status === 'Selected' ? 'bg-gradient-to-r from-emerald-100 to-green-100 border-emerald-300 text-emerald-700' :
-                        status === 'Shortlisted' ? 'bg-gradient-to-r from-indigo-100 to-blue-100 border-indigo-300 text-indigo-700' :
-                        status === 'Rejected' ? 'bg-gradient-to-r from-rose-100 to-red-100 border-rose-300 text-rose-700' :
-                        'bg-gradient-to-r from-slate-100 to-gray-100 border-slate-300 text-slate-700'
-                      }`}>
+                      <span className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 ${getStatusStyle(status)}`}>
                         {status}
                       </span>
                     </div>
@@ -200,7 +202,7 @@ export const ApplicationsTracker: React.FC = () => {
                           <span className="font-bold">Next Update</span>
                         </div>
                         <p className="text-lg font-bold text-slate-900 mt-1">
-                          {status === 'Applied' ? 'Awaiting review' : status === 'Shortlisted' ? 'Interview pending' : 'Follow-up soon'}
+                          {getNextStep(status)}
                         </p>
                       </div>
                     </div>

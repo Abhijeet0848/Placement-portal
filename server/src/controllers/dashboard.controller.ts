@@ -103,13 +103,13 @@ export async function getRecruiterDashboardStats(req: AuthenticatedRequest, res:
     const totalApplicants = applications.length;
 
     let selectedCount = 0;
-    const funnel = { Applied: 0, Shortlisted: 0, Rejected: 0, Selected: 0 };
+    const funnel = { Applied: 0, Shortlisted: 0, Assessment: 0, Interview: 0, Offer: 0, Hired: 0, Rejected: 0 };
     const ats = { High: 0, Medium: 0, Low: 0 };
 
     applications.forEach(app => {
-      const status = app.status as 'Applied' | 'Shortlisted' | 'Rejected' | 'Selected';
+      const status = app.status as 'Applied' | 'Shortlisted' | 'Assessment' | 'Interview' | 'Offer' | 'Hired' | 'Rejected';
       funnel[status] = (funnel[status] || 0) + 1;
-      if (status === 'Selected') selectedCount++;
+      if (status === 'Hired') selectedCount++;
 
       if (app.matchScore > 80) ats.High++;
       else if (app.matchScore >= 50) ats.Medium++;
@@ -121,7 +121,10 @@ export async function getRecruiterDashboardStats(req: AuthenticatedRequest, res:
     const funnelData = [
       { name: 'Applied', Count: funnel.Applied },
       { name: 'Shortlisted', Count: funnel.Shortlisted },
-      { name: 'Selected', Count: funnel.Selected },
+      { name: 'Assessment', Count: funnel.Assessment },
+      { name: 'Interview', Count: funnel.Interview },
+      { name: 'Offer', Count: funnel.Offer },
+      { name: 'Hired', Count: funnel.Hired },
       { name: 'Rejected', Count: funnel.Rejected }
     ];
 

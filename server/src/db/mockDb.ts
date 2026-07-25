@@ -52,7 +52,7 @@ export interface Application {
   _id: string;
   jobId: string;
   studentId: string;
-  status: 'Applied' | 'Shortlisted' | 'Rejected' | 'Selected';
+  status: 'Applied' | 'Shortlisted' | 'Assessment' | 'Interview' | 'Offer' | 'Hired' | 'Rejected';
   resumeUrl: string;
   matchScore: number;
   matchDetails: {

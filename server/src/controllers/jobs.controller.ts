@@ -294,7 +294,7 @@ export async function getRecruiterApplications(req: AuthenticatedRequest, res: R
 // 5. Update Application Status (Recruiter Only)
 export async function updateApplicationStatus(req: AuthenticatedRequest, res: Response) {
   const { appId } = req.params;
-  const { status } = req.body; // 'Applied' | 'Shortlisted' | 'Rejected' | 'Selected'
+  const { status } = req.body; // 'Applied' | 'Shortlisted' | 'Assessment' | 'Interview' | 'Offer' | 'Hired' | 'Rejected'
 
   if (!status) return res.status(400).json({ message: 'Status is required.' });
 

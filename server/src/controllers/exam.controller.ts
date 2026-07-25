@@ -16,7 +16,7 @@ export async function getExams(req: AuthenticatedRequest, res: Response) {
     if (isMockDb) {
       // Find jobs where the user is shortlisted
       allowedJobIds = mockDb.applications
-        .filter(app => app.studentId === userId && (app.status === 'Shortlisted' || app.status === 'Selected'))
+        .filter(app => app.studentId === userId && ['Shortlisted', 'Assessment', 'Interview', 'Offer', 'Hired'].includes(app.status))
         .map(app => app.jobId);
 
       const exams = mockDb.exams
@@ -37,7 +37,7 @@ export async function getExams(req: AuthenticatedRequest, res: Response) {
       return res.json({ exams });
     } else {
       // Find jobs where the user is shortlisted in real DB
-      const applications = await Application.find({ studentId: userId, status: { $in: ['Shortlisted', 'Selected'] } }, 'jobId');
+      const applications = await Application.find({ studentId: userId, status: { $in: ['Shortlisted', 'Assessment', 'Interview', 'Offer', 'Hired'] } }, 'jobId');
       allowedJobIds = applications.map(a => a.jobId.toString());
 
       const exams = await Exam.find({
