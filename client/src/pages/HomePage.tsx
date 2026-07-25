@@ -109,9 +109,9 @@ export const HomePage: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex items-center gap-10 text-sm font-medium">
-          <Link to="#features" className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5">
+          <a href="#features" className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer">
             Features
-          </Link>
+          </a>
         </nav>
 
         {/* Auth Buttons */}
@@ -159,9 +159,9 @@ export const HomePage: React.FC = () => {
               <span>Start Your Journey</span>
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link to="#features" className="group flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-all w-full sm:w-auto backdrop-blur-md">
+            <a href="#features" className="group flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-all w-full sm:w-auto backdrop-blur-md cursor-pointer">
               Explore Features
-            </Link>
+            </a>
           </div>
         </div>
 
