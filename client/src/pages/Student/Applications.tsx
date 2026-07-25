@@ -20,11 +20,9 @@ export const ApplicationsTracker: React.FC = () => {
         
         setApplications(appsRes.applications || []);
         
-        // Only show upcoming scheduled interviews
+        // Show all scheduled interviews (even if slightly past start time so they can join)
         const upcomingInts = (intsRes.interviews || []).filter((i: any) => {
-          if (i.status !== 'Scheduled') return false;
-          const interviewDate = new Date(`${i.date}T${i.time}`);
-          return interviewDate > new Date();
+          return i.status === 'Scheduled';
         });
         setInterviews(upcomingInts);
       } catch (err: any) {
