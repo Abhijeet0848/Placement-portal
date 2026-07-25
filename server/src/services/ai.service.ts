@@ -386,7 +386,7 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
         Output strictly valid JSON that matches the following schema:
         [
           {
-            "questionText": "Question text here",
+            "questionText": "Question text here. Use \\n for newlines, NEVER literal newlines.",
             "category": "${topic}",
             "difficulty": "${difficulty}",
             "marks": 2,
@@ -397,7 +397,7 @@ export async function generateExamQuestions(topic: string, difficulty: string, c
           }
         ]
         
-        Respond only with the JSON array. Do not include markdown blocks or any other text.
+        CRITICAL: Respond ONLY with the JSON array. Do not include markdown blocks, ticks, or conversational text. ALL strings inside the JSON must be properly escaped. Do not use literal newline characters inside strings.
       `;
 
       const response = await model.generateContent(prompt);
