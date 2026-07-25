@@ -467,7 +467,7 @@ export const Profile: React.FC = () => {
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">CGPA Score</label>
                   <span className="text-[11px] font-semibold text-indigo-600">Scale: {cgpaScale}</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-row gap-2">
                   <input
                     type="number"
                     step="0.01"
@@ -475,13 +475,13 @@ export const Profile: React.FC = () => {
                     max={cgpaScale === '9.0' ? 9 : cgpaScale === '4.0' ? 4 : cgpaScale === '100%' ? 100 : 10}
                     value={cgpa}
                     onChange={(e) => setCgpa(e.target.value)}
-                    placeholder={`Score in ${cgpaScale}`}
-                    className="saas-input w-full"
+                    placeholder={`Score`}
+                    className="saas-input flex-1 w-full min-w-[80px]"
                   />
                   <select
                     value={cgpaScale}
                     onChange={(e) => setCgpaScale(e.target.value)}
-                    className="saas-input"
+                    className="saas-input flex-1 w-full"
                     title="Select Grading Scale"
                   >
                     <option value="10.0">10.0 Scale</option>
