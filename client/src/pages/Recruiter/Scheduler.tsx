@@ -23,7 +23,12 @@ export const Scheduler: React.FC = () => {
   const fetchData = async () => {
     try {
       const intsRes = await api.get('/interviews');
-      setInterviews(intsRes.interviews || []);
+      const upcomingInts = (intsRes.interviews || []).filter((i: any) => {
+        if (i.status !== 'Scheduled') return false;
+        const interviewDate = new Date(`${i.date}T${i.time}`);
+        return interviewDate > new Date();
+      });
+      setInterviews(upcomingInts);
 
       const studsRes = await api.get('/auth/students');
       setStudents(studsRes.students || []);

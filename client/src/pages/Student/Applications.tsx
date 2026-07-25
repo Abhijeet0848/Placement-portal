@@ -21,7 +21,11 @@ export const ApplicationsTracker: React.FC = () => {
         setApplications(appsRes.applications || []);
         
         // Only show upcoming scheduled interviews
-        const upcomingInts = (intsRes.interviews || []).filter((i: any) => i.status === 'Scheduled');
+        const upcomingInts = (intsRes.interviews || []).filter((i: any) => {
+          if (i.status !== 'Scheduled') return false;
+          const interviewDate = new Date(`${i.date}T${i.time}`);
+          return interviewDate > new Date();
+        });
         setInterviews(upcomingInts);
       } catch (err: any) {
         setErrorMsg(err.message || 'Unable to load your data.');
