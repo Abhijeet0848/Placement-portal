@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Send, CheckCircle2 } from 'lucide-react';
 import { api } from '../../services/api';
 
 export const SendEmails: React.FC = () => {
-  const [to, setTo] = useState('shortlist@campusmail.com');
+  const [to, setTo] = useState('');
   const [subject, setSubject] = useState('Interview Invitation');
   const [message, setMessage] = useState('Hello, we would like to invite you for the next round of interviews. Please confirm your availability.');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [candidates, setCandidates] = useState<{name: string, email: string}[]>([]);
+
+  useEffect(() => {
+    const fetchCandidates = async () => {
+      try {
+        const res = await api.get('/recruiter/applications');
+        const apps = res.applications || [];
+        const uniqueCandidates = new Map();
+        apps.forEach((app: any) => {
+          const student = app.studentId || app.student;
+          if (student && student.email) {
+            uniqueCandidates.set(student.email, { name: student.name, email: student.email });
+          }
+        });
+        setCandidates(Array.from(uniqueCandidates.values()));
+      } catch (error) {
+        console.error('Failed to fetch candidates', error);
+      }
+    };
+    fetchCandidates();
+  }, []);
 
   const handleSendEmail = async () => {
     if (!to || !subject || !message) {
@@ -48,12 +69,16 @@ export const SendEmails: React.FC = () => {
         <div className="grid gap-4 md:grid-cols-2">
           <div>
             <label className="text-sm font-semibold text-slate-700">To</label>
-            <input 
+            <select 
               className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 " 
               value={to} 
               onChange={(e) => setTo(e.target.value)}
-              placeholder="student@university.edu"
-            />
+            >
+              <option value="" disabled>Select a candidate...</option>
+              {candidates.map((c, i) => (
+                <option key={i} value={c.email}>{c.name} ({c.email})</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="text-sm font-semibold text-slate-700">Subject</label>
