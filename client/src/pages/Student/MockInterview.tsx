@@ -150,7 +150,7 @@ export const MockInterview: React.FC = () => {
                   <MessageSquare className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-slate-900 tracking-tight">AI Mock Interview Room</h3>
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight">Interview Room</h3>
                   <p className="text-base text-slate-700 leading-relaxed mt-1">
                     Test your engineering capabilities. Select a domain, start a voice/text session, and Google Geminis AI will ask questions, rate responses, and provide placement scorecards.
                   </p>
@@ -166,7 +166,7 @@ export const MockInterview: React.FC = () => {
               <div className="relative z-10 space-y-4">
                 <div className="flex items-center gap-2 text-indigo-600">
                   <Play className="h-5 w-5" />
-                  <h4 className="text-sm font-bold uppercase tracking-wider">Setup Mock Drive</h4>
+                  <h4 className="text-sm font-bold uppercase tracking-wider">Setup Interview</h4>
                 </div>
                 
                 <div className="space-y-2">
@@ -218,7 +218,7 @@ export const MockInterview: React.FC = () => {
                   className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg   hover:shadow-xl flex items-center justify-center gap-2"
                 >
                   <Play className="h-5 w-5" />
-                  <span>Start Mock Session</span>
+                  <span>Start Interview Session</span>
                 </button>
               </div>
             </div>
