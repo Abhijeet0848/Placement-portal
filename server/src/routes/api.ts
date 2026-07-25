@@ -74,7 +74,7 @@ router.post('/auth/profile/picture', authenticateJWT, imageUpload.single('avatar
 router.get('/auth/profile', authenticateJWT, getProfile);
 router.put('/auth/profile', authenticateJWT, updateProfile);
 router.get('/auth/students', authenticateJWT, getAllStudents);
-router.get('/admin/users', authenticateJWT, requireRole(['Admin']), getAllUsers);
+router.get('/admin/users', authenticateJWT, requireRole(['Admin', 'PlacementOfficer']), getAllUsers);
 router.delete('/auth/students/:id', authenticateJWT, requireRole(['PlacementOfficer', 'Admin']), deleteStudent);
 router.put('/auth/students/:id/profile', authenticateJWT, requireRole(['PlacementOfficer', 'Admin']), updateStudentProfile);
 
@@ -96,7 +96,7 @@ router.put('/admin/permissions/:role', authenticateJWT, requireRole(['Admin']), 
 router.post('/admin/backup', authenticateJWT, requireRole(['Admin']), createBackup);
 router.post('/admin/restore', authenticateJWT, requireRole(['Admin']), restoreBackup);
 router.get('/admin/activity-logs', authenticateJWT, requireRole(['Admin']), getActivityLogs);
-router.put('/admin/users/:id/status', authenticateJWT, requireRole(['Admin']), updateUserStatus);
+router.put('/admin/users/:id/status', authenticateJWT, requireRole(['Admin', 'PlacementOfficer']), updateUserStatus);
 
 // AI Services
 router.post('/ai/analyze-resume', authenticateJWT, upload.single('resume'), analyzeResumeUpload);

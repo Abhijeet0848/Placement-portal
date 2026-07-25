@@ -30,13 +30,16 @@ export const Verify: React.FC = () => {
   };
 
   const fetchRecruiters = async () => {
-    // Simulating fetching pending recruiters
-    setRecruiters([
-      { id: '1', name: 'John Doe', email: 'john@startup.com', company: 'Tech Startup Inc', status: 'Pending', website: 'https://startup.com', date: '2023-10-25' },
-      { id: '2', name: 'Jane Smith', email: 'jane@enterprise.com', company: 'Enterprise Corp', status: 'Pending', website: 'https://enterprise.com', date: '2023-10-26' },
-      { id: '3', name: 'Alice Lee', email: 'alice@mega.com', company: 'Mega Systems', status: 'Approved', website: 'https://mega.com', date: '2023-10-20' },
-    ]);
-    setLoadingRecruiters(false);
+    try {
+      const data = await api.get('/admin/users');
+      // Filter out only recruiters
+      const recruiterUsers = (data.users || []).filter((u: any) => u.role === 'Recruiter');
+      setRecruiters(recruiterUsers);
+    } catch (err) {
+      setErrorMsg('Failed to fetch recruiters.');
+    } finally {
+      setLoadingRecruiters(false);
+    }
   };
 
   useEffect(() => {
@@ -81,10 +84,17 @@ export const Verify: React.FC = () => {
     }
   };
 
-  const handleRecruiterApproval = (recruiterId: string, status: string) => {
-    setRecruiters(recruiters.map(r => r.id === recruiterId ? { ...r, status } : r));
-    setMessage(`Company ${status} successfully.`);
-    setTimeout(() => setMessage(''), 3000);
+  const handleRecruiterApproval = async (recruiterId: string, status: string) => {
+    setErrorMsg('');
+    setMessage('');
+    try {
+      await api.put(`/admin/users/${recruiterId}/status`, { status });
+      setRecruiters(recruiters.map(r => r.id === recruiterId ? { ...r, status } : r));
+      setMessage(`Company ${status} successfully.`);
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err: any) {
+      setErrorMsg('Failed to update recruiter status.');
+    }
   };
 
   return (
@@ -139,13 +149,13 @@ export const Verify: React.FC = () => {
                         <Building2 className="w-5 h-5"/>
                       </div>
                       <div>
-                        <h4 className="font-bold text-slate-900">{recruiter.company}</h4>
+                        <h4 className="font-bold text-slate-900">{recruiter.profile?.company || recruiter.name || 'Recruiter Account'}</h4>
                         <p className="text-xs text-slate-500">{recruiter.name}</p>
                       </div>
                     </div>
-                    {recruiter.status === 'Approved' ? (
+                    {recruiter.status === 'Active' ? (
                       <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-md uppercase">Approved</span>
-                    ) : recruiter.status === 'Rejected' ? (
+                    ) : recruiter.status === 'Blocked' ? (
                       <span className="px-2 py-1 bg-rose-100 text-rose-700 text-[10px] font-bold rounded-md uppercase">Rejected</span>
                     ) : (
                       <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-md uppercase">Pending</span>
@@ -154,19 +164,21 @@ export const Verify: React.FC = () => {
                   
                   <div className="text-sm text-slate-600 space-y-1">
                     <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5"/> {recruiter.email}</p>
-                    <p className="text-indigo-600 hover:underline cursor-pointer text-xs">{recruiter.website}</p>
+                    {recruiter.profile?.website && (
+                      <p className="text-indigo-600 hover:underline cursor-pointer text-xs">{recruiter.profile.website}</p>
+                    )}
                   </div>
 
-                  {recruiter.status === 'Pending' && (
+                  {(!recruiter.status || recruiter.status === 'Pending') && (
                     <div className="flex items-center gap-3 mt-2 pt-4 border-t border-slate-100">
                       <button 
-                        onClick={() => handleRecruiterApproval(recruiter.id, 'Approved')}
+                        onClick={() => handleRecruiterApproval(recruiter.id, 'Active')}
                         className="flex-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle2 className="w-4 h-4"/> Approve
                       </button>
                       <button 
-                        onClick={() => handleRecruiterApproval(recruiter.id, 'Rejected')}
+                        onClick={() => handleRecruiterApproval(recruiter.id, 'Blocked')}
                         className="flex-1 px-3 py-2 bg-white border border-slate-200 text-rose-600 hover:bg-rose-50 text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5"
                       >
                         <XCircle className="w-4 h-4"/> Reject
