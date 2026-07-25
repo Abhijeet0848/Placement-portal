@@ -375,7 +375,8 @@ export async function submitExam(req: AuthenticatedRequest, res: Response) {
       weakestTopic: weakestTopic || 'General'
     };
 
-    const percentile = Math.floor(Math.random() * 20) + (totalScore * 0.8); // simulated percentile
+    // Simulated percentile calculation (returns 0 if score is 0)
+    const percentile = totalScore === 0 ? 0 : Math.min(99, Math.floor(totalScore * 0.8) + Math.floor(Math.random() * 20));
 
     // 4. Save to Database
     const studentId = req.user?.id;
