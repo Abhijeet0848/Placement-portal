@@ -154,7 +154,6 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         emoji: '🧠',
         items: [
           { name: 'AI Career Coach', path: '/career-roadmap', icon: Brain },
-          { name: 'AI Mock Interview', path: '/mock-interview', icon: Award },
         ]
       },
       {
@@ -162,6 +161,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         emoji: '📝',
         items: [
           { name: 'Screening Test', path: '/coding-lab', icon: CheckSquare },
+          { name: 'Interview', path: '/mock-interview', icon: Award },
         ]
       },
       {
