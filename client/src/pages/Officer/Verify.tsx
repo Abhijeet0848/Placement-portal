@@ -35,8 +35,8 @@ export const Verify: React.FC = () => {
       // Filter out only recruiters
       const recruiterUsers = (data.users || []).filter((u: any) => u.role === 'Recruiter');
       setRecruiters(recruiterUsers);
-    } catch (err) {
-      setErrorMsg('Failed to fetch recruiters.');
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Failed to fetch recruiters.');
     } finally {
       setLoadingRecruiters(false);
     }
