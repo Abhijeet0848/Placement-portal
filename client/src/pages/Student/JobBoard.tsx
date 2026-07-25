@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import {
   MapPin, DollarSign, CheckCircle, AlertTriangle,
-  Search, ShieldAlert, Sparkles, Filter, Briefcase, TrendingUp
+  Search, ShieldAlert, Sparkles, Filter, Briefcase, TrendingUp, IndianRupee, Euro, PoundSterling
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -16,6 +16,9 @@ export const JobBoard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedJob, setSelectedJob] = useState<any>(null);
   const [gpaFilterOn, setGpaFilterOn] = useState(false);
+  const [minSalaryFilter, setMinSalaryFilter] = useState<number>(0);
+  const [locationFilter, setLocationFilter] = useState<string>('Any');
+  const [currency, setCurrency] = useState<string>('INR');
 
   // Feedback
   const [message, setMessage] = useState('');
@@ -61,16 +64,35 @@ export const JobBoard: React.FC = () => {
     };
   };
 
+  // Derived unique locations for dropdown
+  const uniqueLocations = Array.from(new Set(jobs.map(j => j.location))).filter(Boolean);
+
+  const renderCurrencyIcon = (className: string) => {
+    switch (currency) {
+      case 'USD': return <DollarSign className={className} />;
+      case 'EUR': return <Euro className={className} />;
+      case 'GBP': return <PoundSterling className={className} />;
+      case 'INR':
+      default:
+        return <IndianRupee className={className} />;
+    }
+  };
+
   // Filter jobs based on search term and eligibility
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           job.location.toLowerCase().includes(searchTerm.toLowerCase());
     
+    const matchesSalary = (job.salary || 0) >= minSalaryFilter;
+    const matchesLocation = locationFilter === 'Any' || job.location === locationFilter;
+    
+    let isEligible = true;
     if (gpaFilterOn) {
-      return matchesSearch && checkEligibility(job).eligible;
+      isEligible = checkEligibility(job).eligible;
     }
-    return matchesSearch;
+    
+    return matchesSearch && matchesSalary && matchesLocation && isEligible;
   });
 
   // Submit Application
@@ -117,31 +139,67 @@ export const JobBoard: React.FC = () => {
       </div>
 
       {/* Search and Filter */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full md:max-w-md">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 rounded-2xl shadow-sm border-2 border-slate-100">
+        <div className="relative w-full md:flex-1">
           <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
           <input
             type="text"
             placeholder="Search by company, role, location..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-semibold bg-white border-2 border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-50 border-2 border-transparent text-slate-900 focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors"
           />
         </div>
 
-        <button 
-          onClick={() => setGpaFilterOn(!gpaFilterOn)}
-          className={`flex items-center space-x-2 border-2 px-4 py-2 rounded-xl shadow-sm cursor-pointer transition-colors ${
-            gpaFilterOn 
-              ? 'border-indigo-300 bg-indigo-50' 
-              : 'border-slate-200 bg-white hover:bg-slate-50'
-          }`}
-        >
-          <Filter className={`h-4 w-4 ${gpaFilterOn ? 'text-indigo-600' : 'text-slate-400'}`} />
-          <span className={`text-xs font-semibold ${gpaFilterOn ? 'text-indigo-700' : 'text-slate-700'}`}>
-            GPA Eligible Filter: {gpaFilterOn ? 'ON' : 'OFF'}
-          </span>
-        </button>
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            className="px-3 py-2.5 rounded-xl text-sm font-semibold bg-slate-50 border-2 border-transparent text-slate-700 focus:outline-none focus:border-indigo-500 cursor-pointer"
+          >
+            <option value="INR">₹ (INR)</option>
+            <option value="USD">$ (USD)</option>
+            <option value="EUR">€ (EUR)</option>
+            <option value="GBP">£ (GBP)</option>
+          </select>
+
+          <select
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+            className="px-3 py-2.5 rounded-xl text-sm font-semibold bg-slate-50 border-2 border-transparent text-slate-700 focus:outline-none focus:border-indigo-500 cursor-pointer"
+          >
+            <option value="Any">All Locations</option>
+            {uniqueLocations.map(loc => (
+              <option key={loc as string} value={loc as string}>{loc as string}</option>
+            ))}
+          </select>
+
+          <select
+            value={minSalaryFilter}
+            onChange={(e) => setMinSalaryFilter(Number(e.target.value))}
+            className="px-3 py-2.5 rounded-xl text-sm font-semibold bg-slate-50 border-2 border-transparent text-slate-700 focus:outline-none focus:border-indigo-500 cursor-pointer"
+          >
+            <option value={0}>Any Salary</option>
+            <option value={5}>5+ LPA</option>
+            <option value={10}>10+ LPA</option>
+            <option value={15}>15+ LPA</option>
+            <option value={20}>20+ LPA</option>
+          </select>
+
+          <button 
+            onClick={() => setGpaFilterOn(!gpaFilterOn)}
+            className={`flex items-center space-x-2 border-2 px-4 py-2.5 rounded-xl cursor-pointer transition-colors ${
+              gpaFilterOn 
+                ? 'border-indigo-300 bg-indigo-50' 
+                : 'border-transparent bg-slate-50 hover:bg-slate-100'
+            }`}
+          >
+            <Filter className={`h-4 w-4 ${gpaFilterOn ? 'text-indigo-600' : 'text-slate-400'}`} />
+            <span className={`text-xs font-semibold ${gpaFilterOn ? 'text-indigo-700' : 'text-slate-700'}`}>
+              GPA Eligible: {gpaFilterOn ? 'ON' : 'OFF'}
+            </span>
+          </button>
+        </div>
       </div>
 
       {message && (
@@ -207,7 +265,7 @@ export const JobBoard: React.FC = () => {
                       <span>{job.location}</span>
                     </span>
                     <span className="flex items-center space-x-1">
-                      <DollarSign className="h-3.5 w-3.5 text-indigo-600" />
+                      {renderCurrencyIcon("h-3.5 w-3.5 text-indigo-600")}
                       <span>{job.salary} LPA</span>
                     </span>
                   </div>
@@ -248,7 +306,9 @@ export const JobBoard: React.FC = () => {
                 <div className="grid grid-cols-3 gap-3 bg-gradient-to-br from-slate-50 to-slate-100 p-3 rounded-xl border-2 border-slate-200 text-center">
                   <div>
                     <span className="text-[10px] text-slate-600 font-bold block uppercase mb-1">Salary Package</span>
-                    <span className="text-sm font-bold text-slate-900">{selectedJob.salary} LPA</span>
+                    <span className="text-sm font-bold text-slate-900 flex items-center justify-center gap-0.5">
+                      {renderCurrencyIcon("h-4 w-4")} {selectedJob.salary} LPA
+                    </span>
                   </div>
                   <div>
                     <span className="text-[10px] text-slate-600 font-bold block uppercase mb-1">Min CGPA</span>
