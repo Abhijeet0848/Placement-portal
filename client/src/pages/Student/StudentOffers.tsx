@@ -1,11 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, CheckCircle, Download, Briefcase, Building } from 'lucide-react';
+import { api } from '../../services/api';
 
 export const StudentOffers: React.FC = () => {
   const [offers, setOffers] = useState<any[]>([]);
-
   const [selectedOffer, setSelectedOffer] = useState<any>(null);
   const [isAccepting, setIsAccepting] = useState(false);
+
+  useEffect(() => {
+    fetchOffers();
+  }, []);
+
+  const fetchOffers = async () => {
+    try {
+      const response = await api.get('/student/applications');
+      const apps = response.applications || [];
+      const offerApps = apps.filter((app: any) => app.status === 'Offer' || app.status === 'Hired');
+      
+      const formattedOffers = offerApps.map((app: any) => {
+        const job = app.jobId || app.job || {};
+        return {
+          id: app._id || app.id,
+          company: job.company || 'Company',
+          role: job.title || 'Role',
+          package: job.salary || 'Salary',
+          date: new Date(app.createdAt || Date.now()).toLocaleDateString(),
+          status: app.status === 'Hired' ? 'Accepted' : 'Pending',
+          letterText: `Dear Candidate,\n\nCongratulations! We are thrilled to offer you the position of ${job.title || 'Role'} at ${job.company || 'Company'}.\n\nPackage: ${job.salary || 'Salary'}\n\nPlease accept this offer to proceed.\n\nBest,\nHR Team`
+        };
+      });
+      
+      setOffers(formattedOffers);
+    } catch (err) {
+      console.error('Failed to fetch offers:', err);
+    }
+  };
 
   const handleAccept = () => {
     setIsAccepting(true);
