@@ -7,6 +7,7 @@ import Application from '../models/Application';
 import User from '../models/User';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { matchResumeToJob } from '../services/ai.service';
+import { sendEmail } from '../utils/email';
 import logger from '../utils/logger';
 
 // 1. Create Job (Recruiter Only)
@@ -306,16 +307,24 @@ export async function updateApplicationStatus(req: AuthenticatedRequest, res: Re
       mockDb.applications[appIndex].status = status;
       return res.json({ message: `Application status updated to ${status} (Mock DB)`, application: mockDb.applications[appIndex] });
     } else {
-      const app = await Application.findById(appId).populate('studentId', 'name').populate('jobId', 'title');
+      const app = await Application.findById(appId).populate('studentId', 'name email').populate('jobId', 'title company');
       if (!app) return res.status(404).json({ message: 'Application not found.' });
 
       app.status = status;
       await app.save();
 
       const io = req.app.get('socketio');
+      const studentObj = app.studentId as any;
+      const jobObj = app.jobId as any;
+      
+      const studentIdStr = typeof studentObj === 'object' && studentObj._id ? studentObj._id.toString() : studentObj.toString();
+      const studentEmail = typeof studentObj === 'object' && 'email' in studentObj ? studentObj.email : null;
+      const studentName = typeof studentObj === 'object' && 'name' in studentObj ? studentObj.name : 'Candidate';
+      
+      const jobTitle = typeof jobObj === 'object' && 'title' in jobObj ? jobObj.title : 'a job';
+      const companyName = typeof jobObj === 'object' && 'company' in jobObj ? jobObj.company : 'the company';
+
       if (io) {
-        const studentIdStr = typeof app.studentId === 'object' && 'id' in (app.studentId as any) ? (app.studentId as any).id.toString() : (app.studentId as any).toString();
-        const jobTitle = typeof app.jobId === 'object' && 'title' in app.jobId ? app.jobId.title : 'a job';
         io.to(studentIdStr).emit('notification', {
           id: `notif_${Date.now()}`,
           title: 'Application Update',
@@ -323,6 +332,14 @@ export async function updateApplicationStatus(req: AuthenticatedRequest, res: Re
           type: 'status_update',
           read: false,
           createdAt: new Date()
+        });
+      }
+
+      if ((status === 'Hired' || status === 'Offer') && studentEmail) {
+        const emailSubject = `Job Offer: ${jobTitle} at ${companyName}`;
+        const emailText = `Dear ${studentName},\n\nCongratulations! We are thrilled to inform you that you have been selected for the position of ${jobTitle} at ${companyName}.\n\nPlease check your Smart Placement Portal dashboard to view and accept your official offer letter.\n\nBest regards,\nPlacement Cell`;
+        sendEmail({ to: studentEmail, subject: emailSubject, text: emailText }).catch(err => {
+          logger.error(`Failed to send offer email to ${studentEmail}: ${err.message}`);
         });
       }
 
