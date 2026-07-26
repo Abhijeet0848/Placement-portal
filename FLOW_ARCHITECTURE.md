@@ -9,7 +9,7 @@ This document provides a comprehensive overview of the system architecture, data
 The platform follows a robust Client-Server architecture utilizing the MERN stack and Google Gemini AI for advanced intelligent features.
 
 ```mermaid
-graph TD
+flowchart TD
     %% Client Tier
     subgraph Client Tier [Frontend - React 19]
         UI[User Interface]
