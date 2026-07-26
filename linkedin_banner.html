@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Banner Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Standard LinkedIn Banner Dimensions: 1584 x 396 */
+        .banner-container {
+            width: 1584px;
+            height: 396px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 8px; /* Just for preview, doesn't matter for the screenshot */
+            color: white;
+            transform: scale(0.6); /* Scaled down just so it fits on normal screens for screenshotting */
+            transform-origin: center;
+        }
+
+        /* Cool decorative background elements */
+        .glow-circle-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0) 70%);
+            top: -200px;
+            right: -100px;
+            border-radius: 50%;
+        }
+
+        .glow-circle-2 {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(236,72,153,0.1) 0%, rgba(236,72,153,0) 70%);
+            bottom: -400px;
+            left: 200px;
+            border-radius: 50%;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+
+        /* Content Area - shifted right to avoid profile picture */
+        .content {
+            position: absolute;
+            top: 0;
+            left: 450px; /* Safe zone from profile picture */
+            right: 50px;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .name {
+            font-size: 64px;
+            font-weight: 900;
+            margin: 0 0 10px 0;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .role {
+            font-size: 32px;
+            font-weight: 400;
+            color: #38bdf8;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .role span.dot {
+            width: 6px;
+            height: 6px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .skills {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .skill-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f1f5f9;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Simulation of where your profile picture will be (just for you to see) */
+        .profile-pic-safe-zone {
+            position: absolute;
+            bottom: -80px;
+            left: 80px;
+            width: 250px;
+            height: 250px;
+            background: rgba(0,0,0,0.5);
+            border: 4px dashed rgba(255,255,255,0.3);
+            border-radius: 50%;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 20px;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- This is the banner you will screenshot -->
+    <div class="banner-container" id="capture">
+        
+        <!-- Background Elements -->
+        <div class="grid-pattern"></div>
+        <div class="glow-circle-1"></div>
+        <div class="glow-circle-2"></div>
+
+        <!-- Content Area -->
+        <div class="content">
+            <h1 class="name">ABHIJEET</h1>
+            <h2 class="role">
+                Full Stack Developer 
+                <span class="dot"></span> 
+                MCA Student
+            </h2>
+            
+            <div class="skills">
+                <div class="skill-badge">MERN Stack</div>
+                <div class="skill-badge">React & Node.js</div>
+                <div class="skill-badge">Generative AI</div>
+                <div class="skill-badge">TypeScript</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

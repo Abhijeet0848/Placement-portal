@@ -14,7 +14,7 @@ export let model: any = null;
 if (GEMINI_API_KEY) {
   try {
     genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
     logger.info('Initialized Google Gemini AI Service successfully.');
   } catch (error: any) {
     logger.error(`Error initializing Gemini AI: ${error?.message || error}`);
