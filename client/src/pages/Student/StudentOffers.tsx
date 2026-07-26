@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, CheckCircle, Download, Briefcase, Building } from 'lucide-react';
 import { api } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 export const StudentOffers: React.FC = () => {
+  const { user } = useAuth();
   const [offers, setOffers] = useState<any[]>([]);
   const [selectedOffer, setSelectedOffer] = useState<any>(null);
   const [isAccepting, setIsAccepting] = useState(false);
@@ -26,7 +28,7 @@ export const StudentOffers: React.FC = () => {
           package: job.salary || 'Salary',
           date: new Date(app.createdAt || Date.now()).toLocaleDateString(),
           status: app.status === 'Hired' ? 'Accepted' : 'Pending',
-          letterText: `Dear Candidate,\n\nCongratulations! We are thrilled to offer you the position of ${job.title || 'Role'} at ${job.company || 'Company'}.\n\nPackage: ${job.salary || 'Salary'}\n\nPlease accept this offer to proceed.\n\nBest,\nHR Team`
+          letterText: `Dear ${user?.name || 'Candidate'},\n\nCongratulations! We are thrilled to offer you the position of ${job.title || 'Role'} at ${job.company || 'Company'}.\n\nPackage: ${job.salary || 'Salary'}\n\nPlease accept this offer to proceed.\n\nBest,\nHR Team`
         };
       });
       
