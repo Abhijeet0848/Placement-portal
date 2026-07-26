@@ -10,8 +10,7 @@ The platform follows a robust Client-Server architecture utilizing the MERN stac
 
 ```mermaid
 flowchart TD
-    %% Client Tier
-    subgraph Client Tier [Frontend - React 19]
+    subgraph Client [Frontend - React 19]
         UI[User Interface]
         Context[React Context API]
         SocketC[Socket.io Client]
@@ -19,34 +18,32 @@ flowchart TD
         Context --> UI
     end
 
-    %% Server Tier
-    subgraph Server Tier [Backend - Node.js & Express]
+    subgraph Server [Backend - Node.js & Express]
         API[RESTful APIs]
         Auth[JWT Authentication]
         SocketS[Socket.io Server]
         Uploads[Multer File Handling]
-        AI_Controller[Gemini AI Controller]
+        AIController[Gemini AI Controller]
         
         API --> Auth
         API --> Uploads
-        API --> AI_Controller
+        API --> AIController
     end
 
-    %% Data Tier & External Services
-    subgraph Data Tier [Database & Cloud]
+    subgraph DatabaseTier [Database & Cloud]
         MongoDB[(MongoDB Atlas)]
     end
     
-    subgraph External Services
+    subgraph External [External Services]
         Gemini[Google Gemini AI]
     end
 
-    %% Connections
-    UI -- "HTTP Requests (Axios)" --> API
-    SocketC -- "WebSockets (Real-time)" <--> SocketS
-    Auth -- "Query/Update" --> MongoDB
-    Uploads -- "Store Meta" --> MongoDB
-    AI_Controller -- "Prompts/Parsing" --> Gemini
+    UI -->|HTTP Requests| API
+    SocketC -->|WebSockets| SocketS
+    SocketS -->|WebSockets| SocketC
+    Auth -->|Query/Update| MongoDB
+    Uploads -->|Store Meta| MongoDB
+    AIController -->|Prompts/Parsing| Gemini
 ```
 
 ---
@@ -62,12 +59,12 @@ Empowers students with intelligent profiling, AI resume feedback, and automated 
 flowchart TD
     S([Student]) --> Reg[Register / Login]
     Reg --> Profile[Complete Profile & Upload Resume]
-    Profile --> AI_Res[AI Resume Analyzer]
+    Profile --> AIRes[AI Resume Analyzer]
     
-    AI_Res -- ATS Score & Feedback --> Dashboard[Student Dashboard]
+    AIRes -->|ATS Score & Feedback| Dashboard[Student Dashboard]
     
     Dashboard --> Jobs[View & Apply for Jobs]
-    Jobs --> AI_Match[AI Job Matching Percentage]
+    Jobs --> AIMatch[AI Job Matching Percentage]
     
     Dashboard --> Prep[Interview Preparation]
     Prep --> Coding[Coding Lab Challenges]
@@ -83,15 +80,15 @@ Streamlines the hiring pipeline for corporate partners using AI-driven shortlist
 flowchart TD
     R([Recruiter]) --> Reg[Register / Login]
     Reg --> Verify[Wait for PO Verification]
-    Verify -- Approved --> Dashboard[Recruiter Dashboard]
+    Verify -->|Approved| Dashboard[Recruiter Dashboard]
     
     Dashboard --> PostJob[Create Job Posting]
-    PostJob --> AI_JD[AI Generates Job Description]
+    PostJob --> AIJD[AI Generates Job Description]
     
     Dashboard --> Manage[Manage Applications]
-    Manage --> AI_Rank[AI Resume Ranking & Shortlisting]
+    Manage --> AIRank[AI Resume Ranking & Shortlisting]
     
-    AI_Rank --> Shortlist[Shortlist Candidates]
+    AIRank --> Shortlist[Shortlist Candidates]
     Shortlist --> Schedule[Schedule Interviews]
     Schedule --> Email[Automated Email Outreach]
     Email --> Hire[Finalize Hires]
@@ -106,7 +103,7 @@ flowchart TD
     Login --> Dashboard[PO Dashboard]
     
     Dashboard --> VerifyReq[Verify Recruiter & Student Profiles]
-    VerifyReq -- Approve/Reject --> UpdateStatus[Update System Status]
+    VerifyReq -->|Approve/Reject| UpdateStatus[Update System Status]
     
     Dashboard --> Rules[Configure Placement Rules]
     Rules --> Engine[Eligibility Engine]
@@ -134,9 +131,9 @@ sequenceDiagram
     participant GeminiAI
     participant MongoDB
     
-    Student->>Frontend: Uploads Resume (PDF)
+    Student->>Frontend: Uploads Resume PDF
     Frontend->>Backend: POST /api/resume/upload
-    Backend->>Backend: Parse PDF Text (pdf-parse)
+    Backend->>Backend: Parse PDF Text
     
     Backend->>GeminiAI: Send extracted text + prompt for analysis
     GeminiAI-->>Backend: Return ATS Score, Missing Skills, Corrections
@@ -163,7 +160,7 @@ sequenceDiagram
 Ensuring absolute protection of student and corporate data is paramount.
 
 ```mermaid
-graph LR
+flowchart LR
     Req[Incoming Request] --> RateLimit[Rate Limiting]
     RateLimit --> Headers[Helmet HTTP Headers]
     Headers --> Sanitize[NoSQL Injection Sanitization]
