@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, CheckCircle, Download, Briefcase, Building } from 'lucide-react';
+import { FileText, CheckCircle, Download, Briefcase, IndianRupee } from 'lucide-react';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 
@@ -28,7 +28,7 @@ export const StudentOffers: React.FC = () => {
           package: job.salary || 'Salary',
           date: new Date(app.createdAt || Date.now()).toLocaleDateString(),
           status: app.status === 'Hired' ? 'Accepted' : 'Pending',
-          letterText: `Dear ${user?.name || 'Candidate'},\n\nCongratulations! We are thrilled to offer you the position of ${job.title || 'Role'} at ${job.company || 'Company'}.\n\nPackage: ${job.salary || 'Salary'}\n\nPlease accept this offer to proceed.\n\nBest,\nHR Team`
+          letterText: `Dear ${user?.name || 'Candidate'},\n\nCongratulations! We are thrilled to offer you the position of ${job.title || 'Role'} at ${job.company || 'Company'}.\n\nPackage: ₹ ${job.salary || 'Salary'} LPA\n\nPlease accept this offer to proceed.\n\nBest,\nHR Team`
         };
       });
       
@@ -95,7 +95,7 @@ export const StudentOffers: React.FC = () => {
                   )}
                 </div>
                 <p className="text-sm font-semibold text-slate-600 flex items-center gap-1.5 mb-1"><Briefcase className="w-3.5 h-3.5" /> {offer.role}</p>
-                <p className="text-xs text-slate-500 flex items-center gap-1.5"><Building className="w-3.5 h-3.5" /> {offer.package}</p>
+                <p className="text-xs text-slate-500 flex items-center gap-1.5"><IndianRupee className="w-3.5 h-3.5" /> {offer.package} LPA</p>
               </div>
             ))
           )}
