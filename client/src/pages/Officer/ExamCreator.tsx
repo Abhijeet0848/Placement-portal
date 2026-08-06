@@ -167,6 +167,99 @@ export const ExamCreator: React.FC = () => {
         <div className={`p-4 rounded-xl text-sm font-bold flex items-center gap-2 ${
           status.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'
         }`}>
+          {status.type === 'success' ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
+          {status.msg}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Basic Details */}
+        <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-100 bg-white p-8 shadow-xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+          <div className="relative z-10 space-y-6">
+            <h3 className="text-xl font-black text-slate-800 border-b-2 border-slate-100 pb-3 flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-indigo-500" /> 1. Basic Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="col-span-1 md:col-span-2 lg:col-span-4">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Exam Title</label>
+                <input type="text" required value={title} onChange={e => setTitle(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border-2 border-transparent rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors text-sm font-semibold text-slate-800" placeholder="e.g. Weekly Full Stack Challenge" />
+              </div>
+              
+              <div className="col-span-1 md:col-span-2 lg:col-span-4">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Link to Job Posting (Optional)</label>
+                <select value={jobId} onChange={e => setJobId(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border-2 border-transparent rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors text-sm font-semibold text-slate-800 cursor-pointer">
+                  <option value="">No Job Selected (General Exam)</option>
+                  {jobs.map(job => (
+                    <option key={job._id} value={job._id}>{job.title} at {job.company}</option>
+                  ))}
+                </select>
+                <p className="text-[10px] font-bold text-indigo-600 mt-1">Linking an exam to a job post allows you to restrict access only to candidates who applied.</p>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Domain</label>
+                <select value={domain} onChange={e => setDomain(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border-2 border-transparent rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors text-sm font-semibold text-slate-800 cursor-pointer">
+                  <option value="Frontend">Frontend</option>
+                  <option value="Backend">Backend</option>
+                  <option value="Database">Database</option>
+                  <option value="System Design">System Design</option>
+                  <option value="Aptitude">Aptitude</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Difficulty</label>
+                <select value={difficulty} onChange={e => setDifficulty(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border-2 border-transparent rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors text-sm font-semibold text-slate-800 cursor-pointer">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1"><Clock className="h-3 w-3"/> Duration (Mins)</label>
+                <input type="number" min="5" value={durationInMinutes} onChange={e => setDurationInMinutes(Number(e.target.value))} className="w-full px-4 py-3 bg-slate-50 border-2 border-transparent rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors text-sm font-semibold text-slate-800" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scheduling */}
+        <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-100 bg-white p-8 shadow-xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+          <div className="relative z-10 space-y-6">
+            <h3 className="text-xl font-black text-slate-800 border-b-2 border-slate-100 pb-3 flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-indigo-500"/> 2. Scheduling & Access
+            </h3>
+            <p className="text-sm font-medium text-slate-500 mb-4">Leave blank for on-demand assessments. If scheduled, students cannot access the test outside of this window.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Start Time</label>
+                <input type="datetime-local" value={startTime} onChange={e => setStartTime(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border-2 border-transparent rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors text-sm font-semibold text-slate-800" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">End Time</label>
+                <input type="datetime-local" value={endTime} onChange={e => setEndTime(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border-2 border-transparent rounded-xl focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors text-sm font-semibold text-slate-800" />
+              </div>
+            </div>
+            
+            <div className="pt-6 border-t-2 border-slate-100 mt-4 space-y-4">
+              <label className="flex items-center gap-3 cursor-pointer p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-indigo-200 transition-colors">
+                <input type="checkbox" checked={isPrivateScreening} onChange={e => setIsPrivateScreening(e.target.checked)} className="rounded h-5 w-5 text-indigo-600 focus:ring-indigo-500" />
+                <div>
+                  <span className="text-sm font-bold text-slate-800 block">Make this a Private Screening Test</span>
+                  <span className="text-[10px] text-slate-500 font-semibold block mt-0.5">Only invited students (or those shortlisted for the linked job) can see and attempt this exam.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* MCQs */}
+        <div className="glass-card rounded-2xl p-6 space-y-6">
+          <div className="flex justify-between items-center border-b pb-2">
+            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle2 className="h-5 w-5 text-emerald-500"/> 3. Multiple Choice Questions</h3>
             <div className="flex flex-wrap items-center gap-2 mt-4 sm:mt-0">
               <button type="button" onClick={() => setShowAiModal(true)} className="flex items-center gap-1 px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg text-sm font-bold hover:bg-purple-100">
                 <Sparkles className="h-4 w-4" /> Generate with AI
