@@ -290,7 +290,13 @@ export async function getRecruiterApplications(req: AuthenticatedRequest, res: R
         }
       }
 
-      return res.json({ applications: apps });
+      const enrichedApps = apps.map((app: any) => ({
+        ...app,
+        student: app.studentId,
+        job: app.jobId
+      }));
+
+      return res.json({ applications: enrichedApps });
     }
   } catch (error: any) {
     logger.error(`Get recruiter applications failed: ${error?.message || error}`);
