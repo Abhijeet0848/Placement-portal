@@ -235,6 +235,12 @@ export async function applyJob(req: AuthenticatedRequest, res: Response) {
     }
   } catch (error: any) {
     logger.error(`Apply job failed: ${error?.message || error}`);
+    
+    // Handle MongoDB duplicate key error
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'You have already applied for this job.' });
+    }
+    
     return res.status(500).json({ message: error?.message || 'Server job application error' });
   }
 }

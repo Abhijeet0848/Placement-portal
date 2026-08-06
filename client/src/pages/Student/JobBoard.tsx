@@ -111,10 +111,11 @@ export const JobBoard: React.FC = () => {
       });
 
       setMessage(`Applied successfully to ${job.title} at ${job.company}!`);
-      setSelectedJob(null);
       fetchJobs(); // Reload applicant count
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to submit application.');
+    } finally {
+      setSelectedJob(null);
     }
   };
 
