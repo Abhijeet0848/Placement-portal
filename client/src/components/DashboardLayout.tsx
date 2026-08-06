@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 import { 
   LayoutDashboard, User, Briefcase, Award, Brain, MessageSquare, 
   Star, Users, Bell, LogOut, CheckSquare, Shield, ShieldAlert,
-  Calendar, FileText, BarChart3, Search, Menu, X
+  Calendar, FileText, BarChart3, Search, Menu, X, Video
 } from 'lucide-react';
 import { api } from '../services/api';
 
@@ -162,11 +162,12 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         ]
       },
       {
-        title: 'EXAM',
+        title: 'EXAM & INTERVIEW',
         emoji: '📝',
         items: [
           { name: 'Screening Test', path: '/coding-lab', icon: CheckSquare },
-          { name: 'Interview', path: '/mock-interview', icon: Award },
+          { name: 'Practice Interview', path: '/mock-interview', icon: Award },
+          { name: 'Attend Interview', path: '/applications', icon: Video },
         ]
       },
       {
